@@ -5,7 +5,8 @@ import { useEffect, useMemo, useState } from "react";
 import SeasonButton from "./ui/SeasonButton";
 import MapMenuButton from "./ui/MapMenuButton";
 import Marker from "./Marker";
-import { Bookmark, calculateCenter } from "@/model/bookmark";
+import { Bookmark } from "@/model/bookmark";
+import { calculateCenter } from "@/service/map";
 
 type Props = {
   bookmarks: Bookmark[];
@@ -20,13 +21,17 @@ export default function Map({ bookmarks }: Props) {
   const [zoomSize, setZoomSize] = useState(12);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition(position => {
-      console.log(position.coords);
-      setUserPos({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude
-      });
-    });
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        setUserPos({
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        });
+      },
+      error => {
+        console.log("현재 위치를 가져오는 데 실패하였습니다.");
+      }
+    );
   }, []);
 
   function toggleGPS() {
