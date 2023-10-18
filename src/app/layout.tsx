@@ -16,7 +16,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={inter.className}>
-      <body>{children}</body>
+      <body className="w-full max-w-screen-xl oveflow-auto mx-auto">
+        <header></header>
+        <main className="w-full">{children}</main>
+        <footer></footer>
+      </body>
     </html>
   );
 }
