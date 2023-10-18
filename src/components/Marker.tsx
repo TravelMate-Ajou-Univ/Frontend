@@ -9,10 +9,9 @@ type Props = {
 export default function Marker({ bookmarks }: Props) {
   return (
     <ul>
-      {bookmarks.map(bookmark => (
-        <li>
+      {bookmarks.map((bookmark, index) => (
+        <li key={index}>
           <MarkerF
-            key={bookmark.lat}
             position={{ lat: bookmark.lat, lng: bookmark.lng }}
             onLoad={() => console.log("Marker Loaded")}
           />
