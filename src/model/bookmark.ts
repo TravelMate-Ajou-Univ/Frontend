@@ -4,6 +4,6 @@ export type Pin = {
 };
 
 export type Bookmark = Pin & {
-  season?: string;
+  season?: "Spring" | "Summer" | "Fall" | "Winter";
   memo?: string;
 };

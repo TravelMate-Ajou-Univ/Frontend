@@ -29,23 +29,23 @@ export default function Map({ bookmarks }: Props) {
         });
       },
       error => {
-        console.log("현재 위치를 가져오는 데 실패하였습니다.");
+        prompt("현재 위치를 가져오는 데 실패하였습니다.");
       }
     );
   }, []);
 
-  function toggleGPS() {
-    gpsToggle ? setGpsToggle(false) : setGpsToggle(true);
-  }
+  const toggleGPS = () => {
+    setGpsToggle(!gpsToggle);
+  };
 
-  function upSize() {
+  const upSize = () => {
     let size = zoomSize + 1;
     setZoomSize(size);
-  }
-  function downSize() {
+  };
+  const downSize = () => {
     let size = zoomSize - 1;
     setZoomSize(size);
-  }
+  };
   // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
   const mapCenter =
     bookmarks.length === 0 ? userPos : calculateCenter(bookmarks);
@@ -82,7 +82,6 @@ export default function Map({ bookmarks }: Props) {
         center={mapCenter}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: "100%", height: "100%" }}
-        onLoad={() => console.log("Map Component Loaded...")}
       >
         {gpsToggle ? (
           <MarkerF position={{ lat: userPos.lat, lng: userPos.lng }} />
