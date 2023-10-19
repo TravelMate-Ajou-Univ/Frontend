@@ -28,6 +28,7 @@
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {
+    "@types/react-draft-wysiwyg": "^1.13.6",
     "prettier": "3.0.3"
   }
 }
