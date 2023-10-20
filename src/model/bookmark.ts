@@ -4,6 +4,11 @@ export type Pin = {
 };
 
 export type Bookmark = Pin & {
-  season?: "Spring" | "Summer" | "Fall" | "Winter";
   memo?: string;
+};
+
+export type BookmarkCollection = {
+  title: string;
+  visibility: "PRIVATE" | "FRIENDS_ONLY" | "PUBLIC";
+  bookmarks?: Bookmark[];
 };
