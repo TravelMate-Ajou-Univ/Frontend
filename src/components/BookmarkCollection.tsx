@@ -12,7 +12,18 @@ type Props = {
 
 export default function BookmarkCollection({ bookmarkCollection }: Props) {
   return (
-    <Link href={`bookmarkCollection/${bookmarkCollection.title}`}>
+    <Link
+      href={{
+        pathname: `bookmarkCollection/${bookmarkCollection.title}`,
+        // query: JSON.stringify(bookmarkCollection)
+        // query: { title: bookmarkCollection.title }
+        query: {
+          title: bookmarkCollection.title,
+          visibility: bookmarkCollection.visibility,
+          bookmarks: JSON.stringify(bookmarkCollection.bookmarks)
+        }
+      }}
+    >
       <div className="flex flex-col justify-center items-center my-2">
         <BookmakrCollectionIcon />
         <div className="flex justify-center items-center mt-1">
