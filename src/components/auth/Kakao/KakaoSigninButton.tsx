@@ -9,7 +9,7 @@ const KAKAO_AUTHORIZE_URL = `https://kauth.kakao.com/oauth/authorize?response_ty
 export default function KakaoSigninButton() {
   return (
     <Link href={KAKAO_AUTHORIZE_URL}>
-      <Image src={KakaoSigninBtn} alt="카카오 로그인 버튼" />
+      <Image src={KakaoSigninBtn} alt="카카오 로그인 버튼" priority />
     </Link>
   );
 }
