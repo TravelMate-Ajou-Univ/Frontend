@@ -67,6 +67,10 @@ export default function Map({ bookmarks }: Props) {
     return <p>Loading...</p>;
   }
 
+  const ClickHandler = () => {
+    console.log("Clicked!");
+  };
+
   return (
     <div className="relative w-full h-full z-0">
       <MapMenuButton
@@ -82,6 +86,7 @@ export default function Map({ bookmarks }: Props) {
         center={mapCenter}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: "100%", height: "100%" }}
+        onClick={ClickHandler}
       >
         {gpsToggle ? (
           <MarkerF position={{ lat: userPos.lat, lng: userPos.lng }} />

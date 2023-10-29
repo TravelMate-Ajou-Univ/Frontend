@@ -1,8 +1,8 @@
-import AddCollectonButton from "@/components/AddCollectonButton";
 import Collection from "@/components/Collection";
 import { getMyCollectionList } from "@/service/bookmarkCollection";
+import AddCollectonButton from "./AddCollectonButton";
 
-export default async function BookmarkPage() {
+export default async function MyCollectionList() {
   const data = await getMyCollectionList();
 
   return (
