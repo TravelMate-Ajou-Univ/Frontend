@@ -7,6 +7,7 @@ import MapMenuButton from "./ui/MapMenuButton";
 import Marker from "./Marker";
 import { Bookmark } from "@/model/bookmark";
 import { calculateCenter } from "@/service/map";
+import { DotLoader } from "react-spinners";
 
 type Props = {
   bookmarks: Bookmark[];
@@ -30,6 +31,7 @@ export default function Map({ bookmarks }: Props) {
       },
       error => {
         prompt("현재 위치를 가져오는 데 실패하였습니다.");
+        console.log(error);
       }
     );
   }, []);
@@ -46,6 +48,7 @@ export default function Map({ bookmarks }: Props) {
     let size = zoomSize - 1;
     setZoomSize(size);
   };
+
   // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
   const mapCenter =
     bookmarks.length === 0 ? userPos : calculateCenter(bookmarks);
@@ -64,7 +67,11 @@ export default function Map({ bookmarks }: Props) {
   });
 
   if (!isLoaded) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center w-full h-full border-2">
+        <DotLoader size={80} color="#36d7b7" />
+      </div>
+    );
   }
 
   const ClickHandler = () => {
