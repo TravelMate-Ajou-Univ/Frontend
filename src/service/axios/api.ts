@@ -1,5 +1,9 @@
 import axios from "axios";
 
+export const apiWithoutAuth = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_SERVER_BASE_URL
+});
+
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_BASE_URL
 });
@@ -21,7 +25,15 @@ export const userSign = {
       }
     ),
   signinUsingKakao: (accessToken: string) =>
-    api.post("auth/kakao", {
+    apiWithoutAuth.post("auth/kakao", {
       accessToken
+    }),
+  signinUsingGoogle: (accessToken: string) =>
+    apiWithoutAuth.post("auth/google", {
+      accessToken
+    }),
+  refresh: (refreshToken: string) =>
+    apiWithoutAuth.post("auth/refresh", {
+      refreshToken
     })
 };
