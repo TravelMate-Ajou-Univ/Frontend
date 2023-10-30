@@ -1,3 +1,4 @@
+import { Pin } from "@/model/bookmark";
 import {
   deleteCollection,
   modifyCollection
@@ -9,6 +10,8 @@ type Props = {
   id: number;
   title: string;
   visibility: string;
+  addPins: Pin[];
+  subPins: Number[];
   modifyState: Boolean;
   setModifyState: (state: SetStateAction<boolean>) => void;
 };
@@ -16,6 +19,8 @@ export default function ModifyButton({
   id,
   title,
   visibility,
+  addPins,
+  subPins,
   modifyState,
   setModifyState
 }: Props) {
@@ -39,7 +44,7 @@ export default function ModifyButton({
     if (result === false) {
       return;
     }
-    await modifyCollection(id, title, visibility);
+    await modifyCollection(id, title, visibility, addPins, subPins);
     toggleHandler();
     router.push(
       `/bookmarkCollection/${title}?title=${title}&visibility=${visibility}&id=${id}`

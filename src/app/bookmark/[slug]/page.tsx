@@ -2,14 +2,13 @@
 
 import Map from "@/components/Map";
 import { useSearchParams } from "next/navigation";
-import { getAllBookmark } from "@/service/bookmark";
 import ModifyButton from "@/components/ModifyButton";
-import { BookmarkData1 } from "@/data/bookmarkData";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Bookmark } from "@/model/bookmark";
+import { Bookmark, Pin } from "@/model/bookmark";
 import PublicIcon from "@/components/ui/icons/PublicIcon";
 import FriendsOnlyIcon from "@/components/ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "@/components/ui/icons/PrivateIcon";
+import { getAllBookmarks } from "@/service/bookmarkCollection";
 
 export default function BookmarkPage() {
   const params = useSearchParams();
@@ -22,6 +21,9 @@ export default function BookmarkPage() {
   const [newVisibility, setNewVisibility] = useState(visibility);
   const [modifyState, setModifyState] = useState(false);
   const [visibleState, setVisibleState] = useState(false);
+  const [addPins, setAddPins] = useState<Pin[]>([]);
+  const [subPins, setSubPins] = useState<Number[]>([]);
+
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
@@ -43,13 +45,13 @@ export default function BookmarkPage() {
     element => element.name === visibility
   );
 
-  // const bookmarks = await getAllBookmark(id);
   useEffect(() => {
-    // const getBookmark = async () => {
-    //   const data = await getAllBookmark(id);
-    //   setBookmarks(data);
-    // };
-    // getBookmark();
+    const getBookmark = async () => {
+      const data = await getAllBookmarks(id);
+
+      setBookmarks(data);
+    };
+    getBookmark();
   }, []);
 
   const onChangeText = (
@@ -69,6 +71,7 @@ export default function BookmarkPage() {
     setNewVisibility(name);
     setVisibleState(!visibleState);
   };
+
   return (
     <section className="flex flex-col items-center">
       {modifyState ? (
@@ -81,7 +84,7 @@ export default function BookmarkPage() {
           />
           <div
             onClick={toggleVisible}
-            className="flex relative gap-4 p-1 w-[12rem] rounded-md hover:scale-110"
+            className="flex relative gap-4 p-1 w-[12rem] rounded-md hover:scale-110 z-50"
           >
             {
               visible_scopes.find(element => element.name === newVisibility)
@@ -121,12 +124,14 @@ export default function BookmarkPage() {
         </div>
       )}
       <div className="w-[60vw] h-[70vh] border-2 m-4">
-        {/* <Map bookmarks={bookmarks} /> */}
+        <Map bookmarks={bookmarks} modifyState={modifyState} />
       </div>
       <ModifyButton
         id={id}
         title={newTitle}
         visibility={newVisibility}
+        addPins={addPins}
+        subPins={subPins}
         modifyState={modifyState}
         setModifyState={setModifyState}
       />

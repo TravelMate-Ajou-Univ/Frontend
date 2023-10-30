@@ -1,11 +1,11 @@
 export type Bookmark = {
-  location: {
-    id: number;
-    latitude: number;
-    longitude: number;
-  };
+  id: number;
+  latitude: number;
+  longitude: number;
   content?: string;
 };
+
+export type Pin = Omit<Bookmark, "id">;
 
 export type BookmarkCollection = {
   id: number;

@@ -23,7 +23,7 @@ export default function Collection({ bookmarkCollection }: Props) {
       <div className="flex flex-col items-center my-2">
         <Link
           href={{
-            pathname: `bookmarkCollection/${bookmarkCollection.title}`,
+            pathname: `bookmark/${bookmarkCollection.title}`,
             query: {
               title: bookmarkCollection.title,
               visibility: bookmarkCollection.visibility,

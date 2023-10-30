@@ -37,8 +37,8 @@ export default function Marker({ bookmarks }: Props) {
           <MarkerF
             key={index}
             position={{
-              lat: bookmark.location.latitude,
-              lng: bookmark.location.longitude
+              lat: bookmark.latitude,
+              lng: bookmark.longitude
             }}
             title={bookmark.content}
             onClick={e => clickHandler(index, e)}

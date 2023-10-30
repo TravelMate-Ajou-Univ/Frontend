@@ -1,13 +1,60 @@
-import { BookmarkCollection } from "@/model/bookmark";
+import { Bookmark, BookmarkCollection, Pin } from "@/model/bookmark";
 import axios from "axios";
 
-export async function getMyCollectionList(): Promise<BookmarkCollection[]> {
+type Props = {
+  page: number;
+  limit: number;
+  visibility: "PUBLIC" | "FRIENDS_ONLY" | "PRIVATE" | "ALL";
+};
+export async function getMyCollectionList({
+  page,
+  limit,
+  visibility
+}: Props): Promise<BookmarkCollection[]> {
+  try {
+    const scope = visibility === "ALL" ? null : visibility;
+    const response = await axios({
+      method: "get",
+      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/bookmark-collections`,
+      params: {
+        page: page,
+        limit: limit,
+        visibility: scope
+      }
+    });
+    return response.data.bookmarkCollections;
+  } catch (error) {
+    console.log(error);
+    return [];
+  }
+}
+
+export async function getAllBookmarks(id: number): Promise<Bookmark[]> {
   try {
     const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/bookmark-collections`
+      `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/bookmark-collection/${id}/bookmarks`
     );
-
-    return response.data;
+    const datas = response.data;
+    const bookmarks = datas.map(
+      ({
+        id,
+        location,
+        content
+      }: {
+        id: number;
+        location: { latitude: string; longitude: string };
+        content: string;
+      }) => {
+        const bookmark: Bookmark = {
+          id,
+          latitude: Number(location.latitude),
+          longitude: Number(location.longitude),
+          content
+        };
+        return bookmark;
+      }
+    );
+    return bookmarks;
   } catch (error) {
     console.log(error);
     return [];
@@ -28,7 +75,9 @@ export async function deleteCollection(id: number) {
 export async function modifyCollection(
   id: number,
   title: string,
-  visibility: string
+  visibility: string,
+  addPins: Pin[],
+  subPins: Number[]
 ) {
   try {
     await axios({
@@ -37,14 +86,8 @@ export async function modifyCollection(
       data: {
         title: title,
         visibility: visibility,
-        locationsWithContent: [
-          {
-            latitude: 12.524,
-            longitude: 10.125,
-            content: "뭘까용?3"
-          }
-        ],
-        bookmarkIdsToDelete: [1, 2, 3]
+        locationsWithContent: addPins,
+        bookmarkIdsToDelete: subPins
       }
     });
   } catch (error) {

@@ -16,9 +16,10 @@ import { DotLoader } from "react-spinners";
 
 type Props = {
   bookmarks: Bookmark[];
+  modifyState: boolean;
 };
 
-export default function Map({ bookmarks }: Props) {
+export default function Map({ bookmarks, modifyState }: Props) {
   const [userPos, setUserPos] = useState({
     lat: 0,
     lng: 0
@@ -27,6 +28,7 @@ export default function Map({ bookmarks }: Props) {
   const [zoomSize, setZoomSize] = useState(12);
   const [clickState, setClickState] = useState(false);
   const [location, setLocation] = useState({ lat: 0, lng: 0 });
+  // const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -57,8 +59,9 @@ export default function Map({ bookmarks }: Props) {
   };
 
   // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
-  const mapCenter =
+  const initCenter =
     bookmarks.length === 0 ? userPos : calculateCenter(bookmarks);
+  // setMapCenter(initCenter);
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -83,7 +86,12 @@ export default function Map({ bookmarks }: Props) {
   }
 
   const clickHandler = (e: any) => {
+    console.log(modifyState);
+
+    if (modifyState === false) return;
     const position = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+    console.log(position);
+
     setLocation(position);
     setClickState(true);
   };
@@ -92,6 +100,8 @@ export default function Map({ bookmarks }: Props) {
     console.log("add");
     setClickState(false);
   };
+
+  // const centerChangeHandler = () => {};
 
   return (
     <div className="relative w-full h-full z-0">
@@ -105,9 +115,10 @@ export default function Map({ bookmarks }: Props) {
       <GoogleMap
         options={mapOptions}
         zoom={zoomSize}
-        center={mapCenter}
+        center={initCenter}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: "100%", height: "100%" }}
+        // onCenterChanged={centerChangeHandler}
         onClick={e => clickHandler(e)}
       >
         {clickState ? (
@@ -119,7 +130,7 @@ export default function Map({ bookmarks }: Props) {
               onCloseClick={() => setClickState(false)}
             >
               <div>
-                <input type="text" placeholder="Comment" />
+                <input type="text" placeholder="Comment.." />
                 <button className="text-red-500" onClick={() => addHandler()}>
                   추가
                 </button>
