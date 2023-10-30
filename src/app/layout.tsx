@@ -1,3 +1,4 @@
+import AuthContext from "@/context/AuthContext";
 import "./globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -17,9 +18,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={inter.className}>
       <body className="w-full max-w-screen-xl oveflow-auto mx-auto">
-        <header></header>
-        <main className="w-full">{children}</main>
-        <footer></footer>
+        <AuthContext>
+          <header></header>
+          <main className="w-full h-full">{children}</main>
+          <footer></footer>
+        </AuthContext>
       </body>
     </html>
   );

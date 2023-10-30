@@ -13,6 +13,6 @@ export default function GpsIcon({ gpsToggle, toggleGPS }: Props) {
   );
 }
 
-function getGpsStyle(toggle: boolean): string {
+const getGpsStyle = (toggle: boolean): string => {
   return toggle ? "text-red-600" : "";
-}
+};

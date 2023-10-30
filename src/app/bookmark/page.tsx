@@ -17,6 +17,7 @@ export default function BookmarkPage() {
       lng: 127
     }
   ];
+
   return (
     <div className="w-full h-full">
       <Map bookmarks={test_bookmark} />
