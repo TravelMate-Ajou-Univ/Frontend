@@ -1,6 +1,11 @@
 "use client";
 
-import { useLoadScript, GoogleMap, MarkerF } from "@react-google-maps/api";
+import {
+  useLoadScript,
+  GoogleMap,
+  MarkerF,
+  InfoWindowF
+} from "@react-google-maps/api";
 import { useEffect, useMemo, useState } from "react";
 import SeasonButton from "./ui/SeasonButton";
 import MapMenuButton from "./ui/MapMenuButton";
@@ -20,6 +25,8 @@ export default function Map({ bookmarks }: Props) {
   });
   const [gpsToggle, setGpsToggle] = useState(false);
   const [zoomSize, setZoomSize] = useState(12);
+  const [clickState, setClickState] = useState(false);
+  const [location, setLocation] = useState({ lat: 0, lng: 0 });
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -62,6 +69,7 @@ export default function Map({ bookmarks }: Props) {
     []
   );
 
+  // map이 loading중일 때 spinner 보여주기
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string
   });
@@ -74,8 +82,15 @@ export default function Map({ bookmarks }: Props) {
     );
   }
 
-  const ClickHandler = () => {
-    console.log("Clicked!");
+  const clickHandler = (e: any) => {
+    const position = { lat: e.latLng.lat(), lng: e.latLng.lng() };
+    setLocation(position);
+    setClickState(true);
+  };
+
+  const addHandler = () => {
+    console.log("add");
+    setClickState(false);
   };
 
   return (
@@ -93,13 +108,28 @@ export default function Map({ bookmarks }: Props) {
         center={mapCenter}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: "100%", height: "100%" }}
-        onClick={ClickHandler}
+        onClick={e => clickHandler(e)}
       >
+        {clickState ? (
+          <section>
+            <MarkerF position={location} />
+            <InfoWindowF
+              position={location}
+              options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
+              onCloseClick={() => setClickState(false)}
+            >
+              <div>
+                <input type="text" placeholder="Comment" />
+                <button className="text-red-500" onClick={() => addHandler()}>
+                  추가
+                </button>
+              </div>
+            </InfoWindowF>
+          </section>
+        ) : null}
         {gpsToggle ? (
           <MarkerF position={{ lat: userPos.lat, lng: userPos.lng }} />
-        ) : (
-          <></>
-        )}
+        ) : null}
         <Marker bookmarks={bookmarks} />
       </GoogleMap>
     </div>

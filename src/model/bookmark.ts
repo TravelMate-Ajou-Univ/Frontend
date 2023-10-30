@@ -1,8 +1,8 @@
 export type Bookmark = {
   location: {
     id: number;
-    latitude: string;
-    longitude: string;
+    latitude: number;
+    longitude: number;
   };
   content?: string;
 };
