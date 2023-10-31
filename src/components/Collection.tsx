@@ -2,7 +2,7 @@
 
 import { BookmarkCollection } from "@/model/bookmark";
 import React, { useState } from "react";
-import BookmakrCollectionIcon from "./ui/icons/BookmakrCollectionIcon";
+import BookmarkCollectionIcon from "./ui/icons/BookmarkCollectionIcon";
 import PublicIcon from "./ui/icons/PublicIcon";
 import FriendsOnlyIcon from "./ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "./ui/icons/PrivateIcon";
@@ -31,7 +31,7 @@ export default function Collection({ bookmarkCollection }: Props) {
             }
           }}
         >
-          <BookmakrCollectionIcon />
+          <BookmarkCollectionIcon />
         </Link>
       </div>
       <div className="flex justify-center items-center mt-1 relative">

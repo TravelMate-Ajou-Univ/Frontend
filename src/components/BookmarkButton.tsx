@@ -1,5 +1,5 @@
 import { Pin } from "@/model/bookmark";
-import { deleteCollection, modifyCollection } from "@/service/bookmark";
+import { deleteCollection, modifyCollection } from "@/service/axios/bookmark";
 import { useRouter } from "next/navigation";
 import { SetStateAction } from "react";
 
@@ -12,7 +12,7 @@ type Props = {
   modifyState: Boolean;
   setModifyState: (state: SetStateAction<boolean>) => void;
 };
-export default function ModifyButton({
+export default function BookmarkButton({
   id,
   title,
   visibility,
@@ -24,9 +24,9 @@ export default function ModifyButton({
   const router = useRouter();
 
   const deleteHandler = async () => {
-    const result = confirm(`${title} bookmark를 삭제하시겠습니까?`);
+    const answer = confirm(`${title} bookmark를 삭제하시겠습니까?`);
 
-    if (result === true) {
+    if (answer === true) {
       await deleteCollection(id);
       router.push("/bookmark/list/ALL");
     }
@@ -48,7 +48,7 @@ export default function ModifyButton({
     );
   };
   return (
-    <div className="self-end flex font-bold gap-3 mr-[13rem]">
+    <div className="self-end flex font-bold gap-3 mr-[4rem]">
       <button
         onClick={deleteHandler}
         className="border-2 px-3 py-2 rounded-lg hover:text-red-400"

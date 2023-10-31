@@ -1,10 +1,10 @@
 "use client";
 
-import AddCollectonButton from "@/components/AddCollectonButton";
+import CollectionAddButton from "@/components/CollectionAddButton";
 import Collection from "@/components/Collection";
 import VisibilityButton from "@/components/ui/VisibilityButton";
 import { BookmarkCollection } from "@/model/bookmark";
-import { getMyCollectionList } from "@/service/bookmark";
+import { getMyCollectionList } from "@/service/axios/bookmark";
 import { Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 
@@ -37,7 +37,7 @@ export default function BookmarkPage({ params }: Props) {
       <div className="flex flex-col w-[60%] mx-auto">
         <div className="flex justify-between items-center">
           <VisibilityButton scope={params.slug} />
-          <AddCollectonButton />
+          <CollectionAddButton />
         </div>
         <div className="h-[70vh] my-4 border-4 rounded-md p-7 ">
           <ul className="grid gap-4 grid-cols-1 md:grid-cols-2 xl:grid-cols-4">

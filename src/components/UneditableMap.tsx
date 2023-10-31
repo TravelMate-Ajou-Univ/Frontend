@@ -3,15 +3,15 @@ import { useEffect, useMemo, useState } from "react";
 import SeasonButton from "./ui/SeasonButton";
 import MapMenuButton from "./ui/MapMenuButton";
 import { Bookmark } from "@/model/bookmark";
-import { calculateCenter } from "@/service/map";
+import { CalculateCenter } from "@/service/map";
 import { DotLoader } from "react-spinners";
-import MarkerView from "./MarkerView";
+import UneditableMarker from "./UneditableMarker";
 
 type Props = {
   bookmarks: Bookmark[];
 };
 
-export default function MapView({ bookmarks }: Props) {
+export default function UnEditableMap({ bookmarks }: Props) {
   const [userPos, setUserPos] = useState({
     lat: 0,
     lng: 0
@@ -36,7 +36,7 @@ export default function MapView({ bookmarks }: Props) {
 
   // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
   const initCenter =
-    bookmarks.length === 0 ? userPos : calculateCenter(bookmarks);
+    bookmarks.length === 0 ? userPos : CalculateCenter(bookmarks);
 
   const toggleGPS = () => {
     setGpsToggle(!gpsToggle);
@@ -92,7 +92,7 @@ export default function MapView({ bookmarks }: Props) {
         {gpsToggle ? (
           <MarkerF position={{ lat: userPos.lat, lng: userPos.lng }} />
         ) : null}
-        <MarkerView bookmarks={bookmarks} />
+        <UneditableMarker bookmarks={bookmarks} />
       </GoogleMap>
     </div>
   );

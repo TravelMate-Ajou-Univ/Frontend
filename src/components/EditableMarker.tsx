@@ -1,14 +1,20 @@
-"use client";
-
 import { Bookmark } from "@/model/bookmark";
 import { InfoWindowF, MarkerF } from "@react-google-maps/api";
 import { useState } from "react";
 
 type Props = {
   bookmarks: Bookmark[];
+  setBookmarks: (data: Bookmark[]) => void;
+  subPins: Number[];
+  setSubPins: (pin: Number[]) => void;
 };
 
-export default function MarkerView({ bookmarks }: Props) {
+export default function EditableMarker({
+  bookmarks,
+  setBookmarks,
+  subPins,
+  setSubPins
+}: Props) {
   const [selectedMarker, setSelectedMarker] = useState<{
     lat: number;
     lng: number;
@@ -28,6 +34,20 @@ export default function MarkerView({ bookmarks }: Props) {
     setSelectedMarker({ lat: e.latLng.lat(), lng: e.latLng.lng() });
   };
 
+  const deleteHandler = async (target: Bookmark) => {
+    const new_data = target.id === undefined ? 0 : target.id;
+    const new_bookmarks = bookmarks.filter(
+      bookmark =>
+        bookmark.latitude !== target.latitude &&
+        bookmark.longitude !== target.longitude
+    );
+
+    if (target.id !== undefined) {
+      setSubPins([...subPins, new_data]);
+    }
+    setBookmarks(new_bookmarks);
+    setActiveMarker(null);
+  };
   return (
     <ul>
       {bookmarks.map((bookmark, index) => (
@@ -49,6 +69,12 @@ export default function MarkerView({ bookmarks }: Props) {
             >
               <section className="flex flex-col items-center">
                 <p className="text-2xl">{bookmark.content}</p>
+                <button
+                  onClick={() => deleteHandler(bookmark)}
+                  className="hover:text-red-400"
+                >
+                  삭제
+                </button>
               </section>
             </InfoWindowF>
           ) : null}

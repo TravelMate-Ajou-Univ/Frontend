@@ -1,14 +1,14 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, SyntheticEvent, useState } from "react";
 import PublicIcon from "./ui/icons/PublicIcon";
 import PrivateIcon from "./ui/icons/PrivateIcon";
 import FriendsOnlyIcon from "./ui/icons/FriendsOnlyIcon";
-import axios from "axios";
+import { addCollection } from "@/service/axios/bookmark";
 
 type Props = {
   toggleButton: () => void;
 };
 
-export default function AddCollection({ toggleButton }: Props) {
+export default function CollectionModal({ toggleButton }: Props) {
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
@@ -31,7 +31,7 @@ export default function AddCollection({ toggleButton }: Props) {
     title: "",
     visible: ""
   });
-  const visibleSetting = (value: string, e: any) => {
+  const visibleSetting = (value: string, e: SyntheticEvent) => {
     setVisible(value);
     setForm(prev => ({ ...prev, visible: value }));
   };
@@ -40,17 +40,9 @@ export default function AddCollection({ toggleButton }: Props) {
     setForm(prev => ({ ...prev, [name]: value }));
   };
   const onSubmit = () => {
-    axios({
-      method: "post",
-      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/bookmark-collection`,
-      data: {
-        title: form.title,
-        visibility: form.visible
-      }
-    })
-      .then(res => console.log)
-      .catch(err => console.log);
+    addCollection(form);
   };
+
   return (
     <form className="absolute w-[13rem] ml-[-4rem] mt-[1rem] flex flex-col p-3 items-center border-2 border-neutral-300 z-10 bg-white">
       <input

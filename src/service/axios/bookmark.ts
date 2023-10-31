@@ -1,21 +1,27 @@
 import { Bookmark, BookmarkCollection, Pin } from "@/model/bookmark";
-import axios from "axios";
+import { api } from "./api";
 
 type Props = {
   page: number;
   limit: number;
   visibility: "PUBLIC" | "FRIENDS_ONLY" | "PRIVATE" | "ALL";
 };
-export async function getMyCollectionList({
+
+type Form = {
+  title: string;
+  visible: string;
+};
+
+export const getMyCollectionList = async ({
   page,
   limit,
   visibility
-}: Props): Promise<BookmarkCollection[]> {
+}: Props): Promise<BookmarkCollection[]> => {
   try {
     const scope = visibility === "ALL" ? null : visibility;
-    const response = await axios({
+    const response = await api({
       method: "get",
-      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/bookmark-collections`,
+      url: `/users/me/bookmark-collections`,
       params: {
         page: page,
         limit: limit,
@@ -27,12 +33,33 @@ export async function getMyCollectionList({
     console.log(error);
     return [];
   }
-}
+};
 
-export async function getAllBookmarks(id: number): Promise<Bookmark[]> {
+export const addCollection = async ({
+  title,
+  visible
+}: Form): Promise<Boolean> => {
   try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/bookmark-collection/${id}/bookmarks`
+    const response = await api({
+      method: "post",
+      url: `/users/me/bookmark-collection`,
+      data: {
+        title: title,
+        visibility: visible
+      }
+    });
+
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const getAllBookmarks = async (id: number): Promise<Bookmark[]> => {
+  try {
+    const response = await api.get(
+      `/users/me/bookmark-collection/${id}/bookmarks`
     );
     const datas = response.data;
     const bookmarks = datas.map(
@@ -59,30 +86,33 @@ export async function getAllBookmarks(id: number): Promise<Bookmark[]> {
     console.log(error);
     return [];
   }
-}
+};
 
-export async function deleteCollection(id: number) {
+export const deleteCollection = async (id: number): Promise<Boolean> => {
   try {
-    await axios({
+    const response = await api({
       method: "delete",
-      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/bookmark-collection/${id}`
+      url: `/users/me/bookmark-collection/${id}`
     });
+
+    return true;
   } catch (error) {
     console.log(error);
+    return false;
   }
-}
+};
 
-export async function modifyCollection(
+export const modifyCollection = async (
   id: number,
   title: string,
   visibility: string,
   addPins: Pin[],
   subPins: Number[]
-) {
+): Promise<Boolean> => {
   try {
-    await axios({
+    await api({
       method: "patch",
-      url: `${process.env.NEXT_PUBLIC_API_BASE_URL}/users/me/bookmark-collection/${id}`,
+      url: `/users/me/bookmark-collection/${id}`,
       data: {
         title: title,
         visibility: visibility,
@@ -90,7 +120,9 @@ export async function modifyCollection(
         bookmarkIdsToDelete: subPins
       }
     });
+    return true;
   } catch (error) {
     console.log(error);
+    return false;
   }
-}
+};

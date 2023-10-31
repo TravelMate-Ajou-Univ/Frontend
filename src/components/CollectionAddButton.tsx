@@ -1,8 +1,8 @@
 "use client";
 import React, { useState } from "react";
-import AddCollection from "./AddCollection";
+import CollectionModal from "./CollectionModal";
 
-export default function AddCollectonButton() {
+export default function CollectionAddButton() {
   const [modalBtn, setModalBtn] = useState(false);
   const toggleButton = () => {
     setModalBtn(!modalBtn);
@@ -12,7 +12,7 @@ export default function AddCollectonButton() {
       <button className="w-fit border-2 rounded-md p-2" onClick={toggleButton}>
         <p>북마크 추가</p>
       </button>
-      {modalBtn ? <AddCollection toggleButton={toggleButton} /> : null}
+      {modalBtn ? <CollectionModal toggleButton={toggleButton} /> : null}
     </div>
   );
 }

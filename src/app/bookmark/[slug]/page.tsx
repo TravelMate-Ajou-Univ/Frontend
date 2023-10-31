@@ -1,16 +1,15 @@
 "use client";
 
-import Map from "@/components/MapModify";
 import { useSearchParams } from "next/navigation";
-import ModifyButton from "@/components/ModifyButton";
+import BookmarkButton from "@/components/BookmarkButton";
 import { ChangeEvent, useEffect, useState } from "react";
 import { Bookmark, Pin } from "@/model/bookmark";
 import PublicIcon from "@/components/ui/icons/PublicIcon";
 import FriendsOnlyIcon from "@/components/ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "@/components/ui/icons/PrivateIcon";
-import { getAllBookmarks } from "@/service/bookmark";
-import MapModify from "@/components/MapModify";
-import MapView from "@/components/MapView";
+import { getAllBookmarks } from "@/service/axios/bookmark";
+import EditableMap from "@/components/EditableMap";
+import UneditableMap from "@/components/UneditableMap";
 
 export default function BookmarkPage() {
   const params = useSearchParams();
@@ -73,18 +72,18 @@ export default function BookmarkPage() {
   };
 
   return (
-    <section className="flex flex-col items-center">
+    <section className="flex flex-col items-center mt-4">
       {modifyState ? (
         <div className="flex w-[60vw] justify-between items-center">
           <input
             type="text"
             value={newTitle}
             onChange={onChangeText}
-            className="text-3xl font-bold border-none hover:scale-110"
+            className="text-3xl font-bold bg-gray-100 border-none hover:scale-110"
           />
           <div
             onClick={toggleVisible}
-            className="flex relative gap-4 p-1 w-[12rem] rounded-md hover:scale-110 z-50"
+            className="flex relative gap-4 p-1 w-[11rem] justify-center rounded-md hover:scale-110 z-50"
           >
             {
               visible_scopes.find(element => element.name === newVisibility)
@@ -95,7 +94,7 @@ export default function BookmarkPage() {
                 ?.name
             }
             {visibleState ? (
-              <ul className="absolute top-8 border-2 bg-white">
+              <ul className="absolute top-8 border-2 bg-gray-100">
                 {visible_scopes.map(element => (
                   <li
                     key={element.name}
@@ -115,7 +114,7 @@ export default function BookmarkPage() {
       ) : (
         <div className="flex w-[60vw] justify-between items-center">
           <p className="text-3xl font-bold">{title}</p>
-          <div className="flex w-[12rem] gap-4 p-1">
+          <div className="flex justify-center w-[11rem] gap-4 p-1">
             {visible_scope?.icon}
             {visible_scope?.name}
           </div>
@@ -123,7 +122,7 @@ export default function BookmarkPage() {
       )}
       <div className="w-[60vw] h-[70vh] border-2 m-4">
         {modifyState ? (
-          <MapModify
+          <EditableMap
             bookmarks={bookmarks}
             setBookmarks={setBookmarks}
             addPins={addPins}
@@ -132,10 +131,10 @@ export default function BookmarkPage() {
             setSubPins={setSubPins}
           />
         ) : (
-          <MapView bookmarks={bookmarks} />
+          <UneditableMap bookmarks={bookmarks} />
         )}
       </div>
-      <ModifyButton
+      <BookmarkButton
         id={id}
         title={newTitle}
         visibility={newVisibility}

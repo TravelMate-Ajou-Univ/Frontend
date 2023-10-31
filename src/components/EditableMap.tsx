@@ -8,9 +8,9 @@ import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import SeasonButton from "./ui/SeasonButton";
 import MapMenuButton from "./ui/MapMenuButton";
 import { Bookmark, Pin } from "@/model/bookmark";
-import { calculateCenter } from "@/service/map";
+import { CalculateCenter } from "@/service/map";
 import { DotLoader } from "react-spinners";
-import MarkerModify from "./MarkerModify";
+import EditableMarker from "./EditableMarker";
 
 type Props = {
   bookmarks: Bookmark[];
@@ -21,7 +21,7 @@ type Props = {
   setSubPins: (pin: Number[]) => void;
 };
 
-export default function MapModify({
+export default function EditableMap({
   bookmarks,
   setBookmarks,
   addPins,
@@ -56,7 +56,7 @@ export default function MapModify({
 
   // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
   const initCenter =
-    bookmarks.length === 0 ? userPos : calculateCenter(bookmarks);
+    bookmarks.length === 0 ? userPos : CalculateCenter(bookmarks);
 
   const toggleGPS = () => {
     setGpsToggle(!gpsToggle);
@@ -163,7 +163,7 @@ export default function MapModify({
         {gpsToggle ? (
           <MarkerF position={{ lat: userPos.lat, lng: userPos.lng }} />
         ) : null}
-        <MarkerModify
+        <EditableMarker
           bookmarks={bookmarks}
           setBookmarks={setBookmarks}
           subPins={subPins}
