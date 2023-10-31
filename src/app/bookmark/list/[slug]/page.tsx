@@ -1,9 +1,10 @@
 "use client";
+
 import AddCollectonButton from "@/components/AddCollectonButton";
 import Collection from "@/components/Collection";
 import VisibilityButton from "@/components/ui/VisibilityButton";
 import { BookmarkCollection } from "@/model/bookmark";
-import { getMyCollectionList } from "@/service/bookmarkCollection";
+import { getMyCollectionList } from "@/service/bookmark";
 import { Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 

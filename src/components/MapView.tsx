@@ -1,34 +1,23 @@
-"use client";
-
-import {
-  useLoadScript,
-  GoogleMap,
-  MarkerF,
-  InfoWindowF
-} from "@react-google-maps/api";
+import { useLoadScript, GoogleMap, MarkerF } from "@react-google-maps/api";
 import { useEffect, useMemo, useState } from "react";
 import SeasonButton from "./ui/SeasonButton";
 import MapMenuButton from "./ui/MapMenuButton";
-import Marker from "./Marker";
 import { Bookmark } from "@/model/bookmark";
 import { calculateCenter } from "@/service/map";
 import { DotLoader } from "react-spinners";
+import MarkerView from "./MarkerView";
 
 type Props = {
   bookmarks: Bookmark[];
-  modifyState: boolean;
 };
 
-export default function Map({ bookmarks, modifyState }: Props) {
+export default function MapView({ bookmarks }: Props) {
   const [userPos, setUserPos] = useState({
     lat: 0,
     lng: 0
   });
   const [gpsToggle, setGpsToggle] = useState(false);
   const [zoomSize, setZoomSize] = useState(12);
-  const [clickState, setClickState] = useState(false);
-  const [location, setLocation] = useState({ lat: 0, lng: 0 });
-  // const [mapCenter, setMapCenter] = useState({ lat: 0, lng: 0 });
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition(
@@ -45,6 +34,10 @@ export default function Map({ bookmarks, modifyState }: Props) {
     );
   }, []);
 
+  // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
+  const initCenter =
+    bookmarks.length === 0 ? userPos : calculateCenter(bookmarks);
+
   const toggleGPS = () => {
     setGpsToggle(!gpsToggle);
   };
@@ -57,11 +50,6 @@ export default function Map({ bookmarks, modifyState }: Props) {
     let size = zoomSize - 1;
     setZoomSize(size);
   };
-
-  // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
-  const initCenter =
-    bookmarks.length === 0 ? userPos : calculateCenter(bookmarks);
-  // setMapCenter(initCenter);
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -85,24 +73,6 @@ export default function Map({ bookmarks, modifyState }: Props) {
     );
   }
 
-  const clickHandler = (e: any) => {
-    console.log(modifyState);
-
-    if (modifyState === false) return;
-    const position = { lat: e.latLng.lat(), lng: e.latLng.lng() };
-    console.log(position);
-
-    setLocation(position);
-    setClickState(true);
-  };
-
-  const addHandler = () => {
-    console.log("add");
-    setClickState(false);
-  };
-
-  // const centerChangeHandler = () => {};
-
   return (
     <div className="relative w-full h-full z-0">
       <MapMenuButton
@@ -118,30 +88,11 @@ export default function Map({ bookmarks, modifyState }: Props) {
         center={initCenter}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: "100%", height: "100%" }}
-        // onCenterChanged={centerChangeHandler}
-        onClick={e => clickHandler(e)}
       >
-        {clickState ? (
-          <section>
-            <MarkerF position={location} />
-            <InfoWindowF
-              position={location}
-              options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
-              onCloseClick={() => setClickState(false)}
-            >
-              <div>
-                <input type="text" placeholder="Comment.." />
-                <button className="text-red-500" onClick={() => addHandler()}>
-                  추가
-                </button>
-              </div>
-            </InfoWindowF>
-          </section>
-        ) : null}
         {gpsToggle ? (
           <MarkerF position={{ lat: userPos.lat, lng: userPos.lng }} />
         ) : null}
-        <Marker bookmarks={bookmarks} />
+        <MarkerView bookmarks={bookmarks} />
       </GoogleMap>
     </div>
   );

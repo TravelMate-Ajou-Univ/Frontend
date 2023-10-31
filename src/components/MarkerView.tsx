@@ -2,13 +2,13 @@
 
 import { Bookmark } from "@/model/bookmark";
 import { InfoWindowF, MarkerF } from "@react-google-maps/api";
-import { SetStateAction, useState } from "react";
+import { useState } from "react";
 
 type Props = {
   bookmarks: Bookmark[];
 };
 
-export default function Marker({ bookmarks }: Props) {
+export default function MarkerView({ bookmarks }: Props) {
   const [selectedMarker, setSelectedMarker] = useState<{
     lat: number;
     lng: number;
@@ -24,18 +24,15 @@ export default function Marker({ bookmarks }: Props) {
   };
 
   const clickHandler = (index: number, e: any) => {
-    console.log(index);
-    console.log(e);
-
     handleActiveMarker(index);
     setSelectedMarker({ lat: e.latLng.lat(), lng: e.latLng.lng() });
   };
+
   return (
     <ul>
       {bookmarks.map((bookmark, index) => (
         <li key={index}>
           <MarkerF
-            key={index}
             position={{
               lat: bookmark.latitude,
               lng: bookmark.longitude
@@ -50,9 +47,9 @@ export default function Marker({ bookmarks }: Props) {
               options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
               onCloseClick={() => setActiveMarker(null)}
             >
-              <div>
-                <div className="text-2xl">{bookmark.content}</div>
-              </div>
+              <section className="flex flex-col items-center">
+                <p className="text-2xl">{bookmark.content}</p>
+              </section>
             </InfoWindowF>
           ) : null}
         </li>

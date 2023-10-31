@@ -1,6 +1,6 @@
 "use client";
 
-import Map from "@/components/Map";
+import Map from "@/components/MapModify";
 import { useSearchParams } from "next/navigation";
 import ModifyButton from "@/components/ModifyButton";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -8,7 +8,9 @@ import { Bookmark, Pin } from "@/model/bookmark";
 import PublicIcon from "@/components/ui/icons/PublicIcon";
 import FriendsOnlyIcon from "@/components/ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "@/components/ui/icons/PrivateIcon";
-import { getAllBookmarks } from "@/service/bookmarkCollection";
+import { getAllBookmarks } from "@/service/bookmark";
+import MapModify from "@/components/MapModify";
+import MapView from "@/components/MapView";
 
 export default function BookmarkPage() {
   const params = useSearchParams();
@@ -66,8 +68,6 @@ export default function BookmarkPage() {
   };
 
   const modifyVisible = (name: string, e: any) => {
-    console.log(name);
-
     setNewVisibility(name);
     setVisibleState(!visibleState);
   };
@@ -95,7 +95,7 @@ export default function BookmarkPage() {
                 ?.name
             }
             {visibleState ? (
-              <ul className="absolute top-8 border-2">
+              <ul className="absolute top-8 border-2 bg-white">
                 {visible_scopes.map(element => (
                   <li
                     key={element.name}
@@ -109,9 +109,7 @@ export default function BookmarkPage() {
                   </li>
                 ))}
               </ul>
-            ) : (
-              <></>
-            )}
+            ) : null}
           </div>
         </div>
       ) : (
@@ -124,7 +122,18 @@ export default function BookmarkPage() {
         </div>
       )}
       <div className="w-[60vw] h-[70vh] border-2 m-4">
-        <Map bookmarks={bookmarks} modifyState={modifyState} />
+        {modifyState ? (
+          <MapModify
+            bookmarks={bookmarks}
+            setBookmarks={setBookmarks}
+            addPins={addPins}
+            setAddPins={setAddPins}
+            subPins={subPins}
+            setSubPins={setSubPins}
+          />
+        ) : (
+          <MapView bookmarks={bookmarks} />
+        )}
       </div>
       <ModifyButton
         id={id}

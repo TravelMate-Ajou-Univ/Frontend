@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import { BsTrash } from "react-icons/bs";
-import { deleteCollection } from "@/service/bookmarkCollection";
+import { deleteCollection } from "@/service/bookmark";
 
 type Props = {
   id: number;

@@ -12,7 +12,7 @@ export default function AddCollectonButton() {
       <button className="w-fit border-2 rounded-md p-2" onClick={toggleButton}>
         <p>북마크 추가</p>
       </button>
-      {modalBtn ? <AddCollection toggleButton={toggleButton} /> : <></>}
+      {modalBtn ? <AddCollection toggleButton={toggleButton} /> : null}
     </div>
   );
 }

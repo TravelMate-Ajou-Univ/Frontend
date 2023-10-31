@@ -1,5 +1,5 @@
 export type Bookmark = {
-  id: number;
+  id?: number;
   latitude: number;
   longitude: number;
   content?: string;

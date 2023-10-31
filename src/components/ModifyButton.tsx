@@ -1,8 +1,5 @@
 import { Pin } from "@/model/bookmark";
-import {
-  deleteCollection,
-  modifyCollection
-} from "@/service/bookmarkCollection";
+import { deleteCollection, modifyCollection } from "@/service/bookmark";
 import { useRouter } from "next/navigation";
 import { SetStateAction } from "react";
 
@@ -31,7 +28,7 @@ export default function ModifyButton({
 
     if (result === true) {
       await deleteCollection(id);
-      router.push("/bookmarkCollection");
+      router.push("/bookmark/list/ALL");
     }
   };
 
@@ -47,7 +44,7 @@ export default function ModifyButton({
     await modifyCollection(id, title, visibility, addPins, subPins);
     toggleHandler();
     router.push(
-      `/bookmarkCollection/${title}?title=${title}&visibility=${visibility}&id=${id}`
+      `/bookmark/${title}?title=${title}&visibility=${visibility}&id=${id}`
     );
   };
   return (
