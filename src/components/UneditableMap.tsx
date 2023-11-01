@@ -1,18 +1,17 @@
-"use client";
-
 import { useLoadScript, GoogleMap, MarkerF } from "@react-google-maps/api";
 import { useEffect, useMemo, useState } from "react";
 import SeasonButton from "./ui/SeasonButton";
 import MapMenuButton from "./ui/MapMenuButton";
-import Marker from "./Marker";
 import { Bookmark } from "@/model/bookmark";
-import { calculateCenter } from "@/service/map";
+import { CalculateCenter } from "@/service/map";
+import { DotLoader } from "react-spinners";
+import UneditableMarker from "./UneditableMarker";
 
 type Props = {
   bookmarks: Bookmark[];
 };
 
-export default function Map({ bookmarks }: Props) {
+export default function UnEditableMap({ bookmarks }: Props) {
   const [userPos, setUserPos] = useState({
     lat: 0,
     lng: 0
@@ -30,9 +29,14 @@ export default function Map({ bookmarks }: Props) {
       },
       error => {
         prompt("현재 위치를 가져오는 데 실패하였습니다.");
+        console.log(error);
       }
     );
   }, []);
+
+  // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
+  const initCenter =
+    bookmarks.length === 0 ? userPos : CalculateCenter(bookmarks);
 
   const toggleGPS = () => {
     setGpsToggle(!gpsToggle);
@@ -46,9 +50,6 @@ export default function Map({ bookmarks }: Props) {
     let size = zoomSize - 1;
     setZoomSize(size);
   };
-  // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
-  const mapCenter =
-    bookmarks.length === 0 ? userPos : calculateCenter(bookmarks);
 
   const mapOptions = useMemo<google.maps.MapOptions>(
     () => ({
@@ -59,12 +60,17 @@ export default function Map({ bookmarks }: Props) {
     []
   );
 
+  // map이 loading중일 때 spinner 보여주기
   const { isLoaded } = useLoadScript({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY as string
   });
 
   if (!isLoaded) {
-    return <p>Loading...</p>;
+    return (
+      <div className="flex justify-center items-center w-full h-full border-2">
+        <DotLoader size={80} color="#36d7b7" />
+      </div>
+    );
   }
 
   return (
@@ -79,16 +85,14 @@ export default function Map({ bookmarks }: Props) {
       <GoogleMap
         options={mapOptions}
         zoom={zoomSize}
-        center={mapCenter}
+        center={initCenter}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: "100%", height: "100%" }}
       >
         {gpsToggle ? (
           <MarkerF position={{ lat: userPos.lat, lng: userPos.lng }} />
-        ) : (
-          <></>
-        )}
-        <Marker bookmarks={bookmarks} />
+        ) : null}
+        <UneditableMarker bookmarks={bookmarks} />
       </GoogleMap>
     </div>
   );
