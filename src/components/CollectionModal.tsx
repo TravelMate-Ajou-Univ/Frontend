@@ -3,12 +3,15 @@ import PublicIcon from "./ui/icons/PublicIcon";
 import PrivateIcon from "./ui/icons/PrivateIcon";
 import FriendsOnlyIcon from "./ui/icons/FriendsOnlyIcon";
 import { addCollection } from "@/service/axios/bookmark";
+import { useDispatch } from "react-redux";
+import { addBookmarkCollection } from "@/redux/features/bookmarkCollectionSlice";
 
 type Props = {
   toggleButton: () => void;
 };
 
 export default function CollectionModal({ toggleButton }: Props) {
+  const dispatch = useDispatch();
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
@@ -39,27 +42,38 @@ export default function CollectionModal({ toggleButton }: Props) {
     const { name, value } = e.target;
     setForm(prev => ({ ...prev, [name]: value }));
   };
-  const onSubmit = () => {
-    addCollection(form);
+  const onSubmit = async (e: SyntheticEvent) => {
+    e.preventDefault();
+    if (form.visible === "") {
+      alert("공개 범위를 설정하지 않았습니다.");
+      return;
+    }
+    const res = await addCollection(form);
+    if (res === null) {
+      alert("생성 실패!");
+    } else {
+      dispatch(addBookmarkCollection(res));
+    }
+    toggleButton();
   };
 
   return (
-    <form className="absolute w-[13rem] ml-[-4rem] mt-[1rem] flex flex-col p-3 items-center border-2 border-neutral-300 z-10 bg-white">
+    <form className="absolute right-0 w-[12rem] mt-[1rem] flex flex-col p-3 items-center border-2 border-neutral-300 z-10 bg-white">
       <input
         className="w-full m-1 outline-none p-3 border-2"
         type="text"
         id="title"
         name="title"
-        placeholder="북마크 제목..."
+        placeholder="북마크 컬렉션 제목..."
         required
         value={form.title}
         onChange={onChange}
       />
       <p className="self-start my-1">공개 범위</p>
-      <ul className="flex gap-3">
+      <ul className="flex gap-3 cursor:">
         {visible_scopes.map((scope, index) => (
           <li
-            className="flex flex-col items-center"
+            className="flex flex-col items-center cursor-pointer"
             key={index}
             onClick={e => {
               visibleSetting(scope.value, e);
@@ -74,7 +88,7 @@ export default function CollectionModal({ toggleButton }: Props) {
           </li>
         ))}
       </ul>
-      <div className="flex self-end font-bold gap-3 mr-1">
+      <div className="flex self-end font-bold gap-3 mr-1 mt-1">
         <button onClick={toggleButton} className="hover:text-red-400">
           취소
         </button>

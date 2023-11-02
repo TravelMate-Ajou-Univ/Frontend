@@ -144,17 +144,18 @@ export default function EditableMap({
               options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
               onCloseClick={() => setClickState(false)}
             >
-              <div>
-                <input
-                  type="text"
-                  placeholder="Comment.."
+              <div className="flex flex-col items-center gap-2">
+                <textarea
+                  rows={3}
                   onChange={onChange}
+                  className="border-4"
+                  autoFocus
                 />
                 <button
-                  className="text-red-500"
+                  className="text-red-500 focus:pointer hover:scale-110"
                   onClick={() => addHandler(location)}
                 >
-                  추가
+                  추가하기
                 </button>
               </div>
             </InfoWindowF>

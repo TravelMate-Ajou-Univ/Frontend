@@ -47,12 +47,12 @@ export default function BookmarkPage() {
   );
 
   useEffect(() => {
-    const getBookmark = async () => {
+    const getData = async () => {
       const data = await getAllBookmarks(id);
 
       setBookmarks(data);
     };
-    getBookmark();
+    getData();
   }, []);
 
   const onChangeText = (
@@ -72,9 +72,9 @@ export default function BookmarkPage() {
   };
 
   return (
-    <section className="flex flex-col items-center mt-4">
+    <section className="flex flex-col w-[60vw] items-center mx-auto mt-4">
       {modifyState ? (
-        <div className="flex w-[60vw] justify-between items-center">
+        <div className="flex w-full justify-between items-center">
           <input
             type="text"
             value={newTitle}
@@ -112,7 +112,7 @@ export default function BookmarkPage() {
           </div>
         </div>
       ) : (
-        <div className="flex w-[60vw] justify-between items-center">
+        <div className="flex w-full justify-between items-center">
           <p className="text-3xl font-bold">{title}</p>
           <div className="flex justify-center w-[11rem] gap-4 p-1">
             {visible_scope?.icon}

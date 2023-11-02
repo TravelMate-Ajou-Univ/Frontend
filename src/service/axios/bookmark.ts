@@ -1,10 +1,15 @@
-import { Bookmark, BookmarkCollection, Pin } from "@/model/bookmark";
+import {
+  Bookmark,
+  BookmarkCollection,
+  BookmarkCollectionList,
+  Pin
+} from "@/model/bookmark";
 import { api } from "./api";
 
-type Props = {
+type CollectionList = {
   page: number;
   limit: number;
-  visibility: "PUBLIC" | "FRIENDS_ONLY" | "PRIVATE" | "ALL";
+  visibility: string;
 };
 
 type Form = {
@@ -16,29 +21,32 @@ export const getMyCollectionList = async ({
   page,
   limit,
   visibility
-}: Props): Promise<BookmarkCollection[]> => {
+}: CollectionList): Promise<BookmarkCollectionList> => {
   try {
-    const scope = visibility === "ALL" ? null : visibility;
+    const scope = visibility === "all" ? null : visibility;
     const response = await api({
       method: "get",
       url: `/users/me/bookmark-collections`,
       params: {
         page: page,
         limit: limit,
-        visibility: scope
+        visibility: scope?.toUpperCase()
       }
     });
-    return response.data.bookmarkCollections;
+    return {
+      bookmarkCollections: response.data.bookmarkCollections,
+      count: response.data.count
+    };
   } catch (error) {
     console.log(error);
-    return [];
+    return { bookmarkCollections: [], count: 0 };
   }
 };
 
 export const addCollection = async ({
   title,
   visible
-}: Form): Promise<Boolean> => {
+}: Form): Promise<BookmarkCollection | null> => {
   try {
     const response = await api({
       method: "post",
@@ -49,10 +57,10 @@ export const addCollection = async ({
       }
     });
 
-    return true;
+    return response.data;
   } catch (error) {
     console.log(error);
-    return false;
+    return null;
   }
 };
 

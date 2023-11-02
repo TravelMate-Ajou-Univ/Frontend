@@ -48,7 +48,7 @@ export default function BookmarkButton({
     );
   };
   return (
-    <div className="self-end flex font-bold gap-3 mr-[4rem]">
+    <div className="flex self-end font-bold gap-3">
       <button
         onClick={deleteHandler}
         className="border-2 px-3 py-2 rounded-lg hover:text-red-400"
