@@ -13,7 +13,11 @@ export default function MenuProfile() {
         }`}
       >
         <Image
-          src={profileImageId === "" ? defaultProfileImg : profileImageId}
+          src={
+            profileImageId === ""
+              ? defaultProfileImg
+              : `process.env.NEXT_PUBLIC_SERVER_BASE_URL/attachment/${profileImageId}`
+          }
           alt="profile"
           priority
         />

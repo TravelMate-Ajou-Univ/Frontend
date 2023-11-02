@@ -10,14 +10,9 @@ import Menu from "./Menu";
 import { getCookie } from "cookies-next";
 import { GetUserInfo } from "@/service/axios/userSign";
 import { setUser } from "@/redux/features/userSlice";
-import { User } from "@/model/user";
 
 export default function Header() {
   const { userName, profileImageId } = useAppSelector(state => state.userSlice);
-  const [userInfo, setUserInfo] = useState<User>({
-    userName: "",
-    profileImageId: ""
-  });
   const [menu, setMenu] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -27,18 +22,12 @@ export default function Header() {
       const setUserInfoAsync = async () => {
         const userInfoData = await GetUserInfo();
         if (userInfoData !== false) {
-          // setUserInfo(userInfoData);
           dispatch(setUser(userInfoData));
         }
       };
       setUserInfoAsync();
     }
   }, [dispatch]);
-
-  // useEffect(() => {
-  //   if (userInfo.userName !== "") {
-  //   }
-  // }, [userInfo, dispatch]);
 
   const openMenu = () => {
     setMenu(true);
@@ -63,7 +52,11 @@ export default function Header() {
             }`}
           >
             <Image
-              src={profileImageId === "" ? defaultProfileImg : profileImageId}
+              src={
+                profileImageId === ""
+                  ? defaultProfileImg
+                  : `process.env.NEXT_PUBLIC_SERVER_BASE_URL/attachment/${profileImageId}`
+              }
               alt="profile"
               priority
             />
