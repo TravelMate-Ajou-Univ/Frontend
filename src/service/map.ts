@@ -1,12 +1,12 @@
-import { Bookmark, Pin } from "@/model/bookmark";
+import { Bookmark } from "@/model/bookmark";
 
-export function calculateCenter(bookmarks: Bookmark[]) {
+export function CalculateCenter(bookmarks: Bookmark[]) {
   let lat = 0;
   let lng = 0;
 
   for (let i = 0; i < bookmarks.length; i++) {
-    lat += bookmarks[i].lat;
-    lng += bookmarks[i].lng;
+    lat += bookmarks[i].latitude;
+    lng += bookmarks[i].longitude;
   }
 
   lat = lat / bookmarks.length;
