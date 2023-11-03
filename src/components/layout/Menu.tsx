@@ -26,7 +26,7 @@ export default function Menu({ closeMenu }: Props) {
           <ul>
             <li>
               <Link
-                href="/bookmark/list/ALL"
+                href="bookmark/list/me/all"
                 className="flex gap-2 items-center"
                 onClick={closeMenu}
               >

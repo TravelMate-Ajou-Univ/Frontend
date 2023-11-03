@@ -4,28 +4,29 @@ import PrivateIcon from "./icons/PrivateIcon";
 import PublicIcon from "./icons/PublicIcon";
 
 type Props = {
-  scope: "PUBLIC" | "FRIENDS_ONLY" | "PRIVATE" | "ALL";
+  user: string;
+  scope: string;
 };
-export default function VisibilityButton({ scope }: Props) {
+export default function VisibilityButton({ scope, user }: Props) {
   const view_scopes = [
     {
       icon: <p>ALL</p>,
-      value: "ALL",
+      value: "all",
       description: "전체 보기"
     },
     {
       icon: <PrivateIcon />,
-      value: "PRIVATE",
+      value: "private",
       description: "나만 공개"
     },
     {
       icon: <FriendsOnlyIcon />,
-      value: "FRIENDS_ONLY",
+      value: "friends_only",
       description: "친구 공개"
     },
     {
       icon: <PublicIcon />,
-      value: "PUBLIC",
+      value: "public",
       description: "모두 공개"
     }
   ];
@@ -41,10 +42,10 @@ export default function VisibilityButton({ scope }: Props) {
       {view_scopes.map(view => (
         <li key={view.value} className={highlightHandler(view.value)}>
           <Link
-            href={`/bookmark/list/${view.value}`}
+            href={`/bookmark/list/${user}/${view.value}`}
             className="flex flex-col items-center"
           >
-            {view.icon}
+            <div className="h-[1.5rem]">{view.icon}</div>
             {view.description}
           </Link>
         </li>
