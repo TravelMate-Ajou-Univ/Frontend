@@ -47,12 +47,12 @@ export default function BookmarkPage() {
   );
 
   useEffect(() => {
-    const getBookmark = async () => {
+    const getData = async () => {
       const data = await getAllBookmarks(id);
 
       setBookmarks(data);
     };
-    getBookmark();
+    getData();
   }, []);
 
   const onChangeText = (
@@ -72,9 +72,9 @@ export default function BookmarkPage() {
   };
 
   return (
-    <section className="flex flex-col items-center mt-4">
+    <section className="flex flex-col w-[60vw] items-center mx-auto mt-4">
       {modifyState ? (
-        <div className="flex w-[60vw] justify-between items-center">
+        <div className="flex w-full justify-between items-center">
           <input
             type="text"
             value={newTitle}
@@ -83,7 +83,7 @@ export default function BookmarkPage() {
           />
           <div
             onClick={toggleVisible}
-            className="flex relative gap-4 p-1 w-[11rem] justify-center rounded-md hover:scale-110 z-50"
+            className="flex relative gap-4 p-1 w-[8rem] justify-center rounded-md hover:scale-110 z-50"
           >
             {
               visible_scopes.find(element => element.name === newVisibility)
@@ -91,20 +91,20 @@ export default function BookmarkPage() {
             }
             {
               visible_scopes.find(element => element.name === newVisibility)
-                ?.name
+                ?.description
             }
             {visibleState ? (
-              <ul className="absolute top-8 border-2 bg-gray-100">
+              <ul className="absolute top-8 right-0 border-2 bg-gray-100">
                 {visible_scopes.map(element => (
                   <li
                     key={element.name}
                     onClick={e => {
                       modifyVisible(element.name, e);
                     }}
-                    className="flex gap-4 p-1 hover:bg-slate-200"
+                    className="flex gap-4 p-1 justify-center hover:bg-slate-200 w-[8rem]"
                   >
                     {element.icon}
-                    {element.name}
+                    {element.description}
                   </li>
                 ))}
               </ul>
@@ -112,11 +112,11 @@ export default function BookmarkPage() {
           </div>
         </div>
       ) : (
-        <div className="flex w-[60vw] justify-between items-center">
+        <div className="flex w-full justify-between items-center">
           <p className="text-3xl font-bold">{title}</p>
-          <div className="flex justify-center w-[11rem] gap-4 p-1">
+          <div className="flex justify-center w-[8rem] gap-4 p-1">
             {visible_scope?.icon}
-            {visible_scope?.name}
+            {visible_scope?.description}
           </div>
         </div>
       )}

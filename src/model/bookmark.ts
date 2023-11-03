@@ -14,3 +14,8 @@ export type BookmarkCollection = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type BookmarkCollectionList = {
+  bookmarkCollections: BookmarkCollection[];
+  count: number;
+};

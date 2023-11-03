@@ -1,9 +1,11 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "./features/userSlice";
+import bookmarkCollectionSlice from "./features/bookmarkCollectionSlice";
 
 export const store = configureStore({
   reducer: {
-    userSlice
+    userSlice,
+    bookmarkCollectionSlice
   },
   devTools: process.env.NODE_ENV !== "production"
 });
