@@ -8,7 +8,7 @@ export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_BASE_URL
 });
 
-export const userSign = {
+export const userAuth = {
   getKakaoToken: (code: string) =>
     axios.post(
       "https://kauth.kakao.com/oauth/token",
@@ -36,4 +36,8 @@ export const userSign = {
     apiWithoutAuth.post("auth/refresh", {
       refreshToken
     })
+};
+
+export const user = {
+  getUserInfo: () => api.get("users/me")
 };

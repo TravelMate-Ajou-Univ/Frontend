@@ -12,6 +12,19 @@ const config: Config = {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))"
+      },
+      keyframes: {
+        menuSlide: {
+          "0%": {
+            transform: "translateX(20rem)"
+          },
+          "100%": {
+            transform: "translateX(0)"
+          }
+        }
+      },
+      animation: {
+        menuSlide: "menuSlide 0.3s ease-in-out"
       }
     }
   },

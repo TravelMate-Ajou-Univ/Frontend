@@ -3,7 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 const initialUser: User = {
   userName: "",
-  profileImage: ""
+  profileImageId: ""
 };
 
 const userSlice = createSlice({

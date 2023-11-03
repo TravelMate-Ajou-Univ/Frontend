@@ -26,8 +26,8 @@ export default function Collection({ bookmarkCollection }: Props) {
           <BookmarkCollectionIcon />
         </Link>
       </div>
-      <div className="flex justify-center items-center">
-        <p className="w-[5rem] text-md text-center font-semibold px-1 mt-1 truncate">
+      <div className="flex justify-center items-center mt-1">
+        <p className="w-[5rem] text-md text-center font-semibold px-1 truncate">
           {bookmarkCollection.title}
         </p>
         {bookmarkCollection.visibility === "PUBLIC" ? (

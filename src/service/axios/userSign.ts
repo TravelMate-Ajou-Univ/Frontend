@@ -1,25 +1,25 @@
 import { setCookie } from "cookies-next";
-import { api, userSign } from "./api";
+import { api, user, userAuth } from "./api";
 import { jwtDecode } from "jwt-decode";
-import { access } from "fs";
+import { setUser } from "@/redux/features/userSlice";
 
 export const GetKakaoToken = async (code: string) => {
   try {
-    const { data } = await userSign.getKakaoToken(code);
+    const { data } = await userAuth.getKakaoToken(code);
     return data.access_token;
   } catch (error) {
     console.log(error);
-    return "";
+    return false;
   }
 };
 
 export const SigninUsingKakao = async (kakaoAccessToken: string) => {
   try {
-    const { data } = await userSign.signinUsingKakao(kakaoAccessToken);
+    const { data } = await userAuth.signinUsingKakao(kakaoAccessToken);
     const { accessToken, refreshToken } = data;
     if (!accessToken || !refreshToken) throw new Error("다시 로그인 해주세요.");
-
-    configureToken(accessToken, refreshToken);
+    if ((await configureToken(accessToken, refreshToken)) === false)
+      throw new Error("다시 로그인 해주세요.");
 
     return true;
   } catch (error) {
@@ -30,11 +30,11 @@ export const SigninUsingKakao = async (kakaoAccessToken: string) => {
 
 export const SigninUsingGoogle = async (googleAccessToken: string) => {
   try {
-    const { data } = await userSign.signinUsingGoogle(googleAccessToken);
+    const { data } = await userAuth.signinUsingGoogle(googleAccessToken);
     const { accessToken, refreshToken } = data;
     if (!accessToken || !refreshToken) throw new Error("다시 로그인 해주세요.");
-
-    configureToken(accessToken, refreshToken);
+    if ((await configureToken(accessToken, refreshToken)) === false)
+      throw new Error("다시 로그인 해주세요.");
 
     return true;
   } catch (error) {
@@ -45,7 +45,7 @@ export const SigninUsingGoogle = async (googleAccessToken: string) => {
 
 export const Refresh = async (refreshToken: string) => {
   try {
-    const { data } = await userSign.refresh(refreshToken);
+    const { data } = await userAuth.refresh(refreshToken);
     const { accessToken, refreshToken: newRefreshToken } = data;
     if (!accessToken || !newRefreshToken)
       throw new Error("다시 로그인 해주세요.");
@@ -103,4 +103,21 @@ const authInterceptor = async (
       throw new Error("다시 로그인 해주세요.");
     }
   );
+};
+
+export const GetUserInfo = async () => {
+  try {
+    const { data } = await user.getUserInfo();
+    const userInfo = {
+      userName: data.nickname,
+      profileImageId: data.profileImageId ?? ""
+    };
+
+    console.log(userInfo);
+
+    return userInfo;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
 };

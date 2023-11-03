@@ -17,7 +17,6 @@ export default function AuthContext({ children }: AuthContextProps) {
       const refresh = async () => {
         if (await Refresh(refreshToken)) {
           setAvailable(true);
-          //TODO: 유저 정보 저장 로직
         }
       };
       refresh();
