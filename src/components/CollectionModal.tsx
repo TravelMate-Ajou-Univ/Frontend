@@ -5,6 +5,7 @@ import FriendsOnlyIcon from "./ui/icons/FriendsOnlyIcon";
 import { addCollection } from "@/service/axios/bookmark";
 import { useDispatch } from "react-redux";
 import { addBookmarkCollection } from "@/redux/features/bookmarkCollectionSlice";
+import { useAppSelector } from "@/hooks/redux";
 
 type Props = {
   toggleButton: () => void;
@@ -12,6 +13,7 @@ type Props = {
 
 export default function CollectionModal({ toggleButton }: Props) {
   const dispatch = useDispatch();
+  const { search } = useAppSelector(state => state.bookmarkCollectionSlice);
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
@@ -51,7 +53,7 @@ export default function CollectionModal({ toggleButton }: Props) {
     const res = await addCollection(form);
     if (res === null) {
       alert("생성 실패!");
-    } else {
+    } else if (search === "all" || search === res?.visibility.toLowerCase()) {
       dispatch(addBookmarkCollection(res));
     }
     toggleButton();
@@ -70,21 +72,25 @@ export default function CollectionModal({ toggleButton }: Props) {
         onChange={onChange}
       />
       <p className="self-start my-1">공개 범위</p>
-      <ul className="flex gap-3 cursor:">
+      <ul className="flex gap-2">
         {visible_scopes.map((scope, index) => (
           <li
-            className="flex flex-col items-center cursor-pointer"
             key={index}
             onClick={e => {
               visibleSetting(scope.value, e);
             }}
           >
             {visible === scope.value ? (
-              <div className="text-yellow-600">{scope.icon}</div>
+              <div className="flex flex-col items-center gap-1">
+                <div className="text-yellow-600">{scope.icon}</div>
+                <p className="text-xs">{scope.description}</p>
+              </div>
             ) : (
-              <div>{scope.icon}</div>
+              <div className="flex flex-col items-center gap-1">
+                <div>{scope.icon}</div>
+                <p className="text-xs">{scope.description}</p>
+              </div>
             )}
-            <p className="text-xs">{scope.description}</p>
           </li>
         ))}
       </ul>

@@ -2,10 +2,12 @@ import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import { BookmarkCollection, BookmarkCollectionList } from "@/model/bookmark";
 type InitialState = {
   collections: BookmarkCollection[];
+  search: string;
   count: number;
 };
 const initialBookmarkCollection: InitialState = {
   collections: [],
+  search: "",
   count: 0
 };
 
@@ -20,6 +22,9 @@ const bookmarkCollectionSlice = createSlice({
       state.collections = action.payload.bookmarkCollections;
       state.count = action.payload.count;
     },
+    setBookmarkSearch: (state, action: PayloadAction<string>) => {
+      state.search = action.payload;
+    },
     addBookmarkCollection: (
       state,
       action: PayloadAction<BookmarkCollection>
@@ -29,7 +34,10 @@ const bookmarkCollectionSlice = createSlice({
   }
 });
 
-export const { setBookmarkCollection, addBookmarkCollection } =
-  bookmarkCollectionSlice.actions;
+export const {
+  setBookmarkCollection,
+  setBookmarkSearch,
+  addBookmarkCollection
+} = bookmarkCollectionSlice.actions;
 
 export default bookmarkCollectionSlice.reducer;

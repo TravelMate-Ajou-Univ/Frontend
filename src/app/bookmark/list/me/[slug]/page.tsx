@@ -8,7 +8,10 @@ import { Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/hooks/redux";
-import { setBookmarkCollection } from "@/redux/features/bookmarkCollectionSlice";
+import {
+  setBookmarkCollection,
+  setBookmarkSearch
+} from "@/redux/features/bookmarkCollectionSlice";
 
 type Props = {
   params: {
@@ -31,9 +34,10 @@ export default function MyBookmarkPage({ params }: Props) {
         visibility: params.slug
       });
       dispatch(setBookmarkCollection(data));
+      dispatch(setBookmarkSearch(params.slug));
     };
     getData();
-  }, [page]);
+  }, [page, params.slug, dispatch]);
 
   const pageHandler = (page: number) => {
     setPage(page);
@@ -42,7 +46,9 @@ export default function MyBookmarkPage({ params }: Props) {
   return (
     <section className="flex flex-col items-center w-full p-4 relative pb-[4rem]">
       <div className="flex flex-col gap-4 w-[60%] mx-auto">
-        <h1 className="font-bold text-2xl text-center my-4">나의 북마크</h1>
+        <h1 className="font-bold text-2xl text-center my-4">
+          나의 북마크 컬렉션
+        </h1>
         <div className="flex justify-between items-center">
           <VisibilityButton user="me" scope={params.slug} />
           <CollectionAddButton />
