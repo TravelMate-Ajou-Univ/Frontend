@@ -112,9 +112,6 @@ export const GetUserInfo = async () => {
       userName: data.nickname,
       profileImageId: data.profileImageId ?? ""
     };
-
-    console.log(userInfo);
-
     return userInfo;
   } catch (error) {
     console.log(error);

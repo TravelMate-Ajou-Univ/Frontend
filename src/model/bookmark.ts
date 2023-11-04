@@ -10,7 +10,7 @@ export type Pin = Omit<Bookmark, "id">;
 export type BookmarkCollection = {
   id: number;
   title: string;
-  visibility: "PRIVATE" | "FRIENDS_ONLY" | "PUBLIC";
+  visibility: "private" | "friends_only" | "public";
   createdAt: string;
   updatedAt: string;
 };
