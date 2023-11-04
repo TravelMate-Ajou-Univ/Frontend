@@ -1,11 +1,14 @@
 import AuthContext from "@/context/AuthContext";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Nanum_Gothic } from "next/font/google";
 import Header from "@/components/layout/Header";
 import { ProviderContext } from "@/context/ProviderContext";
 
-const inter = Inter({ subsets: ["latin"] });
+const nanumGothic = Nanum_Gothic({
+  subsets: ["latin"],
+  weight: "400"
+});
 
 export const metadata: Metadata = {
   title: "Travel Mate",
@@ -18,17 +21,18 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.className}>
-      <body className="w-full bg-gray-100">
+    <html lang="en" className={nanumGothic.className}>
+      <body className="w-full h-full bg-gray-100 flex flex-col">
         <ProviderContext>
           <AuthContext>
             <Header />
-            <main className="max-w-screen-xl oveflow-auto mx-auto w-full h-full">
+            <main className="max-w-screen-xl oveflow-auto mx-auto w-full flex-grow">
               {children}
             </main>
             <footer></footer>
           </AuthContext>
         </ProviderContext>
+        <div id="portal" />
       </body>
     </html>
   );

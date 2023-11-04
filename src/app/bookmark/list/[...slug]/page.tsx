@@ -35,7 +35,7 @@ export default function UserBookmarkPage({ params }: Props) {
       dispatch(setBookmarkCollection(data));
     };
     getData();
-  }, [page]);
+  }, [page, dispatch, params.slug]);
 
   const pageHandler = (page: number) => {
     setPage(page);
@@ -44,7 +44,7 @@ export default function UserBookmarkPage({ params }: Props) {
     <section className="flex flex-col items-center w-full p-4 relative pb-[4rem]">
       <div className="flex flex-col gap-4 w-[60%] mx-auto">
         <h1 className="font-bold text-2xl text-center my-4">
-          {params.slug[0]}의 북마크
+          {params.slug[0]}의 북마크 컬렉션
         </h1>
         <div className="flex justify-between items-center">
           <VisibilityButton user={params.slug[0]} scope={params.slug[1]} />

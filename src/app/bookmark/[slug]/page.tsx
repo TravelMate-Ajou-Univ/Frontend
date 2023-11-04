@@ -53,7 +53,7 @@ export default function BookmarkPage() {
       setBookmarks(data);
     };
     getData();
-  }, []);
+  }, [id]);
 
   const onChangeText = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

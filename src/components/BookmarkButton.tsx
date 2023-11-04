@@ -28,7 +28,7 @@ export default function BookmarkButton({
 
     if (answer === true) {
       await deleteCollection(id);
-      router.push("/bookmark/list/ALL");
+      router.push("/bookmark/list/me/all");
     }
   };
 
