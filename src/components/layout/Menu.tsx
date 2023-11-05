@@ -27,7 +27,7 @@ export default function Menu({ closeMenu }: Props) {
           <ul className="flex flex-col gap-3">
             <li>
               <Link
-                href="article/new"
+                href="/article/new"
                 className="flex gap-2 items-center"
                 onClick={closeMenu}
               >
@@ -37,7 +37,7 @@ export default function Menu({ closeMenu }: Props) {
             </li>
             <li>
               <Link
-                href="bookmark/list/me/all"
+                href="/bookmark/list/me/all"
                 className="flex gap-2 items-center"
                 onClick={closeMenu}
               >
