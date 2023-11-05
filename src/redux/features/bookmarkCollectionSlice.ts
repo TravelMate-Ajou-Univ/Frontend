@@ -1,5 +1,9 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-import { BookmarkCollection, BookmarkCollectionList } from "@/model/bookmark";
+import {
+  BookmarkCollection,
+  BookmarkCollectionList,
+  VisibilityType
+} from "@/model/bookmark";
 type InitialState = {
   collections: BookmarkCollection[];
   search: string;
@@ -19,7 +23,13 @@ const bookmarkCollectionSlice = createSlice({
       state,
       action: PayloadAction<BookmarkCollectionList>
     ) => {
-      state.collections = action.payload.bookmarkCollections;
+      // state.collections = action.payload.bookmarkCollections;
+      state.collections = action.payload.bookmarkCollections.map(collection => {
+        return {
+          ...collection,
+          visibility: collection.visibility.toLowerCase() as VisibilityType
+        };
+      });
       state.count = action.payload.count;
     },
     setBookmarkSearch: (state, action: PayloadAction<string>) => {
