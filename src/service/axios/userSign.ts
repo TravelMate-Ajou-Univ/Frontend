@@ -1,4 +1,4 @@
-import { setCookie } from "cookies-next";
+import { deleteCookie, setCookie } from "cookies-next";
 import { api, user, userAuth } from "./api";
 import { jwtDecode } from "jwt-decode";
 import { setUser } from "@/redux/features/userSlice";
@@ -57,6 +57,9 @@ export const Refresh = async (refreshToken: string) => {
 
     return true;
   } catch (error) {
+    deleteCookie("refreshToken");
+    alert("다시 로그인 해주세요.");
+    window.location.href = "/auth";
     console.log(error);
     return false;
   }
