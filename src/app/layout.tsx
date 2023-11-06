@@ -4,6 +4,7 @@ import type { Metadata } from "next";
 import { Nanum_Gothic } from "next/font/google";
 import Header from "@/components/layout/Header";
 import { ProviderContext } from "@/context/ProviderContext";
+import Background from "@/components/layout/Background";
 
 const nanumGothic = Nanum_Gothic({
   subsets: ["latin"],
@@ -22,7 +23,8 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={nanumGothic.className}>
-      <body className="w-full h-full bg-gray-100 flex flex-col">
+      <body className="w-full h-full flex flex-col">
+        <Background />
         <ProviderContext>
           <AuthContext>
             <Header />
