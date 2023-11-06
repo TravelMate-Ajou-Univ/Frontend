@@ -32,7 +32,7 @@ export default function RootLayout({
         <ProviderContext>
           <AuthContext>
             <Header />
-            <main className="max-w-screen-lg mx-auto mt-16 w-full flex-grow">
+            <main className="max-w-screen-xl mx-auto mt-16 w-full flex-grow">
               {children}
             </main>
             <footer></footer>
