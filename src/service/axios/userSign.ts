@@ -45,6 +45,8 @@ export const SigninUsingGoogle = async (googleAccessToken: string) => {
 
 export const Refresh = async (refreshToken: string) => {
   try {
+    const oldInterceptor = sessionStorage.getItem("interceptor");
+    if (oldInterceptor) api.interceptors.request.eject(Number(oldInterceptor));
     const { data } = await userAuth.refresh(refreshToken);
     const { accessToken, refreshToken: newRefreshToken } = data;
     if (!accessToken || !newRefreshToken)
@@ -89,7 +91,7 @@ const authInterceptor = async (
   accessTokenExpire: number,
   refreshToken: string
 ) => {
-  api.interceptors.request.use(
+  const interceptor = api.interceptors.request.use(
     async config => {
       const timestamp = new Date().getTime() / 1000;
       if (!config.headers.Authorization || accessTokenExpire - timestamp < 60) {
@@ -103,6 +105,8 @@ const authInterceptor = async (
       throw new Error("다시 로그인 해주세요.");
     }
   );
+
+  sessionStorage.setItem("interceptor", interceptor.toString());
 };
 
 export const GetUserInfo = async () => {
