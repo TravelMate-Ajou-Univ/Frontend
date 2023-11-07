@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import CustomToolbar from "./CustomToolbar";
 import { uploadImage } from "@/service/axios/article";

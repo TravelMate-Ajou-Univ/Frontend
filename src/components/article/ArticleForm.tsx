@@ -1,6 +1,6 @@
 "use client";
 
-import DropDown from "@/components/ui/DropDown/DropDown";
+import DropDown from "@/components/ui/dropDown/DropDown";
 import { useState } from "react";
 import { locationList } from "@/lib/locationList";
 import { seasonList, seasonMapper } from "@/lib/seasonList";
@@ -21,11 +21,11 @@ import {
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import ImageSection from "../ui/ImageSection";
-import FilledButton from "../ui/Button/FilledButton";
+import FilledButton from "../ui/button/FilledButton";
 
 const INPUT_CLASSNAME = "flex items-center gap-4";
 
-const TextEditor = dynamic(() => import("../ReactQuill/TextEditor"), {
+const TextEditor = dynamic(() => import("../reactQuill/TextEditor"), {
   ssr: false
 });
 

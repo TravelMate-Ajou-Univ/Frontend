@@ -1,6 +1,6 @@
 import { ChangeEvent } from "react";
 import Image from "next/image";
-import OutlinedButton from "./Button/OutlinedButton";
+import OutlinedButton from "./button/OutlinedButton";
 
 interface Props {
   handleImage: (e: ChangeEvent<HTMLInputElement>) => void;

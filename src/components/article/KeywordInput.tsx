@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import PlusIcon from "../ui/icons/PlusIcon";
-import DropDownList from "../ui/DropDown/DropDownList";
+import DropDownList from "../ui/dropDown/DropDownList";
 import useOutSideRef from "@/hooks/useClickOutside";
 import { getKeywords } from "@/service/axios/article";
 import { KeywordType } from "@/model/article";
