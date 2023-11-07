@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import { useEffect, useState } from "react";
-import Menu from "./Menu";
+import Menu from "./menu/Menu";
 import { getCookie } from "cookies-next";
 import { GetUserInfo } from "@/service/axios/userSign";
 import { setUser } from "@/redux/features/userSlice";
