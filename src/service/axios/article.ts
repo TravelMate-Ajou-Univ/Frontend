@@ -1,3 +1,4 @@
+import { ArticleType } from "@/model/article";
 import { posting } from "./api";
 
 export const uploadImage = async (file: File) => {
@@ -28,7 +29,20 @@ export const getKeywords = async (word: string) => {
 export const postKeyword = async (name: string) => {
   try {
     const { data } = await posting.postKeyword(name);
-    return true;
+    return {
+      id: data.id,
+      name: data.name
+    };
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const submitArticle = async (article: ArticleType) => {
+  try {
+    const { data } = await posting.submitPosting(article);
+    return data;
   } catch (error) {
     console.log(error);
     return false;

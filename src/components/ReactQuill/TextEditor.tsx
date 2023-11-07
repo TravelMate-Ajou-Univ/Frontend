@@ -1,14 +1,17 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import CustomToolbar from "./CustomToolbar";
-import { uploadImage } from "@/service/axios/posting";
+import { uploadImage } from "@/service/axios/article";
 import { ImageResize } from "quill-image-resize-module-ts";
 Quill.register("modules/ImageResize", ImageResize);
 
-export default function TextEditor() {
-  const [contents, setContents] = useState("");
+interface Props {
+  setContents: (contents: string) => void;
+}
+
+export default function TextEditor({ setContents }: Props) {
   const quillRef = useRef<ReactQuill>(null);
   const imageHandler = () => {
     const input = document.createElement("input");
@@ -54,7 +57,7 @@ export default function TextEditor() {
         className="h-[35rem]"
         ref={quillRef}
         modules={modules}
-        value={contents}
+        // value={contents}
         onChange={setContents}
         placeholder="공유하고 싶은 여행 정보를 기록해주세요!"
       />

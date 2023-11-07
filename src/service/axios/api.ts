@@ -1,3 +1,4 @@
+import { ArticleType } from "@/model/article";
 import axios from "axios";
 
 export const apiWithoutAuth = axios.create({
@@ -48,5 +49,6 @@ export const posting = {
   confirmUpload: (id: string) =>
     api.get(`s3/upload-success/?type=article&id=${id}`),
   getKeywords: (word: string) => api.get(`tags/search/${word}`),
-  postKeyword: (name: string) => api.post(`tags`, { name })
+  postKeyword: (name: string) => api.post("tags", { name }),
+  submitPosting: (article: ArticleType) => api.post("articles", article)
 };

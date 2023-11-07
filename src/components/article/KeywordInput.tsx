@@ -4,7 +4,8 @@ import { useState } from "react";
 import PlusIcon from "../ui/icons/PlusIcon";
 import DropDownList from "../ui/DropDown/DropDownList";
 import useOutSideRef from "@/hooks/useClickOutside";
-import { getKeywords } from "@/service/axios/posting";
+import { getKeywords } from "@/service/axios/article";
+import { KeywordType } from "@/model/article";
 
 interface Props {
   addKeyword: (keyword: string) => void;
