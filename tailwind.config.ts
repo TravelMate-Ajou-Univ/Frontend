@@ -13,6 +13,18 @@ const config: Config = {
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))"
       },
+      backgroundColor: {
+        primary: "#2C3B84",
+        secondary: "#3D4FA6"
+      },
+      textColor: {
+        primary: "#2C3B84",
+        secondary: "#3D4FA6"
+      },
+      borderColor: {
+        primary: "#2C3B84",
+        secondary: "#3D4FA6"
+      },
       keyframes: {
         menuSlide: {
           "0%": {

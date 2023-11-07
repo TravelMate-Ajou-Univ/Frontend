@@ -4,6 +4,7 @@ import XIcon from "../ui/icons/XIcon";
 import MenuBackground from "./MenuBackground";
 import useClickOutside from "@/hooks/useClickOutside";
 import MarkedMapIcon from "../ui/icons/MarkedMapIcon";
+import WritingIcon from "@/components/ui/icons/WritingIcon";
 import { deleteCookie } from "cookies-next";
 import { useAppDispatch } from "@/hooks/redux";
 import { userLogout } from "@/redux/features/userSlice";
@@ -34,10 +35,20 @@ export default function Menu({ closeMenu }: Props) {
           <XIcon onClick={closeMenu} />
         </div>
         <nav className="px-5 text-gray-800 flex-grow">
-          <ul>
+          <ul className="flex flex-col gap-3">
             <li>
               <Link
-                href="bookmark/list/me/all"
+                href="/article/new"
+                className="flex gap-2 items-center"
+                onClick={closeMenu}
+              >
+                <WritingIcon />
+                게시글 작성
+              </Link>
+            </li>
+            <li>
+              <Link
+                href="/bookmark/list/me/all"
                 className="flex gap-2 items-center"
                 onClick={closeMenu}
               >
