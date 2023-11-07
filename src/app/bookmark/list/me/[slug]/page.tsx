@@ -12,10 +12,11 @@ import {
   setBookmarkCollection,
   setBookmarkSearch
 } from "@/redux/features/bookmarkCollectionSlice";
+import { VisibilityType } from "@/model/bookmark";
 
 type Props = {
   params: {
-    slug: "all" | "public" | "friends_only" | "private";
+    slug: "all" & VisibilityType;
   };
 };
 export default function MyBookmarkPage({ params }: Props) {

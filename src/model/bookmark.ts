@@ -7,10 +7,12 @@ export type Bookmark = {
 
 export type Pin = Omit<Bookmark, "id">;
 
+export type VisibilityType = "private" | "friends_only" | "public";
+
 export type BookmarkCollection = {
   id: number;
   title: string;
-  visibility: "private" | "friends_only" | "public";
+  visibility: VisibilityType;
   createdAt: string;
   updatedAt: string;
 };

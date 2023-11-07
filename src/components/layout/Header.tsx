@@ -38,7 +38,7 @@ export default function Header() {
   };
 
   return (
-    <header className="sticky top-0 w-full h-16 bg-white flex flex-row px-10 justify-between items-center">
+    <header className="fixed top-0 left-0 w-full h-16 bg-white flex px-10 justify-between items-center z-50 shadow-md">
       <Link href="/">
         <Logo />
       </Link>

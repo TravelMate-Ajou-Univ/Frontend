@@ -17,7 +17,7 @@ export default function MapMenuButton({
 }: Props) {
   return (
     <div className="absolute left-3 top-2 z-10 flex flex-col w-12  bg-white rounded-sm text-slate-500">
-      <PlusIcon upSize={upSize} />
+      <PlusIcon onClick={upSize} />
       <MinusIcon downSize={downSize} />
       <GpsIcon gpsToggle={gpsToggle} toggleGPS={toggleGPS} />
     </div>

@@ -23,12 +23,18 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={nanumGothic.className}>
+      <head>
+        <link
+          href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
+          rel="stylesheet"
+        />
+      </head>
       <body className="w-full h-full flex flex-col">
         <Background />
         <ProviderContext>
           <AuthContext>
             <Header />
-            <main className="max-w-screen-xl oveflow-auto mx-auto w-full flex-grow">
+            <main className="max-w-screen-xl mx-auto mt-16 w-full flex-grow">
               {children}
             </main>
             <footer></footer>
