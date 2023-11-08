@@ -19,11 +19,12 @@ export default function ChatList() {
       socket.emit("setInit", { nickname }, (response: any) => {
         console.log(response);
       });
-      socket.emit("getChatRoomList", null);
     });
+    //   socket.emit("getChatRoomList", null);
   }, [socket]);
 
   socket.on("getChatRoomList", response => {
+    console.log("getChatRoomList");
     console.log(response);
     setChatList(response);
   });
@@ -37,22 +38,23 @@ export default function ChatList() {
       socket.emit("createChatRoom", { roomName }, (response: any) => {
         console.log(response);
       });
-      socket.emit("getChatRoomList", null);
+      //   socket.emit("getChatRoomList", null);
     }
   };
 
   return (
     <div className="flex flex-col">
       <OutlinedButton onClick={createChatRoom}>채팅방 만들기</OutlinedButton>
-      <ul className="flex flex-col gap-4">
-        {chatList.map((chat: any) => (
-          <li className="border w-full bg-white" key={chat.id}>
-            <Link href={`/chat/${chat.id}`}>
-              <p>{chat.name}</p>
-            </Link>
-          </li>
-        ))}
-      </ul>
+      {/* <ul className="flex flex-col gap-4">
+        {chatList.length !== 0 &&
+          chatList.map((chat: any) => (
+            <li className="border w-full bg-white" key={chat.id}>
+              <Link href={`/chat/${chat.id}`}>
+                <p>{chat.name}</p>
+              </Link>
+            </li>
+          ))}
+      </ul> */}
     </div>
   );
 }
