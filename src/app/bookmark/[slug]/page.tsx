@@ -3,42 +3,44 @@
 import { useSearchParams } from "next/navigation";
 import BookmarkButton from "@/components/BookmarkButton";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Bookmark, Pin } from "@/model/bookmark";
+import { BookmarkType, PinType } from "@/model/bookmark";
 import PublicIcon from "@/components/ui/icons/PublicIcon";
 import FriendsOnlyIcon from "@/components/ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "@/components/ui/icons/PrivateIcon";
 import { getAllBookmarks } from "@/service/axios/bookmark";
 import EditableMap from "@/components/EditableMap";
 import UneditableMap from "@/components/UneditableMap";
+import { useDispatch } from "react-redux";
+import DropDown from "@/components/ui/dropDown/DropDown";
 
 export default function BookmarkPage() {
+  const dispatch = useDispatch();
   const params = useSearchParams();
   const id = Number(params.get("id"));
   const title = String(params.get("title"));
   const visibility = String(params.get("visibility"));
 
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
+  const [bookmarks, setBookmarks] = useState<BookmarkType[]>([]);
   const [newTitle, setNewTitle] = useState<string>(title);
   const [newVisibility, setNewVisibility] = useState(visibility);
-  const [modifyState, setModifyState] = useState(false);
-  const [visibleState, setVisibleState] = useState(false);
-  const [addPins, setAddPins] = useState<Pin[]>([]);
+  const [modifyState, setModifyState] = useState(true);
+  const [addPins, setAddPins] = useState<PinType[]>([]);
   const [subPins, setSubPins] = useState<Number[]>([]);
 
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
-      name: "PRIVATE",
+      name: "private",
       description: "나만 공개"
     },
     {
       icon: <FriendsOnlyIcon />,
-      name: "FRIENDS_ONLY",
+      name: "friends_only",
       description: "친구 공개"
     },
     {
       icon: <PublicIcon />,
-      name: "PUBLIC",
+      name: "public",
       description: "모두 공개"
     }
   ];
@@ -62,13 +64,8 @@ export default function BookmarkPage() {
     setNewTitle(value);
   };
 
-  const toggleVisible = () => {
-    setVisibleState(!visibleState);
-  };
-
-  const modifyVisible = (name: string, e: any) => {
+  const modifyVisible = (name: string) => {
     setNewVisibility(name);
-    setVisibleState(!visibleState);
   };
 
   return (
@@ -79,37 +76,15 @@ export default function BookmarkPage() {
             type="text"
             value={newTitle}
             onChange={onChangeText}
-            className="text-3xl font-bold bg-gray-100 border-none hover:scale-110"
+            className="text-3xl font-bold bg-white border-none hover:scale-110"
           />
-          <div
-            onClick={toggleVisible}
-            className="flex relative gap-4 p-1 w-[8rem] justify-center rounded-md hover:scale-110 z-50"
-          >
-            {
-              visible_scopes.find(element => element.name === newVisibility)
-                ?.icon
-            }
-            {
-              visible_scopes.find(element => element.name === newVisibility)
-                ?.description
-            }
-            {visibleState ? (
-              <ul className="absolute top-8 right-0 border-2 bg-gray-100">
-                {visible_scopes.map(element => (
-                  <li
-                    key={element.name}
-                    onClick={e => {
-                      modifyVisible(element.name, e);
-                    }}
-                    className="flex gap-4 p-1 justify-center hover:bg-slate-200 w-[8rem]"
-                  >
-                    {element.icon}
-                    {element.description}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
+          <DropDown
+            selected={`${visible_scope?.description}`}
+            list={visible_scopes.map(element => element.description)}
+            setSelected={() => {
+              console.log("hi");
+            }}
+          />
         </div>
       ) : (
         <div className="flex w-full justify-between items-center">

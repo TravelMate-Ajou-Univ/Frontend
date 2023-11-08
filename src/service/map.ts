@@ -1,6 +1,6 @@
-import { Bookmark } from "@/model/bookmark";
+import { BookmarkType } from "@/model/bookmark";
 
-export function CalculateCenter(bookmarks: Bookmark[]) {
+export function CalculateCenter(bookmarks: BookmarkType[]) {
   let lat = 0;
   let lng = 0;
 

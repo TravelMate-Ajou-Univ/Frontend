@@ -1,15 +1,15 @@
-export type Bookmark = {
-  id?: number;
+export type BookmarkType = {
+  id: number;
   latitude: number;
   longitude: number;
   content?: string;
 };
 
-export type Pin = Omit<Bookmark, "id">;
+export type PinType = Omit<BookmarkType, "id">;
 
 export type VisibilityType = "private" | "friends_only" | "public";
 
-export type BookmarkCollection = {
+export type BookmarkCollectionType = {
   id: number;
   title: string;
   visibility: VisibilityType;
@@ -17,7 +17,7 @@ export type BookmarkCollection = {
   updatedAt: string;
 };
 
-export type BookmarkCollectionList = {
-  bookmarkCollections: BookmarkCollection[];
+export type BookmarkCollectionListType = {
+  bookmarkCollections: BookmarkCollectionType[];
   count: number;
 };

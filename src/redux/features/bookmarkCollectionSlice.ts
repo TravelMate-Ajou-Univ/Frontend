@@ -1,11 +1,11 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import {
-  BookmarkCollection,
-  BookmarkCollectionList,
+  BookmarkCollectionType,
+  BookmarkCollectionListType,
   VisibilityType
 } from "@/model/bookmark";
 type InitialState = {
-  collections: BookmarkCollection[];
+  collections: BookmarkCollectionType[];
   search: string;
   count: number;
 };
@@ -21,7 +21,7 @@ const bookmarkCollectionSlice = createSlice({
   reducers: {
     setBookmarkCollection: (
       state,
-      action: PayloadAction<BookmarkCollectionList>
+      action: PayloadAction<BookmarkCollectionListType>
     ) => {
       // state.collections = action.payload.bookmarkCollections;
       state.collections = action.payload.bookmarkCollections.map(collection => {
@@ -37,7 +37,7 @@ const bookmarkCollectionSlice = createSlice({
     },
     addBookmarkCollection: (
       state,
-      action: PayloadAction<BookmarkCollection>
+      action: PayloadAction<BookmarkCollectionType>
     ) => {
       state.collections = [action.payload, ...state.collections];
     }
