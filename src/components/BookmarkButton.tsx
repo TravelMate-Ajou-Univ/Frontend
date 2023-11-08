@@ -1,4 +1,4 @@
-import { Pin } from "@/model/bookmark";
+import { useAppSelector } from "@/hooks/redux";
 import { deleteCollection, modifyCollection } from "@/service/axios/bookmark";
 import { useRouter } from "next/navigation";
 import { SetStateAction } from "react";
@@ -7,8 +7,6 @@ type Props = {
   id: number;
   title: string;
   visibility: string;
-  addPins: Pin[];
-  subPins: Number[];
   modifyState: Boolean;
   setModifyState: (state: SetStateAction<boolean>) => void;
 };
@@ -16,11 +14,10 @@ export default function BookmarkButton({
   id,
   title,
   visibility,
-  addPins,
-  subPins,
   modifyState,
   setModifyState
 }: Props) {
+  const { deleteBookmarks, pins } = useAppSelector(state => state.mapSlice);
   const router = useRouter();
 
   const deleteHandler = async () => {
@@ -41,7 +38,7 @@ export default function BookmarkButton({
     if (result === false) {
       return;
     }
-    await modifyCollection(id, title, visibility, addPins, subPins);
+    await modifyCollection(id, title, visibility, pins, deleteBookmarks);
     toggleHandler();
     router.push(
       `/bookmark/${title}?title=${title}&visibility=${visibility}&id=${id}`

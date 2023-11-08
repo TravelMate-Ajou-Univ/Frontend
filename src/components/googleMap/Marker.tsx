@@ -1,85 +1,94 @@
-import { BookmarkType } from "@/model/bookmark";
+import { useAppSelector } from "@/hooks/redux";
+import { BookmarkType, LocationType, PinType } from "@/model/bookmark";
+import { subBookmarks, subPins } from "@/redux/features/mapSlice";
 import { InfoWindowF, MarkerF } from "@react-google-maps/api";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
 
 type Props = {
-  bookmarks: BookmarkType[];
-  setBookmarks: (data: BookmarkType[]) => void;
-  subPins: Number[];
-  setSubPins: (pin: Number[]) => void;
+  bookmark: BookmarkType | PinType;
+  modifyState: boolean;
+  activeMarker: LocationType | null;
+  setActiveMarker: (pos: LocationType | null) => void;
 };
-
-export default function EditableMarker({
-  bookmarks,
-  setBookmarks,
-  subPins,
-  setSubPins
+export default function Marker({
+  bookmark,
+  modifyState,
+  activeMarker,
+  setActiveMarker
 }: Props) {
-  const [selectedMarker, setSelectedMarker] = useState<{
-    lat: number;
-    lng: number;
-  }>({ lat: 0, lng: 0 });
-
-  const [activeMarker, setActiveMarker] = useState<number | null>(null);
-
-  const handleActiveMarker = (marker: number) => {
+  const dispatch = useDispatch();
+  const { pins, bookmarks, deleteBookmarks } = useAppSelector(
+    state => state.mapSlice
+  );
+  const [selectedMarker, setSelectedMarker] = useState<LocationType>({
+    latitude: 0,
+    longitude: 0
+  });
+  const clickHandler = (index: LocationType, e: any) => {
+    handleActiveMarker(index);
+    setSelectedMarker({ latitude: e.latLng.lat(), longitude: e.latLng.lng() });
+  };
+  const handleActiveMarker = (marker: LocationType) => {
     if (marker === activeMarker) {
       return;
     }
     setActiveMarker(marker);
   };
-
-  const clickHandler = (index: number, e: any) => {
-    handleActiveMarker(index);
-    setSelectedMarker({ lat: e.latLng.lat(), lng: e.latLng.lng() });
-  };
-
-  const deleteHandler = async (target: BookmarkType) => {
-    const new_data = target.id === undefined ? 0 : target.id;
-    const new_bookmarks = bookmarks.filter(
+  const deleteHandler = async (target: BookmarkType | PinType) => {
+    const del_bookmark = bookmarks.find(
       bookmark =>
-        bookmark.latitude !== target.latitude &&
-        bookmark.longitude !== target.longitude
+        bookmark.latitude === target.latitude &&
+        bookmark.longitude === target.longitude
     );
 
-    if (target.id !== undefined) {
-      setSubPins([...subPins, new_data]);
+    if (del_bookmark === undefined) {
+      dispatch(subPins(target));
+    } else {
+      dispatch(subBookmarks(del_bookmark));
     }
-    setBookmarks(new_bookmarks);
-    setActiveMarker(null);
   };
   return (
-    <ul>
-      {bookmarks.map((bookmark, index) => (
-        <li key={index}>
-          <MarkerF
-            position={{
-              lat: bookmark.latitude,
-              lng: bookmark.longitude
-            }}
-            title={bookmark.content}
-            onClick={e => clickHandler(index, e)}
-          />
-          {activeMarker === index ? (
-            <InfoWindowF
-              key={index}
-              position={selectedMarker}
-              options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
-              onCloseClick={() => setActiveMarker(null)}
-            >
-              <section className="flex flex-col items-center">
-                <p className="text-2xl">{bookmark.content}</p>
-                <button
-                  onClick={() => deleteHandler(bookmark)}
-                  className="hover:text-red-400"
-                >
-                  삭제
-                </button>
-              </section>
-            </InfoWindowF>
-          ) : null}
-        </li>
-      ))}
-    </ul>
+    <div>
+      <MarkerF
+        position={{
+          lat: bookmark.latitude,
+          lng: bookmark.longitude
+        }}
+        title={bookmark.content}
+        onClick={e =>
+          clickHandler(
+            {
+              latitude: bookmark.latitude,
+              longitude: bookmark.longitude
+            },
+            e
+          )
+        }
+      />
+      {activeMarker?.latitude === bookmark.latitude &&
+      activeMarker.longitude === bookmark.longitude ? (
+        <InfoWindowF
+          position={{
+            lat: selectedMarker.latitude,
+            lng: selectedMarker.longitude
+          }}
+          options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
+          onCloseClick={() => setActiveMarker(null)}
+        >
+          <section className="flex flex-col items-center">
+            <p className="text-2xl">{bookmark.content}</p>
+            {modifyState ? (
+              <button
+                onClick={() => deleteHandler(bookmark)}
+                className="hover:text-red-400"
+              >
+                삭제
+              </button>
+            ) : null}
+          </section>
+        </InfoWindowF>
+      ) : null}
+    </div>
   );
 }

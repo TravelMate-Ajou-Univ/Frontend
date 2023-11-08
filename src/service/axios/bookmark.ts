@@ -1,8 +1,8 @@
 import {
-  Bookmark,
-  BookmarkCollection,
-  BookmarkCollectionList,
-  Pin
+  BookmarkType,
+  BookmarkCollectionType,
+  BookmarkCollectionListType,
+  PinType
 } from "@/model/bookmark";
 import { api } from "./api";
 
@@ -21,7 +21,7 @@ export const getMyCollectionList = async ({
   page,
   limit,
   visibility
-}: CollectionList): Promise<BookmarkCollectionList> => {
+}: CollectionList): Promise<BookmarkCollectionListType> => {
   try {
     const scope = visibility === "all" ? null : visibility;
     const response = await api({
@@ -46,7 +46,7 @@ export const getMyCollectionList = async ({
 export const addCollection = async ({
   title,
   visible
-}: Form): Promise<BookmarkCollection | null> => {
+}: Form): Promise<BookmarkCollectionType | null> => {
   try {
     const response = await api({
       method: "post",
@@ -64,7 +64,7 @@ export const addCollection = async ({
   }
 };
 
-export const getAllBookmarks = async (id: number): Promise<Bookmark[]> => {
+export const getAllBookmarks = async (id: number): Promise<BookmarkType[]> => {
   try {
     const response = await api.get(
       `/users/me/bookmark-collection/${id}/bookmarks`
@@ -80,7 +80,7 @@ export const getAllBookmarks = async (id: number): Promise<Bookmark[]> => {
         location: { latitude: string; longitude: string };
         content: string;
       }) => {
-        const bookmark: Bookmark = {
+        const bookmark: BookmarkType = {
           id,
           latitude: Number(location.latitude),
           longitude: Number(location.longitude),
@@ -114,7 +114,7 @@ export const modifyCollection = async (
   id: number,
   title: string,
   visibility: string,
-  addPins: Pin[],
+  addPins: PinType[],
   subPins: Number[]
 ): Promise<Boolean> => {
   try {
@@ -123,7 +123,7 @@ export const modifyCollection = async (
       url: `/users/me/bookmark-collection/${id}`,
       data: {
         title: title,
-        visibility: visibility,
+        visibility: visibility.toUpperCase(),
         locationsWithContent: addPins,
         bookmarkIdsToDelete: subPins
       }

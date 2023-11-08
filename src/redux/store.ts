@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import userSlice from "./features/userSlice";
-import bookmarkCollectionSlice from "./features/bookmarkCollectionSlice";
+import mapSlice from "./features/mapSlice";
+import bookmarkCollectionListSlice from "./features/bookmarkCollectionListSlice";
 
 export const store = configureStore({
   reducer: {
     userSlice,
-    bookmarkCollectionSlice
+    bookmarkCollectionListSlice,
+    mapSlice
   },
   devTools: process.env.NODE_ENV !== "production"
 });

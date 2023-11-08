@@ -5,17 +5,25 @@ import {
   InfoWindowF
 } from "@react-google-maps/api";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
-import SeasonButton from "../ui/SeasonButton";
 import MapMenuButton from "../ui/MapMenuButton";
-import { BookmarkType, PinType } from "@/model/bookmark";
+import { PinType } from "@/model/bookmark";
 import { CalculateCenter } from "@/service/map";
 import { DotLoader } from "react-spinners";
+import { useDispatch } from "react-redux";
+import { useAppSelector } from "@/hooks/redux";
+import {
+  addPins,
+  setDeleteBookmarks,
+  setPins
+} from "@/redux/features/mapSlice";
+import MarkerList from "./MarkerList";
 
 type Props = {
-  bookmarks: BookmarkType[];
+  modifyState: boolean;
 };
-
-export default function Map({ bookmarks }: Props) {
+export default function Map({ modifyState }: Props) {
+  const dispatch = useDispatch();
+  const { bookmarks } = useAppSelector(state => state.mapSlice);
   const [userPos, setUserPos] = useState({
     lat: 0,
     lng: 0
@@ -39,6 +47,8 @@ export default function Map({ bookmarks }: Props) {
         console.log(error);
       }
     );
+    dispatch(setPins());
+    dispatch(setDeleteBookmarks());
   }, []);
 
   // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
@@ -89,13 +99,12 @@ export default function Map({ bookmarks }: Props) {
 
   const addHandler = (location: any) => {
     setClickState(false);
-    const new_data: PinType = {
+    const new_pin: PinType = {
       latitude: location.lat,
       longitude: location.lng,
       content: text
     };
-    const new_bookmarks = [...bookmarks, new_data];
-    setBookmarks(new_bookmarks);
+    dispatch(addPins(new_pin));
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -111,7 +120,6 @@ export default function Map({ bookmarks }: Props) {
         gpsToggle={gpsToggle}
         toggleGPS={toggleGPS}
       />
-      <SeasonButton />
       <GoogleMap
         options={mapOptions}
         zoom={zoomSize}
@@ -120,40 +128,37 @@ export default function Map({ bookmarks }: Props) {
         mapContainerStyle={{ width: "100%", height: "100%" }}
         onClick={e => clickHandler(e)}
       >
-        {clickState ? (
-          <section>
-            <MarkerF position={location} />
-            <InfoWindowF
-              position={location}
-              options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
-              onCloseClick={() => setClickState(false)}
-            >
-              <div className="flex flex-col items-center gap-2">
-                <textarea
-                  rows={3}
-                  onChange={onChange}
-                  className="border-4"
-                  autoFocus
-                />
-                <button
-                  className="text-red-500 focus:pointer hover:scale-110"
-                  onClick={() => addHandler(location)}
-                >
-                  추가하기
-                </button>
-              </div>
-            </InfoWindowF>
-          </section>
+        {modifyState ? (
+          clickState ? (
+            <section>
+              <MarkerF position={location} />
+              <InfoWindowF
+                position={location}
+                options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
+                onCloseClick={() => setClickState(false)}
+              >
+                <div className="flex flex-col items-center gap-2">
+                  <textarea
+                    rows={3}
+                    onChange={onChange}
+                    className="border-4"
+                    autoFocus
+                  />
+                  <button
+                    className="text-red-500 focus:pointer hover:scale-110"
+                    onClick={() => addHandler(location)}
+                  >
+                    추가하기
+                  </button>
+                </div>
+              </InfoWindowF>
+            </section>
+          ) : null
         ) : null}
         {gpsToggle ? (
           <MarkerF position={{ lat: userPos.lat, lng: userPos.lng }} />
         ) : null}
-        {/* <EditableMarker
-          bookmarks={bookmarks}
-          setBookmarks={setBookmarks}
-          subPins={subPins}
-          setSubPins={setSubPins}
-        /> */}
+        <MarkerList modifyState={modifyState} />
       </GoogleMap>
     </div>
   );

@@ -3,30 +3,19 @@
 import { useSearchParams } from "next/navigation";
 import BookmarkButton from "@/components/BookmarkButton";
 import { ChangeEvent, useEffect, useState } from "react";
-import { BookmarkType, PinType } from "@/model/bookmark";
+import { VisibilityType } from "@/model/bookmark";
 import PublicIcon from "@/components/ui/icons/PublicIcon";
 import FriendsOnlyIcon from "@/components/ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "@/components/ui/icons/PrivateIcon";
 import { getAllBookmarks } from "@/service/axios/bookmark";
-import EditableMap from "@/components/EditableMap";
-import UneditableMap from "@/components/UneditableMap";
-import { useDispatch } from "react-redux";
 import DropDown from "@/components/ui/dropDown/DropDown";
+import Map from "@/components/googleMap/Map";
+import { useDispatch } from "react-redux";
+import { setBookmarks } from "@/redux/features/mapSlice";
 
 export default function BookmarkPage() {
   const dispatch = useDispatch();
-  const params = useSearchParams();
-  const id = Number(params.get("id"));
-  const title = String(params.get("title"));
-  const visibility = String(params.get("visibility"));
-
-  const [bookmarks, setBookmarks] = useState<BookmarkType[]>([]);
-  const [newTitle, setNewTitle] = useState<string>(title);
-  const [newVisibility, setNewVisibility] = useState(visibility);
-  const [modifyState, setModifyState] = useState(true);
-  const [addPins, setAddPins] = useState<PinType[]>([]);
-  const [subPins, setSubPins] = useState<Number[]>([]);
-
+  // const { bookmarks } = useAppSelector(state => state.mapSlice);
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
@@ -44,15 +33,25 @@ export default function BookmarkPage() {
       description: "모두 공개"
     }
   ];
+  const params = useSearchParams();
+  const id = Number(params.get("id"));
+  const title = String(params.get("title"));
+  const visibility = visible_scopes.find(
+    scope => scope.name === String(params.get("visibility"))
+  )?.description as VisibilityType;
+
+  const [newTitle, setNewTitle] = useState<string>(title);
+  const [newVisibility, setNewVisibility] = useState(visibility);
+  const [modifyState, setModifyState] = useState(false);
+
   const visible_scope = visible_scopes.find(
-    element => element.name === visibility
+    element => element.description === newVisibility
   );
 
   useEffect(() => {
     const getData = async () => {
       const data = await getAllBookmarks(id);
-
-      setBookmarks(data);
+      dispatch(setBookmarks(data));
     };
     getData();
   }, [id]);
@@ -64,8 +63,11 @@ export default function BookmarkPage() {
     setNewTitle(value);
   };
 
-  const modifyVisible = (name: string) => {
-    setNewVisibility(name);
+  const modifyVisible = (visibility: string) => {
+    const new_scope = visible_scopes.find(
+      scope => scope.description === visibility
+    )?.description as VisibilityType;
+    setNewVisibility(new_scope);
   };
 
   return (
@@ -79,11 +81,9 @@ export default function BookmarkPage() {
             className="text-3xl font-bold bg-white border-none hover:scale-110"
           />
           <DropDown
-            selected={`${visible_scope?.description}`}
+            selected={newVisibility}
             list={visible_scopes.map(element => element.description)}
-            setSelected={() => {
-              console.log("hi");
-            }}
+            setSelected={modifyVisible}
           />
         </div>
       ) : (
@@ -96,25 +96,12 @@ export default function BookmarkPage() {
         </div>
       )}
       <div className="w-[60vw] h-[70vh] border-2 m-4">
-        {modifyState ? (
-          <EditableMap
-            bookmarks={bookmarks}
-            setBookmarks={setBookmarks}
-            addPins={addPins}
-            setAddPins={setAddPins}
-            subPins={subPins}
-            setSubPins={setSubPins}
-          />
-        ) : (
-          <UneditableMap bookmarks={bookmarks} />
-        )}
+        <Map modifyState={modifyState} />
       </div>
       <BookmarkButton
         id={id}
         title={newTitle}
-        visibility={newVisibility}
-        addPins={addPins}
-        subPins={subPins}
+        visibility={visible_scope?.name as string}
         modifyState={modifyState}
         setModifyState={setModifyState}
       />
