@@ -1,22 +1,30 @@
-import { BookmarkType, PinType } from "@/model/bookmark";
+import { BookmarkType, LocationType, PinType } from "@/model/bookmark";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 type InitialState = {
   bookmarks: BookmarkType[];
   deleteBookmarks: number[];
   pins: PinType[];
+  center: LocationType;
 };
 
 const InitialMap: InitialState = {
   bookmarks: [],
   deleteBookmarks: [],
-  pins: []
+  pins: [],
+  center: {
+    lat: 0,
+    lng: 0
+  }
 };
 
 const mapSlice = createSlice({
   name: "map",
   initialState: InitialMap,
   reducers: {
+    setCenter: (state, action: PayloadAction<LocationType>) => {
+      state.center = action.payload;
+    },
     setPins: state => {
       state.pins = [];
     },
@@ -26,8 +34,8 @@ const mapSlice = createSlice({
     subPins: (state, action: PayloadAction<PinType>) => {
       state.pins = state.pins.filter(
         pin =>
-          pin.latitude !== action.payload.latitude &&
-          pin.longitude !== action.payload.longitude
+          pin.position.lat !== action.payload.position.lat &&
+          pin.position.lng !== action.payload.position.lng
       );
     },
     setBookmarks: (state, action: PayloadAction<BookmarkType[]>) => {
@@ -46,6 +54,7 @@ const mapSlice = createSlice({
 });
 
 export const {
+  setCenter,
   setPins,
   addPins,
   subPins,

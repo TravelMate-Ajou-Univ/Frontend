@@ -6,8 +6,7 @@ import {
 } from "@react-google-maps/api";
 import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import MapMenuButton from "../ui/MapMenuButton";
-import { PinType } from "@/model/bookmark";
-import { CalculateCenter } from "@/service/map";
+import { LocationType, PinType } from "@/model/bookmark";
 import { DotLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 import { useAppSelector } from "@/hooks/redux";
@@ -23,7 +22,7 @@ type Props = {
 };
 export default function Map({ modifyState }: Props) {
   const dispatch = useDispatch();
-  const { bookmarks } = useAppSelector(state => state.mapSlice);
+  const { bookmarks, center } = useAppSelector(state => state.mapSlice);
   const [userPos, setUserPos] = useState({
     lat: 0,
     lng: 0
@@ -47,13 +46,10 @@ export default function Map({ modifyState }: Props) {
         console.log(error);
       }
     );
+
     dispatch(setPins());
     dispatch(setDeleteBookmarks());
   }, []);
-
-  // bookmark가 없다면 현재 위치를 중심으로 지도를 보여준다.
-  const initCenter =
-    bookmarks.length === 0 ? userPos : CalculateCenter(bookmarks);
 
   const toggleGPS = () => {
     setGpsToggle(!gpsToggle);
@@ -97,11 +93,10 @@ export default function Map({ modifyState }: Props) {
     setClickState(true);
   };
 
-  const addHandler = (location: any) => {
+  const addHandler = (location: LocationType) => {
     setClickState(false);
     const new_pin: PinType = {
-      latitude: location.lat,
-      longitude: location.lng,
+      position: location,
       content: text
     };
     dispatch(addPins(new_pin));
@@ -123,7 +118,7 @@ export default function Map({ modifyState }: Props) {
       <GoogleMap
         options={mapOptions}
         zoom={zoomSize}
-        center={initCenter}
+        center={center}
         mapTypeId={google.maps.MapTypeId.ROADMAP}
         mapContainerStyle={{ width: "100%", height: "100%" }}
         onClick={e => clickHandler(e)}

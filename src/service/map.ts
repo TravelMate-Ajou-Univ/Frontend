@@ -5,8 +5,8 @@ export function CalculateCenter(bookmarks: BookmarkType[]) {
   let lng = 0;
 
   for (let i = 0; i < bookmarks.length; i++) {
-    lat += bookmarks[i].latitude;
-    lng += bookmarks[i].longitude;
+    lat += bookmarks[i].position.lat;
+    lng += bookmarks[i].position.lng;
   }
 
   lat = lat / bookmarks.length;

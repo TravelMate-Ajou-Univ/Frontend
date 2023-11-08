@@ -1,11 +1,12 @@
 export type VisibilityType = "public" | "friends_only" | "private";
 
 export type LocationType = {
-  latitude: number;
-  longitude: number;
+  lat: number;
+  lng: number;
 };
 
-export type PinType = LocationType & {
+export type PinType = {
+  position: LocationType;
   content?: string;
 };
 

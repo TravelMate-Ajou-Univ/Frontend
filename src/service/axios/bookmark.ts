@@ -82,8 +82,10 @@ export const getAllBookmarks = async (id: number): Promise<BookmarkType[]> => {
       }) => {
         const bookmark: BookmarkType = {
           id,
-          latitude: Number(location.latitude),
-          longitude: Number(location.longitude),
+          position: {
+            lat: Number(location.latitude),
+            lng: Number(location.longitude)
+          },
           content
         };
         return bookmark;

@@ -22,24 +22,26 @@ export default function Marker({
     state => state.mapSlice
   );
   const [selectedMarker, setSelectedMarker] = useState<LocationType>({
-    latitude: 0,
-    longitude: 0
+    lat: 0,
+    lng: 0
   });
-  const clickHandler = (index: LocationType, e: any) => {
+  const clickHandler = (index: LocationType) => {
+    console.log(index);
+
     handleActiveMarker(index);
-    setSelectedMarker({ latitude: e.latLng.lat(), longitude: e.latLng.lng() });
+    setSelectedMarker(index);
   };
+
   const handleActiveMarker = (marker: LocationType) => {
     if (marker === activeMarker) {
       return;
     }
     setActiveMarker(marker);
   };
+
   const deleteHandler = async (target: BookmarkType | PinType) => {
     const del_bookmark = bookmarks.find(
-      bookmark =>
-        bookmark.latitude === target.latitude &&
-        bookmark.longitude === target.longitude
+      bookmark => bookmark.position === target.position
     );
 
     if (del_bookmark === undefined) {
@@ -51,28 +53,13 @@ export default function Marker({
   return (
     <div>
       <MarkerF
-        position={{
-          lat: bookmark.latitude,
-          lng: bookmark.longitude
-        }}
+        position={bookmark.position}
         title={bookmark.content}
-        onClick={e =>
-          clickHandler(
-            {
-              latitude: bookmark.latitude,
-              longitude: bookmark.longitude
-            },
-            e
-          )
-        }
+        onClick={() => clickHandler(bookmark.position)}
       />
-      {activeMarker?.latitude === bookmark.latitude &&
-      activeMarker.longitude === bookmark.longitude ? (
+      {activeMarker === bookmark.position ? (
         <InfoWindowF
-          position={{
-            lat: selectedMarker.latitude,
-            lng: selectedMarker.longitude
-          }}
+          position={selectedMarker}
           options={{ pixelOffset: new window.google.maps.Size(0, -25) }}
           onCloseClick={() => setActiveMarker(null)}
         >

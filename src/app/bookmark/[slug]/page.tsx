@@ -11,11 +11,13 @@ import { getAllBookmarks } from "@/service/axios/bookmark";
 import DropDown from "@/components/ui/dropDown/DropDown";
 import Map from "@/components/googleMap/Map";
 import { useDispatch } from "react-redux";
-import { setBookmarks } from "@/redux/features/mapSlice";
+import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
+import { CalculateCenter } from "@/service/map";
 
 export default function BookmarkPage() {
   const dispatch = useDispatch();
   // const { bookmarks } = useAppSelector(state => state.mapSlice);
+
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
@@ -52,6 +54,27 @@ export default function BookmarkPage() {
     const getData = async () => {
       const data = await getAllBookmarks(id);
       dispatch(setBookmarks(data));
+
+      // bookmark들이 있다면 지도 center을 bookmark들의 가운데로
+      // 없다면 내 위치를 center로 설정
+      if (data.length === 0) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            dispatch(
+              setCenter({
+                lat: position.coords.latitude,
+                lng: position.coords.longitude
+              })
+            );
+          },
+          error => {
+            prompt("현재 위치를 가져오는 데 실패하였습니다.");
+            console.log(error);
+          }
+        );
+      } else {
+        dispatch(setCenter(CalculateCenter(data)));
+      }
     };
     getData();
   }, [id]);
