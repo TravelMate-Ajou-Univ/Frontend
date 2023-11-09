@@ -15,13 +15,19 @@ export default function MasonryContainer({ children }: Props) {
       gutter: 20,
       initLayout: false
     });
-    if (msnry.on) {
-      msnry.on("layoutComplete", function (items: any) {
-        console.log(items.length);
-      });
-    }
-    if (msnry.layout) msnry.layout();
+    const intervalId = setInterval(() => {
+      if (msnry && msnry.layout) msnry.layout();
+    }, 1000);
+
+    const timdoutId = setTimeout(() => {
+      clearInterval(intervalId);
+    }, 10000);
+
+    return () => {
+      clearInterval(intervalId);
+      clearTimeout(timdoutId);
+    };
   }, [children]);
 
-  return <ul className="grid-masonry grid w-full">{children}</ul>;
+  return <ul className="grid-masonry w-full">{children}</ul>;
 }

@@ -17,7 +17,8 @@ export default function Search() {
 
   useEffect(() => {
     searchParams.get("word") && setWord(searchParams.get("word")!);
-    searchParams.get("location") && setLocation(searchParams.get("location")!);
+    if (!searchParams.get("location")) setLocation("전체");
+    else setLocation(searchParams.get("location")!);
   }, [searchParams]);
 
   const handleWord = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -26,12 +27,13 @@ export default function Search() {
 
   const search = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!word) return;
+    if (word === "") return;
     router.push(`/article/list?word=${word}&location=${location}`);
   };
 
   const handleLocation = (location: string) => {
-    router.push(`/article/list?word=${word}&location=${location}`);
+    if (location === "전체") router.push(`/article/list?word=${word}`);
+    else router.push(`/article/list?word=${word}&location=${location}`);
   };
 
   const handleSeason = (season: string) => {

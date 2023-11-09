@@ -14,7 +14,7 @@ export default function ArticleListPage() {
           <p>모두가 함께 만들어 나가는 여행 정보 게시판</p>
         </div>
       </h1>
-      <section className="flex flex-col items-center">
+      <section className="flex flex-col items-center w-full">
         <ArticleList />
       </section>
     </div>
