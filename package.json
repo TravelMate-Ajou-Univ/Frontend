@@ -25,6 +25,7 @@
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
     "jwt-decode": "^4.0.0",
+    "masonry-layout": "^4.2.2",
     "next": "13.4.19",
     "next-redux-wrapper": "^8.1.0",
     "postcss": "8.4.28",
@@ -42,6 +43,7 @@
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {
+    "@types/masonry-layout": "^4.2.7",
     "encoding": "^0.1.13",
     "prettier": "3.0.3"
   }
