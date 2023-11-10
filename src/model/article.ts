@@ -14,3 +14,26 @@ export type ArticleType = {
   location: string;
   thumbnail: string;
 };
+
+export type ArticlePreviewType = {
+  id: number;
+  title: string;
+  thumbnail: string;
+  location: string;
+  authorId: number;
+  springVersionID: number;
+  summerVersionID: number;
+  fallVersionID: number;
+  winterVersionID: number;
+  articleTagMap: {
+    id: number;
+    articleId: number;
+    tagId: number;
+    tag: {
+      id: number;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+  }[];
+};

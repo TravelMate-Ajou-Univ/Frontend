@@ -11,7 +11,7 @@ import {
   submitArticle,
   uploadImage
 } from "@/service/axios/article";
-import Keyword from "../ui/Keyword";
+import Keyword from "@/components/ui/Keyword";
 import {
   ArticleType,
   KeywordType,
@@ -19,13 +19,12 @@ import {
   SeasonType
 } from "@/model/article";
 import { useRouter } from "next/navigation";
-import Image from "next/image";
-import ImageSection from "../ui/ImageSection";
-import FilledButton from "../ui/button/FilledButton";
+import ImageSection from "@/components/ui/ImageSection";
+import FilledButton from "@/components/ui/button/FilledButton";
 
 const INPUT_CLASSNAME = "flex items-center gap-4";
 
-const TextEditor = dynamic(() => import("../reactQuill/TextEditor"), {
+const TextEditor = dynamic(() => import("@/components/reactQuill/TextEditor"), {
   ssr: false
 });
 
