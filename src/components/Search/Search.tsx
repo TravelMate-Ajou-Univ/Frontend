@@ -19,6 +19,9 @@ export default function Search() {
     searchParams.get("word") && setWord(searchParams.get("word")!);
     if (!searchParams.get("location")) setLocation("전체");
     else setLocation(searchParams.get("location")!);
+    searchParams.getAll("seasons").length !== 0 &&
+      setSeasons(searchParams.getAll("seasons"));
+    console.log(searchParams.getAll("seasons"));
   }, [searchParams]);
 
   const handleWord = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,20 +31,60 @@ export default function Search() {
   const search = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (word === "") return;
-    router.push(`/article/list?word=${word}&location=${location}`);
+    const pathname = getPathname(word, location, seasons);
+    router.push(pathname);
+    // router.push(`/article/list?word=${word}&location=${location}`);
   };
 
   const handleLocation = (location: string) => {
-    if (location === "전체") router.push(`/article/list?word=${word}`);
-    else router.push(`/article/list?word=${word}&location=${location}`);
+    const pathname = getPathname(word, location, seasons);
+    router.push(pathname);
+    // if (location === "전체") router.push(`/article/list?word=${word}`);
+    // else
+    //   router.push(
+    //     `/article/list?${
+    //       word === "" ? "" : `word=${word}`
+    //     }&location=${location}`
+    //   );
   };
 
   const handleSeason = (season: string) => {
+    let newSeasons;
     if (seasons.includes(season)) {
-      setSeasons(seasons.filter(s => s !== season));
+      newSeasons = seasons.filter(s => s !== season);
+      setSeasons(newSeasons);
     } else {
-      setSeasons([...seasons, season]);
+      newSeasons = [...seasons, season];
+      setSeasons(newSeasons);
     }
+
+    const pathname = getPathname(word, location, newSeasons);
+    // console.log(pathname);
+    // const seasonQuery =
+    //   newSeasons.length === 0
+    //     ? [""]
+    //     : newSeasons.map(season => `seasons=${season}&`);
+    // // for (let i = 0; i < seasonQuery.length; i++) {
+    // //   const query = seasonQuery[i].toString();
+    // //   pathname.concat(query);
+    // // }
+    // console.log(seasonQuery);
+    // const query = seasonQuery.join("");
+
+    router.push(pathname);
+  };
+
+  const getPathname = (
+    word: string,
+    location: string,
+    seasons: string[]
+  ): string => {
+    const pathname = "/article/list?";
+    const wordQuery = word === "" ? "" : `word=${word}&`;
+    const locationQuery = location === "전체" ? "" : `location=${location}&`;
+    const seasonQuery =
+      seasons.length === 0 ? [""] : seasons.map(season => `seasons=${season}&`);
+    return pathname.concat(wordQuery, locationQuery, seasonQuery.join(""));
   };
 
   return (

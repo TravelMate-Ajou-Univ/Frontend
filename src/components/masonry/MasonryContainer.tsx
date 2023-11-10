@@ -17,11 +17,11 @@ export default function MasonryContainer({ children }: Props) {
     });
     const intervalId = setInterval(() => {
       if (msnry && msnry.layout) msnry.layout();
-    }, 1000);
+    }, 10);
 
     const timdoutId = setTimeout(() => {
       clearInterval(intervalId);
-    }, 10000);
+    }, 1000);
 
     return () => {
       clearInterval(intervalId);
