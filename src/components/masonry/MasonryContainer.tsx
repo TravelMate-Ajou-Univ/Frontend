@@ -21,7 +21,7 @@ export default function MasonryContainer({ children }: Props) {
 
     const timdoutId = setTimeout(() => {
       clearInterval(intervalId);
-    }, 1000);
+    }, 3000);
 
     return () => {
       clearInterval(intervalId);

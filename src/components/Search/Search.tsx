@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import DropDown from "../ui/dropDown/DropDown";
 import SearchIcon from "../ui/icons/SearchIcon";
 import { locationList } from "@/lib/locationList";
-import { seasonList } from "@/lib/seasonList";
+import { seasonList, seasonMapperToKorean } from "@/lib/seasonList";
 import Keyword from "../ui/Keyword";
 import { useRouter, useSearchParams } from "next/navigation";
+import { SeasonType } from "@/model/article";
 
 export default function Search() {
   const [location, setLocation] = useState("전쳬");
@@ -20,8 +21,14 @@ export default function Search() {
     if (!searchParams.get("location")) setLocation("전체");
     else setLocation(searchParams.get("location")!);
     searchParams.getAll("seasons").length !== 0 &&
-      setSeasons(searchParams.getAll("seasons"));
-    console.log(searchParams.getAll("seasons"));
+      searchParams
+        .getAll("seasons")
+        .map((season: string) =>
+          setSeasons(prev => [
+            ...prev,
+            seasonMapperToKorean[season.toUpperCase() as SeasonType]
+          ])
+        );
   }, [searchParams]);
 
   const handleWord = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -33,19 +40,11 @@ export default function Search() {
     if (word === "") return;
     const pathname = getPathname(word, location, seasons);
     router.push(pathname);
-    // router.push(`/article/list?word=${word}&location=${location}`);
   };
 
   const handleLocation = (location: string) => {
     const pathname = getPathname(word, location, seasons);
     router.push(pathname);
-    // if (location === "전체") router.push(`/article/list?word=${word}`);
-    // else
-    //   router.push(
-    //     `/article/list?${
-    //       word === "" ? "" : `word=${word}`
-    //     }&location=${location}`
-    //   );
   };
 
   const handleSeason = (season: string) => {
@@ -59,17 +58,6 @@ export default function Search() {
     }
 
     const pathname = getPathname(word, location, newSeasons);
-    // console.log(pathname);
-    // const seasonQuery =
-    //   newSeasons.length === 0
-    //     ? [""]
-    //     : newSeasons.map(season => `seasons=${season}&`);
-    // // for (let i = 0; i < seasonQuery.length; i++) {
-    // //   const query = seasonQuery[i].toString();
-    // //   pathname.concat(query);
-    // // }
-    // console.log(seasonQuery);
-    // const query = seasonQuery.join("");
 
     router.push(pathname);
   };
@@ -82,9 +70,13 @@ export default function Search() {
     const pathname = "/article/list?";
     const wordQuery = word === "" ? "" : `word=${word}&`;
     const locationQuery = location === "전체" ? "" : `location=${location}&`;
-    const seasonQuery =
-      seasons.length === 0 ? [""] : seasons.map(season => `seasons=${season}&`);
-    return pathname.concat(wordQuery, locationQuery, seasonQuery.join(""));
+    let seasonQuery = "";
+    // seasons.length === 0 ? [""] : seasons.map(season => `seasons=${season}&`);
+    if (seasons.includes("봄")) seasonQuery = seasonQuery + "seasons=spring&";
+    if (seasons.includes("여름")) seasonQuery = seasonQuery + "seasons=summer&";
+    if (seasons.includes("가을")) seasonQuery = seasonQuery + "seasons=fall&";
+    if (seasons.includes("겨울")) seasonQuery = seasonQuery + "seasons=winter&";
+    return pathname.concat(wordQuery, locationQuery, seasonQuery);
   };
 
   return (
