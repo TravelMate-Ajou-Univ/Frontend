@@ -1,4 +1,4 @@
-import { ArticleType } from "@/model/article";
+import { ArticleDetailType, ArticleType } from "@/model/article";
 import { article } from "./api";
 
 export const uploadImage = async (file: File) => {
@@ -95,7 +95,39 @@ export const getArticleList = async (
 export const submitArticle = async (newArticle: ArticleType) => {
   try {
     const { data } = await article.submitArticle(newArticle);
-    return data;
+    if (!data) return false;
+    return data.id;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const getArticle = async (
+  id: string
+): Promise<ArticleDetailType | false> => {
+  try {
+    const { data } = await article.getArticle(id);
+    if (!data) return false;
+
+    const articleData: ArticleDetailType = {
+      id: data.id,
+      title: data.title,
+      thumbnail: data.thumbnail,
+      location: data.location,
+      authorId: data.authorId,
+      springVersionID: data.springVersionID,
+      summerVersionID: data.summerVersionID,
+      fallVersionID: data.fallVersionID,
+      winterVersionID: data.winterVersionID,
+      articleTagMap: data.articleTagMap,
+      spring: data.spring,
+      summer: data.summer,
+      fall: data.fall,
+      winter: data.winter
+    };
+
+    return articleData;
   } catch (error) {
     console.log(error);
     return false;

@@ -64,5 +64,6 @@ export const article = {
         keyword === "" ? "" : `&keyword=${keyword}`
       }`
     ),
-  submitArticle: (article: ArticleType) => api.post("articles", article)
+  submitArticle: (article: ArticleType) => api.post("articles", article),
+  getArticle: (id: string) => api.get(`articles/${id}`)
 };

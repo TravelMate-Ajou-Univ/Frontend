@@ -84,9 +84,11 @@ export default function ArticleForm() {
       thumbnail
     };
 
-    if (await submitArticle(article)) {
+    const id = await submitArticle(article);
+
+    if (id) {
       alert("게시글이 등록되었습니다.");
-      router.push("/");
+      router.push(`/article/detail/${id}}`);
     }
   };
 
