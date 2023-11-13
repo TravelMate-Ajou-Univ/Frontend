@@ -40,7 +40,10 @@ export const userAuth = {
 };
 
 export const user = {
-  getUserInfo: () => api.get("users/me")
+  getUserInfo: () => api.get("users/me"),
+  getUserInfoById: (id: number) => api.get(`users/${id}`),
+  getBookmarkCollectionsById: (id: number) =>
+    api.get(`users/${id}/bookmark-collections`)
 };
 
 export const article = {

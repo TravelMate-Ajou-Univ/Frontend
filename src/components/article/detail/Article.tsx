@@ -39,13 +39,8 @@ export default function Article({ articleId }: Props) {
       <nav className="absolute -left-12 top-5">
         <SeasonNav season={season} onClick={value => setSeason(value)} />
       </nav>
-      {/* TODO: 게시글 작성자 정보 GET */}
-      {/* {article && (
-        <section>
-          <Author authorId={article.authorId} />
-        </section>
-      )} */}
-      <section className="w-full px-14 py-8">
+      {article && <Author authorId={article.authorId} />}
+      <section className="w-full px-12 py-8">
         {article && (
           <div className="w-full flex flex-col gap-4">
             <ul>

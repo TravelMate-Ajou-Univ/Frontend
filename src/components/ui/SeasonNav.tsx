@@ -11,7 +11,7 @@ interface Props {
 }
 
 export default function SeasonNav({ season, onClick }: Props) {
-  const IMAGECLASS = "w-11 h-11 p-1.5 cursor-pointer";
+  const IMAGECLASS = "w-11 h-11 p-1.5 cursor-pointer object-cover";
   return (
     <ul className="border rounded-lg flex flex-col items-center divide-y bg-white">
       <li onClick={() => onClick("SPRING")}>
@@ -19,6 +19,8 @@ export default function SeasonNav({ season, onClick }: Props) {
           className={IMAGECLASS + (season === "SPRING" ? " bg-gray-200" : "")}
           src={springIcon}
           alt="봄 아이콘"
+          width={100}
+          height={100}
         />
       </li>
       <li onClick={() => onClick("SUMMER")}>
@@ -26,6 +28,8 @@ export default function SeasonNav({ season, onClick }: Props) {
           className={IMAGECLASS + (season === "SUMMER" ? " bg-gray-200" : "")}
           src={summerIcon}
           alt="여름 아이콘"
+          width={100}
+          height={100}
         />
       </li>
       <li onClick={() => onClick("FALL")}>
@@ -33,6 +37,8 @@ export default function SeasonNav({ season, onClick }: Props) {
           className={IMAGECLASS + (season === "FALL" ? " bg-gray-200" : "")}
           src={fallIcon}
           alt="가을 아이콘"
+          width={100}
+          height={100}
         />
       </li>
       <li onClick={() => onClick("WINTER")}>
@@ -40,6 +46,8 @@ export default function SeasonNav({ season, onClick }: Props) {
           className={IMAGECLASS + (season === "WINTER" ? " bg-gray-200" : "")}
           src={winterIcon}
           alt="겨울 아이콘"
+          width={100}
+          height={100}
         />
       </li>
     </ul>
