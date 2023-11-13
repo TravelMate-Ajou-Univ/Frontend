@@ -1,7 +1,8 @@
 import { deleteCookie, setCookie } from "cookies-next";
 import { api, user, userAuth } from "./api";
 import { jwtDecode } from "jwt-decode";
-import { setUser } from "@/redux/features/userSlice";
+import { User } from "@/model/user";
+import { BookmarkCollection } from "@/model/bookmark";
 
 export const GetKakaoToken = async (code: string) => {
   try {
@@ -120,6 +121,40 @@ export const GetUserInfo = async () => {
       profileImageId: data.profileImageId ?? ""
     };
     return userInfo;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const getUserInfoById = async (id: number): Promise<User | false> => {
+  try {
+    const { data } = await user.getUserInfoById(id);
+    const userInfo: User = {
+      userName: data.nickname,
+      profileImageId: data.profileImageId ?? ""
+    };
+    return userInfo;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const getBookmarkCollectionsById = async (
+  id: number
+): Promise<{ id: number; title: string }[] | false> => {
+  try {
+    const { data } = await user.getBookmarkCollectionsById(id);
+    if (data.bookmarkCollections.length === 0) return false;
+    return data.bookmarkCollections.map(
+      (bookmarkCollection: BookmarkCollection) => {
+        return {
+          id: bookmarkCollection.id,
+          title: bookmarkCollection.title
+        };
+      }
+    );
   } catch (error) {
     console.log(error);
     return false;

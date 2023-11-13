@@ -3,7 +3,7 @@
 import { useState } from "react";
 import DownIcon from "../icons/DownIcon";
 import DropDownList from "./DropDownList";
-import useOutsideRef from "@/hooks/useOutsideRef";
+import useOutsideRef from "@/hooks/useClickOutside";
 
 type Props = {
   selected: string;
