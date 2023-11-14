@@ -64,7 +64,8 @@ export default function GoogleMap({ modifyState }: Props) {
           lat: bookmark.latitude,
           lng: bookmark.longitude
         },
-        map: initmap
+        map: initmap,
+        icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
       });
       marker.addListener("click", async () => {
         const result = await placeDetail({
@@ -114,7 +115,8 @@ export default function GoogleMap({ modifyState }: Props) {
           lat: pin.latitude,
           lng: pin.longitude
         },
-        map: initmap
+        map: initmap,
+        icon: "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
       });
       marker.addListener("click", async () => {
         const result = await placeDetail({
@@ -187,6 +189,7 @@ export default function GoogleMap({ modifyState }: Props) {
       const marker = new google.maps.Marker({
         position: place.geometry?.location,
         map: map,
+        icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
         title: place.name
       });
       setPlaces(prevPlaces => [...prevPlaces, marker]);
