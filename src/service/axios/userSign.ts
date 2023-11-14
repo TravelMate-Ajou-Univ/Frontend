@@ -2,7 +2,7 @@ import { deleteCookie, setCookie } from "cookies-next";
 import { api, user, userAuth } from "./api";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@/model/user";
-import { BookmarkCollection } from "@/model/bookmark";
+import { BookmarkCollectionType } from "@/model/bookmark";
 
 export const GetKakaoToken = async (code: string) => {
   try {
@@ -148,7 +148,7 @@ export const getBookmarkCollectionsById = async (
     const { data } = await user.getBookmarkCollectionsById(id);
     if (data.bookmarkCollections.length === 0) return false;
     return data.bookmarkCollections.map(
-      (bookmarkCollection: BookmarkCollection) => {
+      (bookmarkCollection: BookmarkCollectionType) => {
         return {
           id: bookmarkCollection.id,
           title: bookmarkCollection.title
