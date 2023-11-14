@@ -9,14 +9,14 @@ import FriendsOnlyIcon from "@/components/ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "@/components/ui/icons/PrivateIcon";
 import { getAllBookmarks } from "@/service/axios/bookmark";
 import DropDown from "@/components/ui/dropDown/DropDown";
-import Map from "@/components/googleMap/Map";
 import { useDispatch } from "react-redux";
 import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
-import { CalculateCenter } from "@/service/map";
+import { CalculateCenter } from "@/service/googlemap/map";
+import { useAppSelector } from "@/hooks/redux";
+import GoogleMap from "@/components/googleMap/GoogleMap";
 
 export default function BookmarkPage() {
   const dispatch = useDispatch();
-  // const { bookmarks } = useAppSelector(state => state.mapSlice);
 
   const visible_scopes = [
     {
@@ -62,8 +62,8 @@ export default function BookmarkPage() {
           position => {
             dispatch(
               setCenter({
-                lat: position.coords.latitude,
-                lng: position.coords.longitude
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
               })
             );
           },
@@ -77,7 +77,7 @@ export default function BookmarkPage() {
       }
     };
     getData();
-  }, [id]);
+  }, [id, dispatch]);
 
   const onChangeText = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -119,7 +119,7 @@ export default function BookmarkPage() {
         </div>
       )}
       <div className="w-[60vw] h-[70vh] border-2 m-4">
-        <Map modifyState={modifyState} />
+        <GoogleMap modifyState={modifyState} />
       </div>
       <BookmarkButton
         id={id}

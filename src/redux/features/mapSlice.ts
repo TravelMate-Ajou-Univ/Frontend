@@ -13,8 +13,8 @@ const InitialMap: InitialState = {
   deleteBookmarks: [],
   pins: [],
   center: {
-    lat: 0,
-    lng: 0
+    latitude: 0,
+    longitude: 0
   }
 };
 
@@ -34,8 +34,8 @@ const mapSlice = createSlice({
     subPins: (state, action: PayloadAction<PinType>) => {
       state.pins = state.pins.filter(
         pin =>
-          pin.position.lat !== action.payload.position.lat &&
-          pin.position.lng !== action.payload.position.lng
+          pin.latitude !== action.payload.latitude &&
+          pin.longitude !== action.payload.longitude
       );
     },
     setBookmarks: (state, action: PayloadAction<BookmarkType[]>) => {
