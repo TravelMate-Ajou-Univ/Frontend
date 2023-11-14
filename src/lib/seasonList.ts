@@ -6,3 +6,10 @@ export const seasonMapper = {
   가을: "FALL",
   겨울: "WINTER"
 };
+
+export const seasonMapperToKorean = {
+  SPRING: "봄",
+  SUMMER: "여름",
+  FALL: "가을",
+  WINTER: "겨울"
+};

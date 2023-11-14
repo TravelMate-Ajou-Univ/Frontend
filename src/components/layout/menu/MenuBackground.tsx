@@ -1,4 +1,4 @@
-import ModalPortal from "../ui/ModalPortal";
+import ModalPortal from "@/components/ui/ModalPortal";
 
 interface Props {
   children: React.ReactNode;

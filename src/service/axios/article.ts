@@ -1,13 +1,13 @@
-import { ArticleType } from "@/model/article";
-import { posting } from "./api";
+import { ArticleDetailType, ArticleType } from "@/model/article";
+import { article } from "./api";
 
 export const uploadImage = async (file: File) => {
   try {
-    const { data: s3data } = await posting.getS3Url();
+    const { data: s3data } = await article.getS3Url();
     const { url, id } = s3data;
-    const res = await posting.uploadImgToS3(url, file);
+    const res = await article.uploadImgToS3(url, file);
     if (res.status === 200) {
-      const { data } = await posting.confirmUpload(id);
+      const { data } = await article.confirmUpload(id);
       return data.id;
     }
   } catch (error) {
@@ -18,7 +18,7 @@ export const uploadImage = async (file: File) => {
 
 export const getKeywords = async (word: string) => {
   try {
-    const { data } = await posting.getKeywords(word);
+    const { data } = await article.getKeywords(word);
     return data;
   } catch (error) {
     console.log(error);
@@ -28,7 +28,7 @@ export const getKeywords = async (word: string) => {
 
 export const postKeyword = async (name: string) => {
   try {
-    const { data } = await posting.postKeyword(name);
+    const { data } = await article.postKeyword(name);
     return {
       id: data.id,
       name: data.name
@@ -39,10 +39,95 @@ export const postKeyword = async (name: string) => {
   }
 };
 
-export const submitArticle = async (article: ArticleType) => {
+export const getArticleList = async (
+  page: number,
+  limit: number,
+  period: string,
+  location: string,
+  word: string
+) => {
   try {
-    const { data } = await posting.submitPosting(article);
-    return data;
+    const { data } = await article.getArticleList(
+      page,
+      limit,
+      period,
+      location,
+      word
+    );
+
+    const { count, articles } = data;
+
+    const newArticles = articles.map((article: any) => {
+      const {
+        id,
+        title,
+        thumbnail,
+        location,
+        authorId,
+        springVersionID,
+        summerVersionID,
+        fallVersionID,
+        winterVersionID,
+        articleTagMap
+      } = article;
+
+      return {
+        id,
+        title,
+        thumbnail,
+        location,
+        authorId,
+        springVersionID,
+        summerVersionID,
+        fallVersionID,
+        winterVersionID,
+        articleTagMap
+      };
+    });
+
+    return { count, newArticles };
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const submitArticle = async (newArticle: ArticleType) => {
+  try {
+    const { data } = await article.submitArticle(newArticle);
+    if (!data) return false;
+    return data.id;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const getArticle = async (
+  id: string
+): Promise<ArticleDetailType | false> => {
+  try {
+    const { data } = await article.getArticle(id);
+    if (!data) return false;
+
+    const articleData: ArticleDetailType = {
+      id: data.id,
+      title: data.title,
+      thumbnail: data.thumbnail,
+      location: data.location,
+      authorId: data.authorId,
+      springVersionID: data.springVersionID,
+      summerVersionID: data.summerVersionID,
+      fallVersionID: data.fallVersionID,
+      winterVersionID: data.winterVersionID,
+      articleTagMap: data.articleTagMap,
+      spring: data.spring,
+      summer: data.summer,
+      fall: data.fall,
+      winter: data.winter
+    };
+
+    return articleData;
   } catch (error) {
     console.log(error);
     return false;
