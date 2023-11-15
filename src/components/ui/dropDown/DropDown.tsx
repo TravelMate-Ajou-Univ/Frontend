@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import DownIcon from "../icons/DownIcon";
 import DropDownList from "./DropDownList";

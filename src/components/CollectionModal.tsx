@@ -4,7 +4,7 @@ import PrivateIcon from "./ui/icons/PrivateIcon";
 import FriendsOnlyIcon from "./ui/icons/FriendsOnlyIcon";
 import { addCollection } from "@/service/axios/bookmark";
 import { useDispatch } from "react-redux";
-import { addBookmarkCollection } from "@/redux/features/bookmarkCollectionSlice";
+import { addBookmarkCollection } from "@/redux/features/bookmarkCollectionListSlice";
 import { useAppSelector } from "@/hooks/redux";
 
 type Props = {
@@ -13,7 +13,7 @@ type Props = {
 
 export default function CollectionModal({ toggleButton }: Props) {
   const dispatch = useDispatch();
-  const { search } = useAppSelector(state => state.bookmarkCollectionSlice);
+  const { view } = useAppSelector(state => state.bookmarkCollectionListSlice);
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
@@ -53,7 +53,7 @@ export default function CollectionModal({ toggleButton }: Props) {
     const res = await addCollection(form);
     if (res === null) {
       alert("생성 실패!");
-    } else if (search === "all" || search === res?.visibility.toLowerCase()) {
+    } else if (view === "all" || view === res?.visibility.toLowerCase()) {
       dispatch(addBookmarkCollection(res));
     }
     toggleButton();
@@ -62,7 +62,7 @@ export default function CollectionModal({ toggleButton }: Props) {
   return (
     <form className="absolute right-0 w-[12rem] mt-[1rem] flex flex-col p-3 items-center border-2 border-neutral-300 z-10 bg-white">
       <input
-        className="w-full m-1 outline-none p-3 border-2"
+        className="w-full m-1 outline-none p-3 border-2 text-sm"
         type="text"
         id="title"
         name="title"

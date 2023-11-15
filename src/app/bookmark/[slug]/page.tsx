@@ -3,57 +3,81 @@
 import { useSearchParams } from "next/navigation";
 import BookmarkButton from "@/components/BookmarkButton";
 import { ChangeEvent, useEffect, useState } from "react";
-import { Bookmark, Pin } from "@/model/bookmark";
+import { VisibilityType } from "@/model/bookmark";
 import PublicIcon from "@/components/ui/icons/PublicIcon";
 import FriendsOnlyIcon from "@/components/ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "@/components/ui/icons/PrivateIcon";
 import { getAllBookmarks } from "@/service/axios/bookmark";
-import EditableMap from "@/components/EditableMap";
-import UneditableMap from "@/components/UneditableMap";
+import DropDown from "@/components/ui/dropDown/DropDown";
+import { useDispatch } from "react-redux";
+import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
+import { CalculateCenter } from "@/service/googlemap/map";
+import { useAppSelector } from "@/hooks/redux";
+import GoogleMap from "@/components/googleMap/GoogleMap";
 
 export default function BookmarkPage() {
-  const params = useSearchParams();
-  const id = Number(params.get("id"));
-  const title = String(params.get("title"));
-  const visibility = String(params.get("visibility"));
-
-  const [bookmarks, setBookmarks] = useState<Bookmark[]>([]);
-  const [newTitle, setNewTitle] = useState<string>(title);
-  const [newVisibility, setNewVisibility] = useState(visibility);
-  const [modifyState, setModifyState] = useState(false);
-  const [visibleState, setVisibleState] = useState(false);
-  const [addPins, setAddPins] = useState<Pin[]>([]);
-  const [subPins, setSubPins] = useState<Number[]>([]);
+  const dispatch = useDispatch();
 
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
-      name: "PRIVATE",
+      name: "private",
       description: "나만 공개"
     },
     {
       icon: <FriendsOnlyIcon />,
-      name: "FRIENDS_ONLY",
+      name: "friends_only",
       description: "친구 공개"
     },
     {
       icon: <PublicIcon />,
-      name: "PUBLIC",
+      name: "public",
       description: "모두 공개"
     }
   ];
+  const params = useSearchParams();
+  const id = Number(params.get("id"));
+  const title = String(params.get("title"));
+  const visibility = visible_scopes.find(
+    scope => scope.name === String(params.get("visibility"))
+  )?.description as VisibilityType;
+
+  const [newTitle, setNewTitle] = useState<string>(title);
+  const [newVisibility, setNewVisibility] = useState(visibility);
+  const [modifyState, setModifyState] = useState(false);
+
   const visible_scope = visible_scopes.find(
-    element => element.name === visibility
+    element => element.description === newVisibility
   );
 
   useEffect(() => {
     const getData = async () => {
       const data = await getAllBookmarks(id);
+      dispatch(setBookmarks(data));
 
-      setBookmarks(data);
+      // bookmark들이 있다면 지도 center을 bookmark들의 가운데로
+      // 없다면 내 위치를 center로 설정
+      if (data.length === 0) {
+        navigator.geolocation.getCurrentPosition(
+          position => {
+            dispatch(
+              setCenter({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+              })
+            );
+          },
+          error => {
+            prompt("현재 위치를 가져오는 데 실패하였습니다.");
+            console.log(error);
+          }
+        );
+      } else {
+        dispatch(setCenter(CalculateCenter(data)));
+      }
     };
     getData();
-  }, [id]);
+  }, [id, dispatch]);
 
   const onChangeText = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -62,13 +86,11 @@ export default function BookmarkPage() {
     setNewTitle(value);
   };
 
-  const toggleVisible = () => {
-    setVisibleState(!visibleState);
-  };
-
-  const modifyVisible = (name: string, e: any) => {
-    setNewVisibility(name);
-    setVisibleState(!visibleState);
+  const modifyVisible = (visibility: string) => {
+    const new_scope = visible_scopes.find(
+      scope => scope.description === visibility
+    )?.description as VisibilityType;
+    setNewVisibility(new_scope);
   };
 
   return (
@@ -79,37 +101,13 @@ export default function BookmarkPage() {
             type="text"
             value={newTitle}
             onChange={onChangeText}
-            className="text-3xl font-bold bg-gray-100 border-none hover:scale-110"
+            className="text-3xl font-bold bg-white border-none hover:scale-110"
           />
-          <div
-            onClick={toggleVisible}
-            className="flex relative gap-4 p-1 w-[8rem] justify-center rounded-md hover:scale-110 z-50"
-          >
-            {
-              visible_scopes.find(element => element.name === newVisibility)
-                ?.icon
-            }
-            {
-              visible_scopes.find(element => element.name === newVisibility)
-                ?.description
-            }
-            {visibleState ? (
-              <ul className="absolute top-8 right-0 border-2 bg-gray-100">
-                {visible_scopes.map(element => (
-                  <li
-                    key={element.name}
-                    onClick={e => {
-                      modifyVisible(element.name, e);
-                    }}
-                    className="flex gap-4 p-1 justify-center hover:bg-slate-200 w-[8rem]"
-                  >
-                    {element.icon}
-                    {element.description}
-                  </li>
-                ))}
-              </ul>
-            ) : null}
-          </div>
+          <DropDown
+            selected={newVisibility}
+            list={visible_scopes.map(element => element.description)}
+            setSelected={modifyVisible}
+          />
         </div>
       ) : (
         <div className="flex w-full justify-between items-center">
@@ -121,25 +119,12 @@ export default function BookmarkPage() {
         </div>
       )}
       <div className="w-[60vw] h-[70vh] border-2 m-4">
-        {modifyState ? (
-          <EditableMap
-            bookmarks={bookmarks}
-            setBookmarks={setBookmarks}
-            addPins={addPins}
-            setAddPins={setAddPins}
-            subPins={subPins}
-            setSubPins={setSubPins}
-          />
-        ) : (
-          <UneditableMap bookmarks={bookmarks} />
-        )}
+        <GoogleMap modifyState={modifyState} />
       </div>
       <BookmarkButton
         id={id}
         title={newTitle}
-        visibility={newVisibility}
-        addPins={addPins}
-        subPins={subPins}
+        visibility={visible_scope?.name as string}
         modifyState={modifyState}
         setModifyState={setModifyState}
       />
