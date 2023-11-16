@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import ReactQuill, { Quill } from "react-quill";
 import CustomToolbar from "./CustomToolbar";
 import { uploadImage } from "@/service/axios/article";
@@ -9,10 +9,19 @@ Quill.register("modules/ImageResize", ImageResize);
 
 interface Props {
   setContents: (contents: string) => void;
+  receivedContent?: string;
 }
 
-export default function TextEditor({ setContents }: Props) {
+export default function TextEditor({ setContents, receivedContent }: Props) {
   const quillRef = useRef<ReactQuill>(null);
+
+  useEffect(() => {
+    if (!receivedContent) return;
+    quillRef.current
+      ?.getEditor()
+      .clipboard.dangerouslyPasteHTML(receivedContent);
+  }, [receivedContent]);
+
   const imageHandler = () => {
     const input = document.createElement("input");
     input.setAttribute("type", "file");

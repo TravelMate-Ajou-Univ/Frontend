@@ -117,6 +117,7 @@ export const GetUserInfo = async () => {
   try {
     const { data } = await user.getUserInfo();
     const userInfo = {
+      id: data.id,
       userName: data.nickname,
       profileImageId: data.profileImageId ?? ""
     };
@@ -131,6 +132,7 @@ export const getUserInfoById = async (id: number): Promise<User | false> => {
   try {
     const { data } = await user.getUserInfoById(id);
     const userInfo: User = {
+      id: data.id,
       userName: data.nickname,
       profileImageId: data.profileImageId ?? ""
     };

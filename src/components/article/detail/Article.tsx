@@ -31,7 +31,7 @@ export default function Article({ articleId }: Props) {
   }, [articleId, searchParams]);
 
   const moveToEdit = () => {
-    router.push(`/article/edit/${articleId}`);
+    router.push(`/article/edit/${articleId}?season=${season.toLowerCase()}`);
   };
 
   return (

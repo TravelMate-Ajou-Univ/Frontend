@@ -1,4 +1,4 @@
-import { ArticleDetailType, ArticleType } from "@/model/article";
+import { ArticleDetailType, ArticleType, SeasonType } from "@/model/article";
 import { article } from "./api";
 
 export const uploadImage = async (file: File) => {
@@ -128,6 +128,35 @@ export const getArticle = async (
     };
 
     return articleData;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const editArticle = async (
+  id: string,
+  editedArticle: ArticleType
+): Promise<string | false> => {
+  try {
+    const { data } = await article.editArticle(id, editedArticle);
+    if (!data) return false;
+    return data.id;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const editArticleRequest = async (
+  id: string,
+  content: string,
+  period: SeasonType
+) => {
+  try {
+    const { data } = await article.editArticleRequest(id, content, period);
+    if (!data) return false;
+    return data.id;
   } catch (error) {
     console.log(error);
     return false;

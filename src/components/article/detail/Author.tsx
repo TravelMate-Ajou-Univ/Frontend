@@ -15,6 +15,7 @@ interface Props {
 
 export default function Author({ authorId }: Props) {
   const [author, setAuthor] = useState<User>({
+    id: -1,
     userName: "",
     profileImageId: ""
   });

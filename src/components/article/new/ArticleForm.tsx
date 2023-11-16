@@ -1,12 +1,15 @@
 "use client";
 
 import DropDown from "@/components/ui/dropDown/DropDown";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { locationList } from "@/lib/locationList";
 import { seasonList, seasonMapper } from "@/lib/seasonList";
 import KeywordInput from "./KeywordInput";
 import dynamic from "next/dynamic";
 import {
+  editArticle,
+  editArticleRequest,
+  getArticle,
   postKeyword,
   submitArticle,
   uploadImage
@@ -21,6 +24,8 @@ import {
 import { useRouter } from "next/navigation";
 import ImageSection from "@/components/ui/ImageSection";
 import FilledButton from "@/components/ui/button/FilledButton";
+import OutlinedButton from "@/components/ui/button/OutlinedButton";
+import { useAppSelector } from "@/hooks/redux";
 
 const INPUT_CLASSNAME = "flex items-center gap-4";
 
@@ -28,7 +33,12 @@ const TextEditor = dynamic(() => import("@/components/reactQuill/TextEditor"), {
   ssr: false
 });
 
-export default function ArticleForm() {
+interface Props {
+  id?: string;
+  edittngSeason?: SeasonType;
+}
+
+export default function ArticleForm({ id, edittngSeason }: Props) {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -36,9 +46,51 @@ export default function ArticleForm() {
   const [keywords, setKeywords] = useState<KeywordType[]>([]);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [receivedContent, setReceivedContent] = useState<string>("");
+  const [receivedThumbnail, setReceivedThumbnail] = useState<string>("");
+  const { id: userId } = useAppSelector(state => state.userSlice);
+  const [authorId, setAuthorId] = useState<number>(-1);
   const router = useRouter();
 
+  useEffect(() => {
+    const getOrigin = async () => {
+      if (!id || !edittngSeason) return;
+      const article = await getArticle(id);
+      if (!article) return;
+      setAuthorId(article.authorId);
+      setTitle(article.title);
+      setLocation(article.location);
+      setKeywords(
+        article.articleTagMap.map(tag => {
+          return { id: tag.tag.id, name: tag.tag.name };
+        })
+      );
+      setReceivedThumbnail(article.thumbnail);
+      switch (edittngSeason) {
+        case "SPRING":
+          setSeason("봄");
+          setReceivedContent(article.spring?.content);
+          break;
+        case "SUMMER":
+          setSeason("여름");
+          setReceivedContent(article.summer?.content);
+          break;
+        case "FALL":
+          setSeason("가을");
+          setReceivedContent(article.fall?.content);
+          break;
+        case "WINTER":
+          setSeason("겨울");
+          setReceivedContent(article.winter?.content);
+          break;
+      }
+    };
+
+    getOrigin();
+  }, [id, edittngSeason]);
+
   const handleLocation = (location: string) => {
+    if (id) return;
     setLocation(location);
   };
 
@@ -47,6 +99,7 @@ export default function ArticleForm() {
   };
 
   const addKeyword = async (keyword: string) => {
+    if (id) return;
     const returnedKeyword = await postKeyword(keyword);
     if (!returnedKeyword) return;
     if (returnedKeyword.name.charAt(0) === "#") {
@@ -56,7 +109,8 @@ export default function ArticleForm() {
   };
 
   const removeKeyword = (index: number) => {
-    setKeywords(keywords.filter((item, i) => i !== index));
+    if (id) return;
+    setKeywords(keywords.filter((_, i) => i !== index));
   };
 
   const handleThumbnail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,6 +118,10 @@ export default function ArticleForm() {
     const file = e.target.files[0];
     setThumbnailFile(file);
     setThumbnailPreview(URL.createObjectURL(file));
+  };
+
+  const cancel = () => {
+    confirm("작성을 취소하시겠습니까?") && router.back();
   };
 
   const submit = async () => {
@@ -84,22 +142,56 @@ export default function ArticleForm() {
       thumbnail
     };
 
-    const id = await submitArticle(article);
+    const articleId = await submitArticle(article);
 
-    if (id) {
+    if (articleId) {
       alert("게시글이 등록되었습니다.");
-      router.push(`/article/detail/${id}}`);
+      router.push(`/article/detail/${articleId}}`);
+    }
+  };
+
+  const edit = async () => {
+    const editingSeason = seasonMapper[season] as SeasonType;
+    if (authorId === userId) {
+      const article: ArticleType = {
+        title,
+        period: editingSeason,
+        location,
+        content,
+        tagIds: keywords.map(keyword => keyword.id),
+        thumbnail: receivedThumbnail
+      };
+      const result = await editArticle(id as string, article);
+      if (result) {
+        alert("게시글이 수정되었습니다.");
+        router.push(
+          `/article/detail/${id}?season=${editingSeason.toLowerCase()}`
+        );
+      }
+    } else {
+      const result = await editArticleRequest(
+        id as string,
+        content,
+        editingSeason
+      );
+      if (result) {
+        alert("수정 요청이 완료되었습니다.");
+        router.push(
+          `/article/detail/${id}?season=${editingSeason.toLowerCase()}`
+        );
+      }
     }
   };
 
   return (
     <section className="flex flex-col gap-6 bg-white w-full mx-auto px-16 py-12 mb-12 border">
       <input
-        className="focus:outline-none border-b px-2 py-1 text-lg"
+        className="focus:outline-none border-b px-2 py-1 text-lg disabled:bg-white"
         type="text"
         placeholder="제목"
         value={title}
         onChange={e => setTitle(e.target.value)}
+        disabled={!!id}
       />
       <div className="flex flex-row gap-28">
         <div className={INPUT_CLASSNAME}>
@@ -108,6 +200,7 @@ export default function ArticleForm() {
             selected={location}
             list={locationList}
             setSelected={handleLocation}
+            disabled={!!id}
           />
         </div>
         <div className={INPUT_CLASSNAME}>
@@ -116,17 +209,23 @@ export default function ArticleForm() {
             selected={season}
             list={seasonList}
             setSelected={handleSeason}
+            disabled={!!id}
           />
         </div>
       </div>
-      <TextEditor setContents={value => setContent(value)} />
-      <ImageSection
-        handleImage={handleThumbnail}
-        thumbnailPreview={thumbnailPreview}
+      <TextEditor
+        setContents={value => setContent(value)}
+        receivedContent={receivedContent}
       />
+      {!id && (
+        <ImageSection
+          handleImage={handleThumbnail}
+          thumbnailPreview={thumbnailPreview}
+        />
+      )}
       <div className={INPUT_CLASSNAME}>
         <label>키워드 </label>
-        <KeywordInput addKeyword={addKeyword} />
+        <KeywordInput addKeyword={addKeyword} disabled={!!id} />
       </div>
       <ul className="text-sm">
         {keywords.map((keyword, index) => (
@@ -139,9 +238,12 @@ export default function ArticleForm() {
           </li>
         ))}
       </ul>
-      <FilledButton className="self-end" onClick={submit}>
-        작성
-      </FilledButton>
+      <section className="self-end flex gap-2">
+        <OutlinedButton onClick={cancel}>취소</OutlinedButton>
+        <FilledButton onClick={id ? edit : submit}>
+          {id ? "수정" : "작성"}
+        </FilledButton>
+      </section>
     </section>
   );
 }

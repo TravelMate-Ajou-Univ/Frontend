@@ -1,4 +1,4 @@
-import { ArticleType } from "@/model/article";
+import { ArticleType, SeasonType } from "@/model/article";
 import axios from "axios";
 
 export const apiWithoutAuth = axios.create({
@@ -72,5 +72,12 @@ export const article = {
       }`
     ),
   submitArticle: (article: ArticleType) => api.post("articles", article),
-  getArticle: (id: string) => api.get(`articles/${id}`)
+  getArticle: (id: string) => api.get(`articles/${id}`),
+  editArticle: (id: string, article: ArticleType) =>
+    api.patch(`articles/${id}`, article),
+  editArticleRequest: (id: string, content: string, period: SeasonType) =>
+    api.post(`articles/${id}/reqeusts`, {
+      content,
+      period
+    })
 };
