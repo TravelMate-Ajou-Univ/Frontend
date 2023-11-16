@@ -1,13 +1,15 @@
 import Link from "next/link";
 import MenuProfile from "./MenuProfile";
-import XIcon from "../ui/icons/XIcon";
+import XIcon from "@/components/ui/icons/XIcon";
 import MenuBackground from "./MenuBackground";
 import useClickOutside from "@/hooks/useClickOutside";
-import MarkedMapIcon from "../ui/icons/MarkedMapIcon";
+import MarkedMapIcon from "@/components/ui/icons/MarkedMapIcon";
 import WritingIcon from "@/components/ui/icons/WritingIcon";
+import PaperPlane from "@/components/ui/icons/PaperPlane";
 import { deleteCookie } from "cookies-next";
 import { useAppDispatch } from "@/hooks/redux";
 import { userLogout } from "@/redux/features/userSlice";
+import MenuItem from "./MenuItem";
 
 interface Props {
   closeMenu: () => void;
@@ -36,26 +38,18 @@ export default function Menu({ closeMenu }: Props) {
         </div>
         <nav className="px-5 text-gray-800 flex-grow">
           <ul className="flex flex-col gap-3">
-            <li>
-              <Link
-                href="/article/new"
-                className="flex gap-2 items-center"
-                onClick={closeMenu}
-              >
-                <WritingIcon />
-                게시글 작성
-              </Link>
-            </li>
-            <li>
-              <Link
-                href="/bookmark/list/me/all"
-                className="flex gap-2 items-center"
-                onClick={closeMenu}
-              >
-                <MarkedMapIcon />
-                북마크컬렉션 목록
-              </Link>
-            </li>
+            <MenuItem href="/article/new" onClick={closeMenu}>
+              <WritingIcon />
+              게시글 작성
+            </MenuItem>
+            <MenuItem href="/article/list" onClick={closeMenu}>
+              <PaperPlane />
+              게시글 목록
+            </MenuItem>
+            <MenuItem href="/bookmark/list/me/all" onClick={closeMenu}>
+              <MarkedMapIcon />
+              북마크컬렉션 목록
+            </MenuItem>
           </ul>
         </nav>
         <button className="self-end" onClick={logout}>

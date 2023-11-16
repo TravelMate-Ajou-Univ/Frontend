@@ -3,7 +3,7 @@
 import Collection from "@/components/Collection";
 import VisibilityButton from "@/components/ui/VisibilityButton";
 import { useAppSelector } from "@/hooks/redux";
-import { setBookmarkCollection } from "@/redux/features/bookmarkCollectionSlice";
+import { setBookmarkCollectionList } from "@/redux/features/bookmarkCollectionListSlice";
 import { getMyCollectionList } from "@/service/axios/bookmark";
 import { Pagination } from "@mui/material";
 import { useEffect, useState } from "react";
@@ -17,8 +17,8 @@ type Props = {
 
 export default function UserBookmarkPage({ params }: Props) {
   const dispatch = useDispatch();
-  const { collections, count } = useAppSelector(
-    state => state.bookmarkCollectionSlice
+  const { bookmarkCollections, count } = useAppSelector(
+    state => state.bookmarkCollectionListSlice
   );
 
   const [page, setPage] = useState(1);
@@ -32,7 +32,7 @@ export default function UserBookmarkPage({ params }: Props) {
         limit: limit,
         visibility: params.slug[1]
       });
-      dispatch(setBookmarkCollection(data));
+      dispatch(setBookmarkCollectionList(data));
     };
     getData();
   }, [page, dispatch, params.slug]);
@@ -51,10 +51,10 @@ export default function UserBookmarkPage({ params }: Props) {
         </div>
         <div className=" border-4 rounded-md ">
           <ul className="h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-4">
-            {collections.map((collection, index) =>
+            {bookmarkCollections.map((bookmarkCollection, index) =>
               index === 12 ? null : (
                 <li key={index} className="h-full w-full">
-                  <Collection bookmarkCollection={collection} />
+                  <Collection bookmarkCollection={bookmarkCollection} />
                 </li>
               )
             )}

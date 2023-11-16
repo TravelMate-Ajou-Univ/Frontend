@@ -1,5 +1,5 @@
 import PageTitle from "@/components/PageTitle";
-import ArticleForm from "@/components/article/ArticleForm";
+import ArticleForm from "@/components/article/new/ArticleForm";
 
 export default function ArticleFormPage() {
   return (

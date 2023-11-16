@@ -8,7 +8,7 @@ import Background from "@/components/layout/Background";
 
 const nanumGothic = Nanum_Gothic({
   subsets: ["latin"],
-  weight: "400"
+  weight: "800"
 });
 
 export const metadata: Metadata = {

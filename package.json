@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@mui/lab": "^5.0.0-alpha.152",
     "@mui/material": "^5.14.15",
     "@react-google-maps/api": "^2.19.2",
     "@reduxjs/toolkit": "^1.9.7",
@@ -25,6 +26,7 @@
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
     "jwt-decode": "^4.0.0",
+    "masonry-layout": "^4.2.2",
     "next": "13.4.19",
     "next-redux-wrapper": "^8.1.0",
     "postcss": "8.4.28",
@@ -45,6 +47,7 @@
     "ws": "^8.14.2"
   },
   "devDependencies": {
+    "@types/masonry-layout": "^4.2.7",
     "encoding": "^0.1.13",
     "prettier": "3.0.3"
   }

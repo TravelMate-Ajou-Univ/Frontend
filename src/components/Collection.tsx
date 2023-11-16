@@ -1,4 +1,4 @@
-import { BookmarkCollection } from "@/model/bookmark";
+import { BookmarkCollectionType } from "@/model/bookmark";
 import BookmarkCollectionIcon from "./ui/icons/BookmarkCollectionIcon";
 import Link from "next/link";
 import PublicIcon from "./ui/icons/PublicIcon";
@@ -6,7 +6,7 @@ import FriendsOnlyIcon from "./ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "./ui/icons/PrivateIcon";
 
 type Props = {
-  bookmarkCollection: BookmarkCollection;
+  bookmarkCollection: BookmarkCollectionType;
 };
 
 export default function Collection({ bookmarkCollection }: Props) {
