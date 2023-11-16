@@ -8,9 +8,10 @@ import { getKeywords } from "@/service/axios/article";
 
 interface Props {
   addKeyword: (keyword: string) => void;
+  disabled?: boolean;
 }
 
-export default function KeywordInput({ addKeyword }: Props) {
+export default function KeywordInput({ addKeyword, disabled = false }: Props) {
   const [keyword, setKeyword] = useState<string>("");
   const [searchedKeyword, setSearchedKeyword] = useState<string[]>([]);
   const [dropdown, setDropdown] = useState<boolean>(false);
@@ -49,6 +50,7 @@ export default function KeywordInput({ addKeyword }: Props) {
           placeholder="#맛집, #카페, #숙소 등의 키워드를 입력해주세요 :)"
           value={keyword}
           onChange={e => handleKeyword(e.target.value)}
+          disabled={disabled}
         />
         <button className="border-b text-sm text-primary w-8 h-8" type="submit">
           <PlusIcon noBorder />

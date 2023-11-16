@@ -13,7 +13,7 @@ export default function FilledButton({
     <button
       className={
         className +
-        " rounded-lg bg-secondary text-white px-4 py-1 hover:bg-primary ease-in-out transition-colors font-semibold"
+        " rounded-lg bg-secondary text-white px-4 py-0.5 hover:bg-primary ease-in-out transition-colors font-semibold"
       }
       onClick={onClick}
     >

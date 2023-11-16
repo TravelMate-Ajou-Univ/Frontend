@@ -1,5 +1,5 @@
 export type KeywordType = {
-  id: string;
+  id: number;
   name: string;
 };
 
@@ -14,7 +14,7 @@ export type ArticleType = {
   title: string;
   period: SeasonType;
   content: string;
-  tagIds: string[];
+  tagIds: number[];
   location: string;
   thumbnail: string;
 };
