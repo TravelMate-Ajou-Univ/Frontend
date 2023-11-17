@@ -1,48 +1,18 @@
-"use client";
+import React from "react";
+import MarkedMapIcon from "../ui/icons/MarkedMapIcon";
 
-import { useEffect, useState } from "react";
-import OutlinedButton from "../ui/button/OutlinedButton";
-import ChatRoomModal from "../ui/chat/ChatRoomModal";
-import { FriendType } from "@/model/friend";
-import { getMyFriendsList } from "@/service/axios/friends";
+type Props = {
+  roomName: string;
+  toggleMapState: () => void;
+};
 
-export default function ChatRoomHeader() {
-  const [modalState, setModalState] = useState(false);
-  const [friends, setFriends] = useState<FriendType[]>([]);
-  const [page, setPage] = useState(1);
-  const [total, setTotal] = useState(0);
-
-  const toggleModalState = async () => {
-    setModalState(!modalState);
-  };
-
-  useEffect(() => {
-    const getData = async () => {
-      const res = await getMyFriendsList({
-        page: page,
-        limit: 5
-      });
-      setFriends(res.friends);
-      setTotal(res.count);
-    };
-    getData();
-  }, [page]);
+export default function ChatRoomHeader({ roomName, toggleMapState }: Props) {
   return (
-    <div className="flex justify-between items-center p-4 border-b-2">
-      <p className="text-[2rem]">채팅</p>
-      <div className="relative">
-        <OutlinedButton onClick={() => toggleModalState()}>
-          채팅방 만들기
-        </OutlinedButton>
-        {modalState ? (
-          <ChatRoomModal
-            toggleModalState={toggleModalState}
-            friends={friends}
-            total={total}
-            setPage={setPage}
-          />
-        ) : null}
+    <div className="flex justify-center relative items-center">
+      <div className="absolute left-3" onClick={toggleMapState}>
+        <MarkedMapIcon />
       </div>
+      <p className="text-2xl text-center">{roomName}</p>
     </div>
   );
 }
