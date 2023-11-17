@@ -10,6 +10,7 @@ import { deleteCookie } from "cookies-next";
 import { useAppDispatch } from "@/hooks/redux";
 import { userLogout } from "@/redux/features/userSlice";
 import MenuItem from "./MenuItem";
+import ChatIcon from "@/components/ui/icons/ChatIcon";
 
 interface Props {
   closeMenu: () => void;
@@ -49,6 +50,10 @@ export default function Menu({ closeMenu }: Props) {
             <MenuItem href="/bookmark/list/me/all" onClick={closeMenu}>
               <MarkedMapIcon />
               북마크컬렉션 목록
+            </MenuItem>
+            <MenuItem href="/chat/list" onClick={closeMenu}>
+              <ChatIcon />
+              채팅 목록
             </MenuItem>
           </ul>
         </nav>

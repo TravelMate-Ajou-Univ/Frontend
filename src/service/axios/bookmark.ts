@@ -70,6 +70,8 @@ export const getAllBookmarks = async (id: number): Promise<BookmarkType[]> => {
       `/users/me/bookmark-collection/${id}/bookmarks`
     );
     const datas = response.data;
+    console.log(datas);
+
     const bookmarks = datas.map(
       ({
         id,

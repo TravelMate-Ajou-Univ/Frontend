@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useState } from "react";
-import { io } from "socket.io-client";
+import { Socket, io } from "socket.io-client";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import FilledButton from "../ui/button/FilledButton";
 
