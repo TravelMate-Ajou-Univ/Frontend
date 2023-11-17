@@ -6,7 +6,7 @@ import ChatRoomModal from "../ui/chat/ChatRoomModal";
 import { FriendType } from "@/model/friend";
 import { getMyFriendsList } from "@/service/axios/friends";
 
-export default function ChatList() {
+export default function ChatRoomHeader() {
   const [modalState, setModalState] = useState(false);
   const [friends, setFriends] = useState<FriendType[]>([]);
   const [page, setPage] = useState(1);
