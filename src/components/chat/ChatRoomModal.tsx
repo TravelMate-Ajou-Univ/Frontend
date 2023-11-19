@@ -1,5 +1,5 @@
-import React, { ChangeEvent, SyntheticEvent, useState } from "react";
-import OutlinedButton from "../button/OutlinedButton";
+import React, { ChangeEvent, useState } from "react";
+import OutlinedButton from "../ui/button/OutlinedButton";
 import { getMyFriendsList } from "@/service/axios/friends";
 import { FriendType } from "@/model/friend";
 import { Pagination } from "@mui/material";

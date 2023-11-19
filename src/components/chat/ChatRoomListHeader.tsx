@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import OutlinedButton from "../ui/button/OutlinedButton";
-import ChatRoomModal from "../ui/chat/ChatRoomModal";
+import ChatRoomModal from "./ChatRoomModal";
 import { FriendType } from "@/model/friend";
 import { getMyFriendsList } from "@/service/axios/friends";
 

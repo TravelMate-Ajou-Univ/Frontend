@@ -20,8 +20,6 @@ export const getMyFriendsList = async ({
       }
     });
     const data = response.data;
-    console.log(data);
-
     const friends: FriendType[] = data.friends.map((data: any) => {
       return {
         id: data.friend.id,
@@ -41,4 +39,39 @@ export const getMyFriendsList = async ({
       count: 0
     };
   }
+};
+
+export const searchUser = async (id: string): Promise<FriendType[]> => {
+  try {
+    const response = await api({
+      method: "get",
+      url: "/users",
+      params: {
+        userIds: id
+      }
+    });
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+export const addFriend = async (id: number) => {
+  const response = await api({
+    method: "post",
+    url: "/users/invite-friend",
+    data: {
+      friendId: id
+    }
+  });
+  return response;
+};
+
+export const deleteFriend = async (id: number) => {
+  const response = await api({
+    method: "delete",
+    url: `users/me/friend/${id}`
+  });
+  return response;
 };
