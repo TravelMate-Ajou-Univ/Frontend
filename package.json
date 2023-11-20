@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.18",
     "@mui/lab": "^5.0.0-alpha.152",
     "@mui/material": "^5.14.15",
     "@react-google-maps/api": "^2.19.2",
@@ -33,6 +34,7 @@
     "quill-image-resize": "^3.0.9",
     "quill-image-resize-module-ts": "^3.0.3",
     "react": "18.2.0",
+    "react-diff-view": "^3.2.0",
     "react-diff-viewer": "^3.1.1",
     "react-dom": "18.2.0",
     "react-icons": "^4.11.0",
@@ -42,6 +44,7 @@
     "sharp": "^0.32.6",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
+    "unidiff": "^1.0.4",
     "use-places-autocomplete": "^4.0.1"
   },
   "devDependencies": {
