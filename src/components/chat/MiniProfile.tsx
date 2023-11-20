@@ -11,7 +11,7 @@ type Props = {
 
 export default function MiniProfile({ id, nickname, profileImageId }: Props) {
   return (
-    <div className="flex gap-2 items-center justify-between w-full">
+    <div className="flex gap-2 items-center">
       <Image
         src={defaultProfileImg}
         // src={`${profileImageId}`}

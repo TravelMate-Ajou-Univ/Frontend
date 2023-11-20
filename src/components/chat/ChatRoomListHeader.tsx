@@ -29,7 +29,7 @@ export default function ChatRoomListHeader() {
   }, [page]);
   return (
     <div className="flex justify-between items-center p-4 border-b-2">
-      <p className="text-[2rem]">채팅</p>
+      <p className="text-[2rem]">채팅 목록</p>
       <div className="relative">
         <OutlinedButton onClick={() => toggleModalState()}>
           채팅방 만들기

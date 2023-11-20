@@ -20,7 +20,7 @@ export default function ChatPage({ params: { slug } }: Props) {
   const dispatch = useDispatch();
   const [mapState, setMapState] = useState(false);
   // const roomid = slug;
-  // const socket = io("172.21.35.219:8080", {
+  // const socket = io("http//localhost:8080", {
   //   path: "/socket.io",
   //   transports: ["websocket"]
   // });
@@ -34,24 +34,6 @@ export default function ChatPage({ params: { slug } }: Props) {
   // });
 
   // useEffect(() => {
-  // socket.on("connect", () => {
-  //   console.log("conneted");
-  // });
-  // const nickname = localStorage.getItem("nickname") ?? "user";
-  // const id = socket.io.toString();
-  // socket.emit(
-  //   "setInit",
-  //   {
-  //     nickname: "test_nickname",
-  //     room: {
-  //       roomId: "test room id",
-  //       roomName: "test room name"
-  //     }
-  //   },
-  //   (response: any) => {
-  //     console.log(response);
-  //   }
-  // );
   // socket.emit("enterChatRoom", { roomId: roomid }, (response: any) => {
   //   console.log(response);
   //   setMyInfo({ nickname, id, room: response });
@@ -88,7 +70,27 @@ export default function ChatPage({ params: { slug } }: Props) {
         dispatch(setCenter(calculateCenter(data)));
       }
     };
+
     getData();
+
+    // socket.on("connect", () => {
+    //   console.log("conneted");
+    // });
+    // const nickname = localStorage.getItem("nickname") ?? "user";
+    // const id = socket.io.toString();
+    // socket.emit(
+    //   "setInit",
+    //   {
+    //     nickname: "test_nickname",
+    //     room: {
+    //       roomId: "test room id",
+    //       roomName: "test room name"
+    //     }
+    //   },
+    //   (response: any) => {
+    //     console.log(response);
+    //   }
+    // );
   }, []);
 
   const sendMessage = (message: string) => {

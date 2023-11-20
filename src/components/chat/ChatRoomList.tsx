@@ -7,40 +7,33 @@ import { useDispatch } from "react-redux";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import groupProfileImg from "/public/image/groupProfileImg.png";
 import Link from "next/link";
+import { useEffect } from "react";
+import { getMyChatRooms } from "@/service/axios/chatroom";
+import { setChatRoom } from "@/redux/features/chatRoomSlice";
 
 export default function ChatRoomList() {
   const dispatch = useDispatch();
   const { chatrooms } = useAppSelector(state => state.chatRoomSlice);
 
-  // ui test data
-  const test_chatrooms: ChatRoomType[] = [
-    {
-      name: "chatroom1",
-      memberIds: [1],
-      lastChat: "test1",
-      lastChatTime: "어제"
-    },
-    {
-      name: "chatroom2",
-      memberIds: [1, 2],
-      lastChat: "test2",
-      lastChatTime: "일주일 전"
-    }
-  ];
+  useEffect(() => {
+    const getData = async () => {
+      const data = await getMyChatRooms();
+
+      dispatch(setChatRoom(data));
+    };
+    getData();
+  }, []);
 
   return (
     <ul className="flex flex-col w-full">
-      {test_chatrooms.map((chatroom, index) => (
-        <li
-          key={index}
-          // className="flex items-center border-b-2 h-[8rem] px-4 py-2"
-        >
+      {chatrooms.map((chatroom, index) => (
+        <li key={index}>
           <Link
             href={`/chat/${chatroom.name}`}
             className="flex items-center border-b-2 h-[8rem] px-4 py-2"
           >
             <div className="w-[20%]">
-              {chatroom.memberIds.length === 1 ? (
+              {chatroom.memberIds.length === 2 ? (
                 <Image
                   src={defaultProfileImg}
                   className="bg-gray-100 rounded-full"

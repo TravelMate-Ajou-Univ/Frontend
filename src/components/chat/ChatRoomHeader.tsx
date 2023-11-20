@@ -12,7 +12,7 @@ export default function ChatRoomHeader({ roomName, toggleMapState }: Props) {
       <div className="absolute left-3" onClick={toggleMapState}>
         <MarkedMapIcon />
       </div>
-      <p className="text-2xl text-center">{roomName}</p>
+      <p className="text-2xl text-center mb-2">{roomName}</p>
     </div>
   );
 }
