@@ -162,3 +162,56 @@ export const editArticleRequest = async (
     return false;
   }
 };
+
+export const getArticleRequests = async (
+  id: string,
+  season: SeasonType | "ALL"
+) => {
+  try {
+    const { data } = await article.getArticleRequests(id, season);
+    if (!data) return false;
+    const editRequest = data.map(({ id, articleId, period, userId }: any) => ({
+      id,
+      articleId,
+      period,
+      userId
+    }));
+    return editRequest;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const getArticleRequest = async (id: string, requestId: string) => {
+  try {
+    const { data } = await article.getArticleRequest(id, requestId);
+    if (!data) return false;
+    return data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const acceptArticleRequest = async (id: string, requestId: string) => {
+  try {
+    const { data } = await article.acceptArticleRequest(id, requestId);
+    if (!data) return false;
+    return data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const declineArticleRequest = async (id: string, requestId: string) => {
+  try {
+    const { data } = await article.declineArticleRequest(id, requestId);
+    if (!data) return false;
+    return data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};

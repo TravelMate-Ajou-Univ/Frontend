@@ -45,7 +45,7 @@ export const userAuth = {
 
 export const user = {
   getUserInfo: () => api.get("users/me"),
-  getUserInfoById: (id: number) => api.get(`users/${id}`),
+  getUserInfoById: (id: number) => api.get(`users?userIds=${id}`),
   getBookmarkCollectionsById: (id: number) =>
     api.get(`users/${id}/bookmark-collections`)
 };
@@ -79,5 +79,13 @@ export const article = {
     api.post(`articles/${id}/reqeusts`, {
       content,
       period
-    })
+    }),
+  getArticleRequests: (id: string, season: SeasonType | "ALL") =>
+    api.get(`articles/${id}/reqeusts?season=${season}`),
+  getArticleRequest: (id: string, requestId: string) =>
+    api.get(`articles/${id}/reqeusts/${requestId}`),
+  acceptArticleRequest: (id: string, requestId: string) =>
+    api.get(`articles/${id}/reqeusts/accept/${requestId}`),
+  declineArticleRequest: (id: string, requestId: string) =>
+    api.get(`articles/${id}/reqeusts/decline/${requestId}`)
 };

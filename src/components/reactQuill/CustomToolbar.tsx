@@ -14,7 +14,6 @@ export default function CustomToolbar() {
         <button className="ql-italic" />
         <button className="ql-underline" />
         <button className="ql-strike" />
-        <button className="ql-blockquote" />
       </span>
       <span className="ql-formats">
         <select className="ql-color" />
