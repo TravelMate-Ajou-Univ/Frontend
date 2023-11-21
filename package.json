@@ -11,6 +11,7 @@
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@mui/icons-material": "^5.14.18",
     "@mui/lab": "^5.0.0-alpha.152",
     "@mui/material": "^5.14.15",
     "@react-google-maps/api": "^2.19.2",
@@ -23,6 +24,7 @@
     "axios": "^1.6.0",
     "bufferutil": "^4.0.8",
     "cookies-next": "^4.0.0",
+    "dompurify": "^3.0.6",
     "eslint": "8.47.0",
     "eslint-config-next": "13.4.19",
     "jwt-decode": "^4.0.0",
@@ -33,6 +35,8 @@
     "quill-image-resize": "^3.0.9",
     "quill-image-resize-module-ts": "^3.0.3",
     "react": "18.2.0",
+    "react-diff-view": "^3.2.0",
+    "react-diff-viewer": "^3.1.1",
     "react-dom": "18.2.0",
     "react-icons": "^4.11.0",
     "react-quill": "^2.0.0",
@@ -42,11 +46,13 @@
     "socket.io-client": "^4.7.2",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
+    "unidiff": "^1.0.4",
     "use-places-autocomplete": "^4.0.1",
     "utf-8-validate": "^6.0.3",
     "ws": "^8.14.2"
   },
   "devDependencies": {
+    "@types/dompurify": "^3.0.5",
     "@types/masonry-layout": "^4.2.7",
     "encoding": "^0.1.13",
     "prettier": "3.0.3"

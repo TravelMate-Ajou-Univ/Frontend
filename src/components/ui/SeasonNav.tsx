@@ -13,7 +13,7 @@ interface Props {
 export default function SeasonNav({ season, onClick }: Props) {
   const IMAGECLASS = "w-11 h-11 p-1.5 cursor-pointer object-cover";
   return (
-    <ul className="border rounded-lg flex flex-col items-center divide-y bg-white">
+    <ul className="border rounded-lg flex flex-col items-center divide-y bg-white overflow-hidden">
       <li onClick={() => onClick("SPRING")}>
         <Image
           className={IMAGECLASS + (season === "SPRING" ? " bg-gray-200" : "")}
