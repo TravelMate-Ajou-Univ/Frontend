@@ -31,7 +31,7 @@ export default function ChatPage() {
   useEffect(() => {
     const getData = async () => {
       // Todo : 지도에 대한 처리, Message 기록 가져오기
-      const data = [];
+      const data: any[] = [];
 
       dispatch(setBookmarks(data));
 
@@ -61,16 +61,10 @@ export default function ChatPage() {
 
     socket.on("connect", () => {
       console.log("conneted");
-      socket.emit(
-        "enterChatRoom",
-        {
-          nickname: userName,
-          roomId: roomId
-        }
-        // res => {
-        //   console.log(res);
-        // }
-      );
+      socket.emit("enterChatRoom", {
+        nickname: userName,
+        roomId: roomId
+      });
     });
   }, [socket]);
 

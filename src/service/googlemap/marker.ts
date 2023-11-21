@@ -91,7 +91,8 @@ export const makeMarker = ({
   subPinHandler,
   subBookmarkHandler
 }: MarkerProps) => {
-  const type = pin.id === undefined ? "pin" : "bookmark";
+  const type: string =
+    typeof pin === "object" && "id" in pin ? "bookmark" : "pin";
   console.log(type);
 
   const marker = new google.maps.Marker({
