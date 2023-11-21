@@ -12,7 +12,6 @@ import DropDown from "@/components/ui/dropDown/DropDown";
 import { useDispatch } from "react-redux";
 import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
 import { CalculateCenter } from "@/service/googlemap/map";
-import { useAppSelector } from "@/hooks/redux";
 import GoogleMap from "@/components/googleMap/GoogleMap";
 
 export default function BookmarkPage() {

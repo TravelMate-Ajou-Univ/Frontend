@@ -47,7 +47,9 @@ export const user = {
   getUserInfo: () => api.get("users/me"),
   getUserInfoById: (id: number) => api.get(`users?userIds=${id}`),
   getBookmarkCollectionsById: (id: number) =>
-    api.get(`users/${id}/bookmark-collections`)
+    api.get(`users/${id}/bookmark-collections`),
+  getMyArticleList: (limit: number) =>
+    api.get(`users/me/articles?limit=${limit}`)
 };
 
 export const article = {
@@ -87,7 +89,5 @@ export const article = {
   acceptArticleRequest: (id: string, requestId: string) =>
     api.get(`articles/${id}/reqeusts/accept/${requestId}`),
   declineArticleRequest: (id: string, requestId: string) =>
-    api.get(`articles/${id}/reqeusts/decline/${requestId}`),
-  getMyArticleList: (limit: number, authorId: number) =>
-    api.get(`articles?limit=${limit}&authorId=${authorId}`)
+    api.get(`articles/${id}/reqeusts/decline/${requestId}`)
 };

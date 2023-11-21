@@ -5,11 +5,13 @@ import Dompurify from "dompurify";
 interface Props {
   article: ArticleDetailType;
   season: SeasonType | "";
+  userId: number;
 }
 
 export default function ArticleContent({
-  article: { spring, summer, fall, winter },
-  season
+  article: { spring, summer, fall, winter, authorId },
+  season,
+  userId
 }: Props) {
   switch (season) {
     case "SPRING":
@@ -22,7 +24,7 @@ export default function ArticleContent({
           />
         )
       ) : (
-        <NoContent season="봄" />
+        <NoContent season="봄" authorId={authorId} userId={userId} />
       );
     case "SUMMER":
       return summer ? (
@@ -34,7 +36,7 @@ export default function ArticleContent({
           />
         )
       ) : (
-        <NoContent season="여름" />
+        <NoContent season="여름" authorId={authorId} userId={userId} />
       );
     case "FALL":
       return fall ? (
@@ -46,7 +48,7 @@ export default function ArticleContent({
           />
         )
       ) : (
-        <NoContent season="가을" />
+        <NoContent season="가을" authorId={authorId} userId={userId} />
       );
     case "WINTER":
       return winter ? (
@@ -58,7 +60,7 @@ export default function ArticleContent({
           />
         )
       ) : (
-        <NoContent season="겨울" />
+        <NoContent season="겨울" authorId={authorId} userId={userId} />
       );
     default:
       return <></>;

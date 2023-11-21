@@ -40,10 +40,7 @@ export default function Author({ authorId }: Props) {
   }, [authorId]);
 
   return (
-    <div
-      className="absolute top-8 right-12 flex flex-col items-center gap-2"
-      ref={ref}
-    >
+    <div className="flex flex-col items-center gap-2" ref={ref}>
       <div
         className="flex items-center gap-2 cursor-pointer"
         onClick={() => setIsBookmarkCollectionsOpen(!isBookmarkCollectionsOpen)}

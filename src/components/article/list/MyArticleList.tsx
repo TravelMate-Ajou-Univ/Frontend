@@ -4,18 +4,18 @@ import MasonryContainer from "@/components/masonry/MasonryContainer";
 import ArticlePreview from "./ArticlePreview";
 import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useState } from "react";
-import { ArticlePreviewType } from "@/model/article";
+import { ArticlePreviewType, MyArticleListType } from "@/model/article";
 import { getMyArticleList } from "@/service/axios/article";
 import Link from "next/link";
 import OutlinedButton from "@/components/ui/button/OutlinedButton";
 
 export default function MyArticleList() {
   const { id: userId } = useAppSelector(state => state.userSlice);
-  const [list, setList] = useState<ArticlePreviewType[]>([]);
+  const [list, setList] = useState<MyArticleListType>([]);
 
   useEffect(() => {
     const getArticles = async () => {
-      const articles = await getMyArticleList(1000, userId);
+      const articles = await getMyArticleList(1000);
       if (!articles) return;
       setList(articles);
     };
@@ -37,7 +37,7 @@ export default function MyArticleList() {
     <MasonryContainer>
       {list.map(article => (
         <li className="grid-item mb-8 h-fit" key={article.id}>
-          <ArticlePreview article={article} />
+          <ArticlePreview article={article} count={article.requestCount} />
         </li>
       ))}
     </MasonryContainer>

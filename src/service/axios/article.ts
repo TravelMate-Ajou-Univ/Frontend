@@ -4,7 +4,7 @@ import {
   ArticleType,
   SeasonType
 } from "@/model/article";
-import { article } from "./api";
+import { article, user } from "./api";
 
 export const uploadImage = async (file: File) => {
   try {
@@ -232,9 +232,9 @@ export const declineArticleRequest = async (id: string, requestId: string) => {
   }
 };
 
-export const getMyArticleList = async (limit: number, authorId: number) => {
+export const getMyArticleList = async (limit: number) => {
   try {
-    const { data } = await article.getMyArticleList(limit, authorId);
+    const { data } = await user.getMyArticleList(limit);
     if (!data) return false;
 
     const newArticles = data.articles.map(
@@ -248,7 +248,8 @@ export const getMyArticleList = async (limit: number, authorId: number) => {
         summerVersionID,
         fallVersionID,
         winterVersionID,
-        articleTagMap
+        articleTagMap,
+        pendingArticleRequests
       }: any) => {
         return {
           id,
@@ -260,7 +261,8 @@ export const getMyArticleList = async (limit: number, authorId: number) => {
           summerVersionID,
           fallVersionID,
           winterVersionID,
-          articleTagMap
+          articleTagMap,
+          requestCount: pendingArticleRequests.length
         };
       }
     );
