@@ -3,5 +3,5 @@ interface Props {
 }
 
 export default function PageTitle({ children }: Props) {
-  return <h1 className="text-3xl font-bold my-4">{children}</h1>;
+  return <h1 className="text-2xl font-bold my-4">{children}</h1>;
 }

@@ -1,4 +1,9 @@
-import { ArticleDetailType, ArticleType, SeasonType } from "@/model/article";
+import {
+  ArticleDetailType,
+  ArticleRequestType,
+  ArticleType,
+  SeasonType
+} from "@/model/article";
 import { article } from "./api";
 
 export const uploadImage = async (file: File) => {
@@ -163,19 +168,30 @@ export const editArticleRequest = async (
   }
 };
 
-export const getArticleRequests = async (
+export const getArticleRequestList = async (
   id: string,
   season: SeasonType | "ALL"
 ) => {
   try {
-    const { data } = await article.getArticleRequests(id, season);
+    const { data } = await article.getArticleRequestList(id, season);
     if (!data) return false;
-    const editRequest = data.map(({ id, articleId, period, userId }: any) => ({
-      id,
-      articleId,
-      period,
-      userId
-    }));
+    const editRequest = data.map(
+      ({
+        id,
+        articleId,
+        period,
+        userId,
+        content,
+        updatedAt
+      }: ArticleRequestType) => ({
+        id,
+        articleId,
+        period,
+        userId,
+        content,
+        updatedAt
+      })
+    );
     return editRequest;
   } catch (error) {
     console.log(error);
@@ -210,6 +226,46 @@ export const declineArticleRequest = async (id: string, requestId: string) => {
     const { data } = await article.declineArticleRequest(id, requestId);
     if (!data) return false;
     return data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const getMyArticleList = async (limit: number, authorId: number) => {
+  try {
+    const { data } = await article.getMyArticleList(limit, authorId);
+    if (!data) return false;
+
+    const newArticles = data.articles.map(
+      ({
+        id,
+        title,
+        thumbnail,
+        location,
+        authorId,
+        springVersionID,
+        summerVersionID,
+        fallVersionID,
+        winterVersionID,
+        articleTagMap
+      }: any) => {
+        return {
+          id,
+          title,
+          thumbnail,
+          location,
+          authorId,
+          springVersionID,
+          summerVersionID,
+          fallVersionID,
+          winterVersionID,
+          articleTagMap
+        };
+      }
+    );
+
+    return newArticles;
   } catch (error) {
     console.log(error);
     return false;

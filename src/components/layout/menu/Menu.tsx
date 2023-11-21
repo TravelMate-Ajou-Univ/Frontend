@@ -10,6 +10,7 @@ import { deleteCookie } from "cookies-next";
 import { useAppDispatch } from "@/hooks/redux";
 import { userLogout } from "@/redux/features/userSlice";
 import MenuItem from "./MenuItem";
+import DocsIcon from "@/components/ui/icons/DocsIcon";
 
 interface Props {
   closeMenu: () => void;
@@ -45,6 +46,10 @@ export default function Menu({ closeMenu }: Props) {
             <MenuItem href="/article/list" onClick={closeMenu}>
               <PaperPlane />
               게시글 목록
+            </MenuItem>
+            <MenuItem href="/article/list/me" onClick={closeMenu}>
+              <DocsIcon />
+              내가 작성한 포스팅
             </MenuItem>
             <MenuItem href="/bookmark/list/me/all" onClick={closeMenu}>
               <MarkedMapIcon />

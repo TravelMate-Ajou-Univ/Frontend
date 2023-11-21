@@ -80,12 +80,14 @@ export const article = {
       content,
       period
     }),
-  getArticleRequests: (id: string, season: SeasonType | "ALL") =>
-    api.get(`articles/${id}/reqeusts?season=${season}`),
+  getArticleRequestList: (id: string, season: SeasonType | "ALL") =>
+    api.get(`articles/${id}/reqeusts?period=${season}`),
   getArticleRequest: (id: string, requestId: string) =>
     api.get(`articles/${id}/reqeusts/${requestId}`),
   acceptArticleRequest: (id: string, requestId: string) =>
     api.get(`articles/${id}/reqeusts/accept/${requestId}`),
   declineArticleRequest: (id: string, requestId: string) =>
-    api.get(`articles/${id}/reqeusts/decline/${requestId}`)
+    api.get(`articles/${id}/reqeusts/decline/${requestId}`),
+  getMyArticleList: (limit: number, authorId: number) =>
+    api.get(`articles?limit=${limit}&authorId=${authorId}`)
 };
