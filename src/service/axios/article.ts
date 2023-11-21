@@ -156,10 +156,16 @@ export const editArticle = async (
 export const editArticleRequest = async (
   id: string,
   content: string,
-  period: SeasonType
+  period: SeasonType,
+  comment: string
 ) => {
   try {
-    const { data } = await article.editArticleRequest(id, content, period);
+    const { data } = await article.editArticleRequest(
+      id,
+      content,
+      period,
+      comment
+    );
     if (!data) return false;
     return data.id;
   } catch (error) {
@@ -182,14 +188,16 @@ export const getArticleRequestList = async (
         period,
         userId,
         content,
-        updatedAt
+        updatedAt,
+        comment
       }: ArticleRequestType) => ({
         id,
         articleId,
         period,
         userId,
         content,
-        updatedAt
+        updatedAt,
+        comment
       })
     );
     return editRequest;

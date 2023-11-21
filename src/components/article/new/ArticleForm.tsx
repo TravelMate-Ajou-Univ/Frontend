@@ -26,6 +26,7 @@ import ImageSection from "@/components/ui/ImageSection";
 import FilledButton from "@/components/ui/button/FilledButton";
 import OutlinedButton from "@/components/ui/button/OutlinedButton";
 import { useAppSelector } from "@/hooks/redux";
+import CommentForm from "./CommentForm";
 
 const INPUT_CLASSNAME = "flex items-center gap-4";
 
@@ -48,6 +49,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [receivedContent, setReceivedContent] = useState<string>("");
   const [receivedThumbnail, setReceivedThumbnail] = useState<string>("");
+  const [comment, setComment] = useState<string>("");
   const { id: userId } = useAppSelector(state => state.userSlice);
   const [authorId, setAuthorId] = useState<number>(-1);
   const router = useRouter();
@@ -172,7 +174,8 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       const result = await editArticleRequest(
         id as string,
         content,
-        editingSeason
+        editingSeason,
+        comment
       );
       if (result) {
         alert("수정 요청이 완료되었습니다.");
@@ -238,10 +241,16 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
           </li>
         ))}
       </ul>
+      {id && authorId !== userId && (
+        <CommentForm
+          comment={comment}
+          setComment={value => setComment(value)}
+        />
+      )}
       <section className="self-end flex gap-2">
         <OutlinedButton onClick={cancel}>취소</OutlinedButton>
         <FilledButton onClick={id ? edit : submit}>
-          {id ? "수정" : "작성"}
+          {id ? (authorId === userId ? "수정" : "수정 요청") : "작성"}
         </FilledButton>
       </section>
     </section>
