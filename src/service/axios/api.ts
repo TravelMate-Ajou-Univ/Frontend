@@ -81,10 +81,16 @@ export const article = {
   getArticle: (id: string) => api.get(`articles/${id}`),
   editArticle: (id: string, article: ArticleType) =>
     api.patch(`articles/${id}`, article),
-  editArticleRequest: (id: string, content: string, period: SeasonType) =>
+  editArticleRequest: (
+    id: string,
+    content: string,
+    period: SeasonType,
+    comment: string
+  ) =>
     api.post(`articles/${id}/reqeusts`, {
       content,
-      period
+      period,
+      comment
     }),
   getArticleRequestList: (id: string, season: SeasonType | "ALL") =>
     api.get(`articles/${id}/reqeusts?period=${season}`),
