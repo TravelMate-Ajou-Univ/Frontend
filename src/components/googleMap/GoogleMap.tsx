@@ -1,12 +1,9 @@
 "use client";
 import { useAppSelector } from "@/hooks/redux";
-import { PinType } from "@/model/bookmark";
+import { BookmarkType, PinType } from "@/model/bookmark";
 import { addPins, subBookmarks, subPins } from "@/redux/features/mapSlice";
-import {
-  makeContentString,
-  placeDetail,
-  searchPlace
-} from "@/service/googlemap/map";
+import { makeContentString, makeMarker } from "@/service/googlemap/marker";
+import { placeDetail, searchPlace } from "@/service/googlemap/place";
 import Script from "next/script";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -59,108 +56,37 @@ export default function GoogleMap({ modifyState }: Props) {
       initmap as google.maps.Map
     );
     bookmarks.map(bookmark => {
-      const marker = new google.maps.Marker({
-        position: {
-          lat: bookmark.latitude,
-          lng: bookmark.longitude
-        },
-        map: initmap,
-        icon: "https://maps.google.com/mapfiles/ms/icons/red-dot.png"
-      });
-      marker.addListener("click", async () => {
-        const result = await placeDetail({
-          service,
-          place_id: bookmark.placeId
-        });
-        if (result === null) {
-          return;
-        }
-        const contentString = makeContentString({
-          photoUrl: result?.photos?.[0].getUrl(),
-          name: result.name,
-          address: result.formatted_address,
-          rating: result.rating,
-          modifyState: modifyState,
-          memo: bookmark.content,
-          mode: "delete"
-        });
-
-        const infoWindow = new google.maps.InfoWindow({
-          content: contentString,
-          position: {
-            lat: bookmark.latitude,
-            lng: bookmark.longitude
-          }
-        });
-        infoWindow.open({
-          anchor: marker,
-          map
-        });
-        google.maps.event.addListener(infoWindow, "domready", () => {
-          const btn = document.getElementById("btn");
-          if (btn) {
-            btn.addEventListener("click", () => {
-              dispatch(subBookmarks(bookmark));
-              infoWindow.close();
-              marker.setMap(null);
-            });
-          }
-        });
+      makeMarker({
+        pin: bookmark,
+        initmap,
+        service,
+        modifyState,
+        map: map as google.maps.Map,
+        subPinHandler,
+        subBookmarkHandler
       });
     });
 
     pins.map(pin => {
-      const marker = new google.maps.Marker({
-        position: {
-          lat: pin.latitude,
-          lng: pin.longitude
-        },
-        map: initmap,
-        icon: "https://maps.google.com/mapfiles/ms/icons/yellow-dot.png"
-      });
-      marker.addListener("click", async () => {
-        const result = await placeDetail({
-          service,
-          place_id: pin.placeId
-        });
-        if (result === null) {
-          return;
-        }
-        const contentString = makeContentString({
-          photoUrl: result?.photos?.[0].getUrl(),
-          name: result.name,
-          address: result.formatted_address,
-          rating: result.rating,
-          modifyState: modifyState,
-          memo: pin.content,
-          mode: "delete"
-        });
-
-        const infoWindow = new google.maps.InfoWindow({
-          content: contentString,
-          position: {
-            lat: pin.latitude,
-            lng: pin.longitude
-          }
-        });
-        infoWindow.open({
-          anchor: marker,
-          map
-        });
-        google.maps.event.addListener(infoWindow, "domready", () => {
-          const btn = document.getElementById("btn");
-          if (btn) {
-            btn.addEventListener("click", () => {
-              dispatch(subPins(pin));
-              infoWindow.close();
-              marker.setMap(null);
-            });
-          }
-        });
+      makeMarker({
+        pin: pin,
+        initmap,
+        service,
+        modifyState,
+        map: map as google.maps.Map,
+        subPinHandler,
+        subBookmarkHandler
       });
     });
   };
 
+  const subPinHandler = (pin: PinType) => {
+    dispatch(subPins(pin));
+  };
+
+  const subBookmarkHandler = (bookmark: BookmarkType) => {
+    dispatch(subBookmarks(bookmark));
+  };
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = e.target;
     setSearch(value);

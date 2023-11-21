@@ -9,6 +9,10 @@ export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_SERVER_BASE_URL
 });
 
+export const chatApi = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_CHAT_SERVER_BASE_URL
+});
+
 export const mapApi = axios.create({
   baseURL: "https://maps.googleapis.com"
 });
