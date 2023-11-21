@@ -16,11 +16,13 @@ export const getMyChatRooms = async (): Promise<ChatRoomType[]> => {
 
     const chatrooms = datas.map((data: any) => {
       const chatroom = {
+        roomId: data.chatRoom._id,
         name: data.chatRoom.name,
         memberIds: data.chatRoom.memberIds,
         lastChat: data.chatRoom.lastChat,
         lastChatTime: data.chatRoom.created_at
       };
+
       return chatroom;
     });
 
@@ -47,6 +49,7 @@ export const makeChatRoom = async ({
     const data = response.data;
 
     const newChatRoom: ChatRoomType = {
+      roomId: data.chatRoom._id,
       name: data.chatRoom.name,
       memberIds: data.chatRoom.memberIds,
       lastChat: "",
@@ -56,6 +59,7 @@ export const makeChatRoom = async ({
   } catch (error) {
     console.error(error);
     return {
+      roomId: "",
       name: "",
       memberIds: [],
       lastChat: "",

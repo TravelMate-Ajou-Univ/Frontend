@@ -10,6 +10,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { getMyChatRooms } from "@/service/axios/chatroom";
 import { setChatRoom } from "@/redux/features/chatRoomSlice";
+import { CalculateTime } from "@/service/time";
 
 export default function ChatRoomList() {
   const dispatch = useDispatch();
@@ -29,7 +30,13 @@ export default function ChatRoomList() {
       {chatrooms.map((chatroom, index) => (
         <li key={index}>
           <Link
-            href={`/chat/${chatroom.name}`}
+            href={{
+              pathname: `/chat/${chatroom.name}`,
+              query: {
+                roomId: chatroom.roomId,
+                roomName: chatroom.name
+              }
+            }}
             className="flex items-center border-b-2 h-[8rem] px-4 py-2"
           >
             <div className="w-[20%]">
@@ -56,7 +63,9 @@ export default function ChatRoomList() {
             <div className="w-[80%] h-full">
               <div className="flex justify-between">
                 <p className="text-xl">{chatroom.name}</p>
-                <p className="text-xs font-thin">{chatroom.lastChatTime}</p>
+                <p className="text-xs font-thin">
+                  {CalculateTime(chatroom.lastChatTime)}
+                </p>
               </div>
               <p className="py-2">{chatroom.lastChat}</p>
             </div>

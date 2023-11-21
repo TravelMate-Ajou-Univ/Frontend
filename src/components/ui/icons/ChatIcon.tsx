@@ -1,5 +1,5 @@
-import { BsChat } from "react-icons/bs";
+import { IoChatbubblesOutline } from "react-icons/io5";
 
 export default function ChatIcon() {
-  return <BsChat className="w-6 h-6" />;
+  return <IoChatbubblesOutline className="w-6 h-6" />;
 }

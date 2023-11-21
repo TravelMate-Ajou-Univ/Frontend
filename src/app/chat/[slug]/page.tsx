@@ -9,39 +9,25 @@ import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
 import { Socket, io } from "socket.io-client";
 import { calculateCenter } from "@/service/googlemap/map";
 import { getAllBookmarks } from "@/service/axios/bookmark";
+import { useSearchParams } from "next/navigation";
+import { useAppSelector } from "@/hooks/redux";
 
-interface Props {
-  params: {
-    slug: string;
-  };
-}
-
-export default function ChatPage({ params: { slug } }: Props) {
+export default function ChatPage() {
+  const params = useSearchParams();
+  const rooomName = String(params.get("roomName"));
+  const roomId = String(params.get("roomId"));
   const dispatch = useDispatch();
+  const { userName } = useAppSelector(state => state.userSlice);
   const [mapState, setMapState] = useState(false);
-  // const roomid = slug;
-  // const socket = io("http//localhost:8080", {
-  //   path: "/socket.io",
-  //   transports: ["websocket"]
-  // });
-  // const [myInfo, setMyInfo] = useState({
-  //   nickname: "",
-  //   id: "",
-  //   room: {
-  //     roomId: "",
-  //     roomName: ""
-  //   }
-  // });
 
-  // useEffect(() => {
-  // socket.emit("enterChatRoom", { roomId: roomid }, (response: any) => {
-  //   console.log(response);
-  //   setMyInfo({ nickname, id, room: response });
-  // });
-  // socket.on("disconnect", () => {
-  //   console.log("disconneted");
-  // });
-  // }, [roomid, socket]);
+  const socket = io(
+    "http://travelmate-chat-env.eba-djvegdyw.ap-northeast-2.elasticbeanstalk.com/",
+    // "http://localhost:8080",
+    {
+      path: "/socket.io",
+      transports: ["websocket"]
+    }
+  );
   useEffect(() => {
     const getData = async () => {
       // Todo : 지도에 대한 처리, Message 기록 가져오기
@@ -73,31 +59,34 @@ export default function ChatPage({ params: { slug } }: Props) {
 
     getData();
 
-    // socket.on("connect", () => {
-    //   console.log("conneted");
-    // });
-    // const nickname = localStorage.getItem("nickname") ?? "user";
-    // const id = socket.io.toString();
-    // socket.emit(
-    //   "setInit",
-    //   {
-    //     nickname: "test_nickname",
-    //     room: {
-    //       roomId: "test room id",
-    //       roomName: "test room name"
-    //     }
-    //   },
-    //   (response: any) => {
-    //     console.log(response);
-    //   }
-    // );
-  }, []);
+    socket.on("connect", () => {
+      console.log("conneted");
+      socket.emit(
+        "enterChatRoom",
+        {
+          nickname: userName,
+          roomId: roomId
+        }
+        // res => {
+        //   console.log(res);
+        // }
+      );
+    });
+  }, [socket]);
 
   const sendMessage = (message: string) => {
     // Todo : send Message
-    // socket.emit("sendMessage", { roomId: "test Id", nickname: "test name" });
+    socket.emit(
+      "sendMessage",
+      { roomId: roomId, nickname: userName },
+      { message: message }
+    );
   };
 
+  socket.on("message", (sender, message) => {
+    console.log("sender : ", sender);
+    console.log("message : ", message);
+  });
   const toggleMapState = () => {
     setMapState(!mapState);
   };
@@ -110,7 +99,7 @@ export default function ChatPage({ params: { slug } }: Props) {
         </div>
       ) : null}
       <div className="w-[50%] mx-auto mt-2 p-2 border-2 rounded-md">
-        <ChatRoomHeader roomName={slug} toggleMapState={toggleMapState} />
+        <ChatRoomHeader roomName={rooomName} toggleMapState={toggleMapState} />
         <ChatList />
         <ChatForm sendMessage={sendMessage} />
       </div>
