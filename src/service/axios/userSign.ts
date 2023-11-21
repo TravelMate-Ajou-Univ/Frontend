@@ -1,5 +1,5 @@
 import { deleteCookie, setCookie } from "cookies-next";
-import { api, user, userAuth } from "./api";
+import { api, chatApi, user, userAuth } from "./api";
 import { jwtDecode } from "jwt-decode";
 import { User } from "@/model/user";
 import { BookmarkCollectionType } from "@/model/bookmark";
@@ -69,6 +69,7 @@ export const Refresh = async (refreshToken: string) => {
 const configureToken = async (accessToken: string, refreshToken: string) => {
   try {
     api.defaults.headers.common["Authorization"] = "Bearer " + accessToken;
+    chatApi.defaults.headers.common["Authorization"] = "Bearer " + accessToken;
 
     const decodedAccessToken = jwtDecode(accessToken);
     if (!decodedAccessToken.exp) return false;

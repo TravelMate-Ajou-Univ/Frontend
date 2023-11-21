@@ -11,7 +11,7 @@ import { getAllBookmarks } from "@/service/axios/bookmark";
 import DropDown from "@/components/ui/dropDown/DropDown";
 import { useDispatch } from "react-redux";
 import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
-import { CalculateCenter } from "@/service/googlemap/map";
+import { calculateCenter } from "@/service/googlemap/map";
 import GoogleMap from "@/components/googleMap/GoogleMap";
 
 export default function BookmarkPage() {
@@ -72,7 +72,7 @@ export default function BookmarkPage() {
           }
         );
       } else {
-        dispatch(setCenter(CalculateCenter(data)));
+        dispatch(setCenter(calculateCenter(data)));
       }
     };
     getData();
