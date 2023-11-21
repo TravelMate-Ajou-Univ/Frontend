@@ -1,3 +1,4 @@
+import RequestList from "@/components/article/request/list/RequestList";
 import Request from "@/components/article/request/Request";
 import SharePostingTitle from "@/components/SharePostingTitle";
 
@@ -13,7 +14,11 @@ export default function RequestPage({ params: { slug } }: Props) {
   return (
     <div className="flex flex-col w-[53rem] mx-auto">
       <SharePostingTitle />
-      {requestId && <Request articleId={articleId} requestId={requestId} />}
+      {requestId ? (
+        <Request articleId={articleId} requestId={requestId} />
+      ) : (
+        <RequestList articleId={articleId} />
+      )}
     </div>
   );
 }

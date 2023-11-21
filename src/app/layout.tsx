@@ -1,15 +1,12 @@
 import AuthContext from "@/context/AuthContext";
 import "./globals.css";
 import type { Metadata } from "next";
-import { Nanum_Gothic } from "next/font/google";
+import { Open_Sans } from "next/font/google";
 import Header from "@/components/layout/Header";
 import { ProviderContext } from "@/context/ProviderContext";
 import Background from "@/components/layout/Background";
 
-const nanumGothic = Nanum_Gothic({
-  subsets: ["latin"],
-  weight: "800"
-});
+const openSans = Open_Sans({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Travel Mate",
@@ -22,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={nanumGothic.className}>
+    <html lang="en" className={openSans.className}>
       <head>
         <link
           href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
