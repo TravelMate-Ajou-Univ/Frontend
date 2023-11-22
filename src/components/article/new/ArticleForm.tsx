@@ -148,7 +148,11 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
 
     if (articleId) {
       alert("게시글이 등록되었습니다.");
-      router.push(`/article/detail/${articleId}}`);
+      router.push(
+        `/article/detail/${articleId}?season=${seasonMapper[
+          season
+        ].toLowerCase()}`
+      );
     }
   };
 
