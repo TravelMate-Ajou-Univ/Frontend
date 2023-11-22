@@ -28,6 +28,7 @@ export default function Request({ articleId, requestId }: Props) {
   const [requestArticle, setRequestArticle] = useState<string>("");
   const [requestUser, setRequestUser] = useState<User>();
   const [requestComment, setRequestComment] = useState<string>("");
+  const [requestPeriod, setRequestPeriod] = useState<SeasonType>("SPRING");
   const [diff, setDiff] = useState<any>();
   const router = useRouter();
 
@@ -63,6 +64,7 @@ export default function Request({ articleId, requestId }: Props) {
       }
       setRequestArticle(request.content.split("</p>").join("\n"));
       setRequestComment(request.comment);
+      setRequestPeriod(request.period);
     };
     getRequest();
   }, [articleId, requestId]);
@@ -90,7 +92,9 @@ export default function Request({ articleId, requestId }: Props) {
     const response = await acceptArticleRequest(articleId, requestId);
     if (!response) return;
     alert("수정 요청이 승인되었습니다.");
-    router.push(`/article/detail/${articleId}`);
+    router.push(
+      `/article/detail/${articleId}?season=${requestPeriod.toLowerCase()}`
+    );
   };
 
   return (
