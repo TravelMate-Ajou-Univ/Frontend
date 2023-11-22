@@ -14,7 +14,8 @@ export default function FriendsListPage() {
 
   useEffect(() => {
     const getFriends = async () => {
-      const data = await getMyFriendsList({ page, limit });
+      const data = await getMyFriendsList(page, limit);
+
       setFriends(data.friends);
       setTotal(data.count);
     };

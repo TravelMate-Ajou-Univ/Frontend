@@ -93,7 +93,6 @@ export const makeMarker = ({
 }: MarkerProps) => {
   const type: string =
     typeof pin === "object" && "id" in pin ? "bookmark" : "pin";
-  console.log(type);
 
   const marker = new google.maps.Marker({
     position: {

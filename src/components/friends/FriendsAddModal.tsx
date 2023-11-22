@@ -1,15 +1,16 @@
-"use client";
-
 import { Pagination } from "@mui/material";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
-import MiniProfile from "../chat/MiniProfile";
 import { addFriend, searchUser } from "@/service/axios/friends";
 import { FriendType } from "@/model/friend";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 
-export default function FriendsAddModal() {
+type Props = {
+  toggleModalState: (type: "received" | "sent" | "add" | "") => void;
+};
+
+export default function FriendsAddModal({ toggleModalState }: Props) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [searchFriends, setSearchFriends] = useState<FriendType[]>([]);
@@ -22,15 +23,18 @@ export default function FriendsAddModal() {
   const searchHandler = async (e: SyntheticEvent) => {
     e.preventDefault();
     const response = await searchUser(search);
+
     setSearchFriends(response);
   };
   const onClick = (id: number) => {
     addFriend(id)
       .then(res => {
         alert("친구 요청을 보냈습니다.");
+        toggleModalState("");
       })
       .catch(err => {
         alert(err.response.data.message);
+        toggleModalState("");
       });
   };
   return (
