@@ -1,7 +1,11 @@
 "use client";
 
 import { ArticleDetailType, SeasonType } from "@/model/article";
-import { getArticle, getArticleRequestList } from "@/service/axios/article";
+import {
+  deleteArticle,
+  getArticle,
+  getArticleRequestList
+} from "@/service/axios/article";
 import { useEffect, useState } from "react";
 import ArticleContent from "./ArticleContent";
 import Keyword from "@/components/ui/Keyword";
@@ -11,6 +15,7 @@ import SeasonNav from "@/components/ui/SeasonNav";
 import Author from "./Author";
 import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
+import FilledButton from "@/components/ui/button/FilledButton";
 
 interface Props {
   articleId: string;
@@ -45,6 +50,18 @@ export default function Article({ articleId }: Props) {
 
   const moveToEdit = () => {
     router.push(`/article/edit/${articleId}?season=${season.toLowerCase()}`);
+  };
+
+  const deleteThisArticle = async () => {
+    const check = confirm("정말로 삭제하시겠습니까?");
+    if (!check) return;
+
+    const res = await deleteArticle(articleId);
+    if (!res) alert("삭제에 실패했습니다.");
+    else {
+      alert("삭제되었습니다.");
+      router.push("/article/list/me");
+    }
   };
 
   return (
@@ -86,9 +103,16 @@ export default function Article({ articleId }: Props) {
           </div>
         )}
       </section>
-      <OutlinedButton className="self-center" onClick={moveToEdit}>
-        {article?.authorId === userId ? "작성/수정하기" : "수정/추가 제안하기"}
-      </OutlinedButton>
+      <section className="flex flex-row gap-2">
+        {userId === article?.authorId && (
+          <FilledButton onClick={deleteThisArticle}>게시글 삭제</FilledButton>
+        )}
+        <OutlinedButton className="self-center" onClick={moveToEdit}>
+          {article?.authorId === userId
+            ? "작성/수정하기"
+            : "수정/추가 제안하기"}
+        </OutlinedButton>
+      </section>
     </article>
   );
 }
