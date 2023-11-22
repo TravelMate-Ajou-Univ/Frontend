@@ -14,12 +14,18 @@ export default function ArticleList() {
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
 
-  const location = searchParams.get("location") ?? "";
-  const word = searchParams.get("word") ?? "";
-
   const getArticles = useCallback(
     async (command: "new" | "add") => {
-      const data = await getArticleList(page, 10, "", location, word);
+      const location = searchParams.get("location") ?? "";
+      const word = searchParams.get("word") ?? "";
+      const seasons = searchParams.getAll("seasons");
+      const period = seasons
+        .map(season => season.toUpperCase())
+        .join("&period=");
+
+      const data = await getArticleList(page, 10, period, location, word);
+
+      console.log(seasons);
 
       if (!data) return;
       const { count, newArticles } = data;
@@ -36,7 +42,7 @@ export default function ArticleList() {
         return [...prev, newArticles];
       });
     },
-    [location, word, page]
+    [page, searchParams]
   );
 
   const handleIntersect = useCallback(
@@ -54,7 +60,7 @@ export default function ArticleList() {
   useEffect(() => {
     setCount(0);
     setList([]);
-  }, [location, word]);
+  }, [searchParams]);
 
   useEffect(() => {
     getArticles("new");
@@ -67,11 +73,14 @@ export default function ArticleList() {
     });
 
     targetRef.current && observer.observe(targetRef.current);
+    if (list.length >= count) {
+      observer.disconnect();
+    }
 
     return () => {
       observer.disconnect();
     };
-  }, [handleIntersect]);
+  }, [handleIntersect, list, count]);
 
   return (
     <MasonryContainer>

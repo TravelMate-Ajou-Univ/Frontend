@@ -71,7 +71,6 @@ export default function Search() {
     const wordQuery = word === "" ? "" : `word=${word}&`;
     const locationQuery = location === "전체" ? "" : `location=${location}&`;
     let seasonQuery = "";
-    // seasons.length === 0 ? [""] : seasons.map(season => `seasons=${season}&`);
     if (seasons.includes("봄")) seasonQuery = seasonQuery + "seasons=spring&";
     if (seasons.includes("여름")) seasonQuery = seasonQuery + "seasons=summer&";
     if (seasons.includes("가을")) seasonQuery = seasonQuery + "seasons=fall&";
