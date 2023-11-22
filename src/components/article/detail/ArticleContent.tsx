@@ -15,7 +15,7 @@ export default function ArticleContent({
 }: Props) {
   switch (season) {
     case "SPRING":
-      return spring ? (
+      return spring && spring.content !== "" ? (
         typeof window !== "undefined" && (
           <div
             dangerouslySetInnerHTML={{
@@ -27,7 +27,7 @@ export default function ArticleContent({
         <NoContent season="봄" authorId={authorId} userId={userId} />
       );
     case "SUMMER":
-      return summer ? (
+      return summer && summer.content !== "" ? (
         typeof window !== "undefined" && (
           <div
             dangerouslySetInnerHTML={{
@@ -39,7 +39,7 @@ export default function ArticleContent({
         <NoContent season="여름" authorId={authorId} userId={userId} />
       );
     case "FALL":
-      return fall ? (
+      return fall && fall.content !== "" ? (
         typeof window !== "undefined" && (
           <div
             dangerouslySetInnerHTML={{
@@ -51,7 +51,7 @@ export default function ArticleContent({
         <NoContent season="가을" authorId={authorId} userId={userId} />
       );
     case "WINTER":
-      return winter ? (
+      return winter && winter.content !== "" ? (
         typeof window !== "undefined" && (
           <div
             dangerouslySetInnerHTML={{
