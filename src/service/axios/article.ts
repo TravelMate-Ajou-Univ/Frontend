@@ -153,6 +153,17 @@ export const editArticle = async (
   }
 };
 
+export const deleteArticle = async (id: string) => {
+  try {
+    const { data } = await article.deleteArticle(id);
+    if (!data) return false;
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 export const editArticleRequest = async (
   id: string,
   content: string,

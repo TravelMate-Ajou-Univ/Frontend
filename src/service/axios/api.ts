@@ -81,6 +81,7 @@ export const article = {
   getArticle: (id: string) => api.get(`articles/${id}`),
   editArticle: (id: string, article: ArticleType) =>
     api.patch(`articles/${id}`, article),
+  deleteArticle: (id: string) => api.delete(`articles/${id}`),
   editArticleRequest: (
     id: string,
     content: string,
