@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useEffect, useState } from "react";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import { getMyFriendsList } from "@/service/axios/friends";
 import { FriendType } from "@/model/friend";
@@ -12,20 +12,15 @@ import { addChatRoom } from "@/redux/features/chatRoomSlice";
 
 type Props = {
   toggleModalState: () => void;
-  friends: FriendType[];
-  total: number;
-  setPage: (page: number) => void;
 };
 
-export default function ChatRoomModal({
-  toggleModalState,
-  friends,
-  total,
-  setPage
-}: Props) {
+export default function ChatRoomModal({ toggleModalState }: Props) {
   const dispatch = useDispatch();
   const [title, setTitle] = useState("");
   const [members, setMembers] = useState<FriendType[]>([]);
+  const [friends, setFriends] = useState<FriendType[]>([]);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   const onChangeText = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -34,13 +29,16 @@ export default function ChatRoomModal({
     setTitle(value);
   };
 
-  const addMember = (friend: FriendType) => {
-    setMembers([...members, friend]);
+  const addMember = (addFriend: FriendType) => {
+    const filter = friends.filter(friend => friend.id !== addFriend.id);
+    setFriends(filter);
+    setMembers([...members, addFriend]);
   };
 
-  const subMember = (friend: FriendType) => {
-    const filter = members.filter(member => member.id !== friend.id);
+  const subMember = (subFriend: FriendType) => {
+    const filter = members.filter(member => member.id !== subFriend.id);
     setMembers(filter);
+    setFriends([...friends, subFriend]);
   };
   const createChatRoom = async () => {
     const memberIds = members.map(member => member.id);
@@ -50,6 +48,15 @@ export default function ChatRoomModal({
 
     toggleModalState();
   };
+
+  useEffect(() => {
+    const getData = async () => {
+      const res = await getMyFriendsList(page, 5);
+      setFriends(res.friends);
+      setTotal(res.count);
+    };
+    getData();
+  }, [page]);
 
   return (
     <div className="flex flex-col gap-2 w-[15rem] absolute right-0 bg-white z-10 border-2 rounded-md p-2 mt-4">
