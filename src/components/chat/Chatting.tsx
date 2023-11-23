@@ -61,28 +61,28 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
     // console.log(message);
     // });
     socket.on("message", data => {
+      console.log(data);
+
       const newChat: ChatType = {
-        message: data.message,
+        userId: data.userId,
         nickname: data.nickname,
-        time: data.time
+        content: data.content,
+        createdAt: data.createdAt
       };
       setChatList(chatList => [...chatList, newChat]);
     });
     socket.on("disconnected", message => {});
   }, [socket, dispatch]);
 
-  const sendMessage = (message: string) => {
-    if (message.length === 0) {
+  const sendMessage = (content: string) => {
+    if (content.length === 0) {
       return;
     }
     socket.emit("sendMessage", {
       roomId: roomId,
       userId: id,
-
       nickname: userName,
-      message: message
-      // nickname: userName,
-      // content: message
+      content: content
     });
   };
 

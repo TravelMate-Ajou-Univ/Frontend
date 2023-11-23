@@ -7,7 +7,8 @@ export type ChatRoomType = {
 };
 
 export type ChatType = {
-  message: string;
+  userId: number;
   nickname: string;
-  time: string;
+  content: string;
+  createdAt: string;
 };

@@ -22,6 +22,8 @@ export default function ChatList({ chatList }: Props) {
     scrollToBottom();
   }, [chatList]);
 
+  console.log(chatList);
+
   const pre_chat: string = "";
   return (
     <section className="w-full h-[33rem]">
@@ -33,9 +35,9 @@ export default function ChatList({ chatList }: Props) {
           chat.nickname === userName ? (
             <li key={index} className="justify-end flex items-end">
               <div className="flex">
-                <p className="self-end text-xs mb-2">time</p>
+                <p className="self-end text-xs mb-2">{chat.createdAt}</p>
                 <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-yellow-300">
-                  {chat.message}
+                  {chat.content}
                 </p>
               </div>
               <div className="flex items-center">
@@ -63,9 +65,9 @@ export default function ChatList({ chatList }: Props) {
                 <p className="text-sm ml-1">{chat.nickname}</p>
                 <div className="flex">
                   <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-gray-200">
-                    {chat.message}
+                    {chat.content}
                   </p>
-                  <p className="self-end text-xs mb-2">time</p>
+                  <p className="self-end text-xs mb-2">{chat.createdAt}</p>
                 </div>
               </div>
             </li>
