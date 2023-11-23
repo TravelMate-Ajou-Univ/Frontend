@@ -20,7 +20,14 @@ export default function ChatForm({ sendMessage }: Props) {
         value={message}
         onChange={e => setMessage(e.target.value)}
       />
-      <FilledButton onClick={() => sendMessage(message)}>전송</FilledButton>
+      <FilledButton
+        onClick={() => {
+          setMessage("");
+          sendMessage(message);
+        }}
+      >
+        전송
+      </FilledButton>
     </form>
   );
 }

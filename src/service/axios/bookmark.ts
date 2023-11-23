@@ -43,6 +43,32 @@ export const getMyCollectionList = async ({
   }
 };
 
+export const getFriendCollectionList = async ({
+  page,
+  limit,
+  visibility
+}: CollectionList): Promise<BookmarkCollectionListType> => {
+  try {
+    const scope = visibility === "all" ? null : visibility;
+    const response = await api({
+      method: "get",
+      url: `/users/me/bookmark-collections`,
+      params: {
+        page: page,
+        limit: limit,
+        visibility: scope?.toUpperCase()
+      }
+    });
+    return {
+      bookmarkCollections: response.data.bookmarkCollections,
+      count: response.data.count
+    };
+  } catch (error) {
+    console.log(error);
+    return { bookmarkCollections: [], count: 0 };
+  }
+};
+
 export const addCollection = async ({
   title,
   visible

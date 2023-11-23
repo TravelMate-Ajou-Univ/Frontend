@@ -9,7 +9,7 @@ import { api } from "./api";
 export const getMyFriendsList = async (
   page: number,
   limit: number
-): Promise<FriendsListType> => {
+): Promise<FriendsWithPkListType> => {
   try {
     const response = await api({
       method: "get",
@@ -20,8 +20,9 @@ export const getMyFriendsList = async (
       }
     });
     const data = response.data;
-    const friends: FriendType[] = data.friends.map((data: any) => {
+    const friends: FriendWithPkType[] = data.friends.map((data: any) => {
       return {
+        pk: data.id,
         id: data.friend.id,
         nickname: data.friend.nickname,
         profileImageId: data.friend.profileImageId
@@ -78,19 +79,20 @@ export const viewReceivedFriendRequest = async (
         limit
       }
     });
-    const data = response.data;
-    const friends: FriendWithPkType[] = data.friends.map((data: any) => {
+    const datas = response.data;
+
+    const friends: FriendWithPkType[] = datas.friends.map((data: any) => {
       return {
         pk: data.id,
-        id: data.friend.id,
-        nickname: data.friend.nickname,
-        profileImageId: data.friend.profileImageId
+        id: data.user.id,
+        nickname: data.user.nickname,
+        profileImageId: data.user.profileImageId
       };
     });
 
     return {
       friends,
-      count: data.count
+      count: datas.count
     };
   } catch (error) {
     console.error(error);
@@ -114,8 +116,9 @@ export const viewSentFriendRequest = async (
         limit
       }
     });
-    const data = response.data;
-    const friends: FriendWithPkType[] = data.friends.map((data: any) => {
+    const datas = response.data;
+
+    const friends: FriendWithPkType[] = datas.friends.map((data: any) => {
       return {
         pk: data.id,
         id: data.friend.id,
@@ -123,10 +126,9 @@ export const viewSentFriendRequest = async (
         profileImageId: data.friend.profileImageId
       };
     });
-
     return {
       friends,
-      count: data.count
+      count: datas.count
     };
   } catch (error) {
     console.error(error);
@@ -137,7 +139,18 @@ export const viewSentFriendRequest = async (
   }
 };
 
-export const addFriend = async (id: number) => {
+export const acceptAddFriendRequest = async (pk: number) => {
+  const response = await api({
+    method: "post",
+    url: `/users/me/friend-invitation/received/${pk}/accept`,
+    data: {
+      id: pk
+    }
+  });
+  return response;
+};
+
+export const sendAddFriendRequest = async (id: number) => {
   const response = await api({
     method: "post",
     url: "/users/invite-friend",

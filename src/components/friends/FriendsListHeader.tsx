@@ -1,4 +1,3 @@
-"use client";
 import { useEffect, useRef, useState } from "react";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import FriendsAddModal from "./FriendsAddModal";
@@ -6,11 +5,12 @@ import FriendsListModal from "./FriendsListModal";
 
 type Props = {
   total: number;
+  setTotal: (total: number) => void;
 };
 
 type lookUp = "received" | "sent" | "add" | "";
 
-export default function FriendsListHeader({ total }: Props) {
+export default function FriendsListHeader({ total, setTotal }: Props) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [lookUpState, setlookUpState] = useState<lookUp>("");
 
@@ -42,6 +42,8 @@ export default function FriendsListHeader({ total }: Props) {
           </OutlinedButton>
           {lookUpState === "received" ? (
             <FriendsListModal
+              total={total}
+              setTotal={setTotal}
               toggleModalState={toggleModalState}
               mode="received"
               buttonContent="승인"
@@ -54,6 +56,8 @@ export default function FriendsListHeader({ total }: Props) {
           </OutlinedButton>
           {lookUpState === "sent" ? (
             <FriendsListModal
+              total={total}
+              setTotal={setTotal}
               toggleModalState={toggleModalState}
               mode="sent"
               buttonContent="취소"

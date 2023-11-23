@@ -52,6 +52,7 @@ export default function Chatting({ socket }: { socket: Socket }) {
 
     getData();
 
+    // Todo : 관리자 메시지에 대한 처리
     // socket.on("adminMessage", message => {
     // console.log(message);
     // });
@@ -66,7 +67,6 @@ export default function Chatting({ socket }: { socket: Socket }) {
   }, []);
 
   const sendMessage = (message: string) => {
-    // Todo : send Message
     socket.emit("sendMessage", {
       roomId: roomId,
       userId: id,

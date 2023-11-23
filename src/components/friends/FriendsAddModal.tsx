@@ -1,6 +1,6 @@
 import { Pagination } from "@mui/material";
 import { ChangeEvent, SyntheticEvent, useState } from "react";
-import { addFriend, searchUser } from "@/service/axios/friends";
+import { sendAddFriendRequest, searchUser } from "@/service/axios/friends";
 import { FriendType } from "@/model/friend";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import Image from "next/image";
@@ -27,7 +27,7 @@ export default function FriendsAddModal({ toggleModalState }: Props) {
     setSearchFriends(response);
   };
   const onClick = (id: number) => {
-    addFriend(id)
+    sendAddFriendRequest(id)
       .then(res => {
         alert("친구 요청을 보냈습니다.");
         toggleModalState("");
