@@ -11,10 +11,11 @@ import {
 import { getUserInfoById } from "@/service/axios/userSign";
 import { useEffect, useState } from "react";
 import { parseDiff } from "react-diff-view";
-import Diff from "./\bDiff";
+import Diff from "./Diff";
 import OutlinedButton from "@/components/ui/button/OutlinedButton";
 import FilledButton from "@/components/ui/button/FilledButton";
 import { useRouter } from "next/navigation";
+import Comment from "./Comment";
 const { formatLines, diffLines } = require("unidiff");
 
 interface Props {
@@ -26,6 +27,8 @@ export default function Request({ articleId, requestId }: Props) {
   const [originArticle, setOriginArticle] = useState<string>("");
   const [requestArticle, setRequestArticle] = useState<string>("");
   const [requestUser, setRequestUser] = useState<User>();
+  const [requestComment, setRequestComment] = useState<string>("");
+  const [requestPeriod, setRequestPeriod] = useState<SeasonType>("SPRING");
   const [diff, setDiff] = useState<any>();
   const router = useRouter();
 
@@ -60,6 +63,8 @@ export default function Request({ articleId, requestId }: Props) {
           return;
       }
       setRequestArticle(request.content.split("</p>").join("\n"));
+      setRequestComment(request.comment);
+      setRequestPeriod(request.period);
     };
     getRequest();
   }, [articleId, requestId]);
@@ -78,8 +83,7 @@ export default function Request({ articleId, requestId }: Props) {
     const response = await declineArticleRequest(articleId, requestId);
     if (!response) return;
     alert("수정 요청이 거절되었습니다.");
-    // TODO: 수정 요청 목록 페이지로 이동
-    router.push(`/article/${articleId}`);
+    router.push(`/article/request/${articleId}`);
   };
 
   const accept = async () => {
@@ -88,7 +92,9 @@ export default function Request({ articleId, requestId }: Props) {
     const response = await acceptArticleRequest(articleId, requestId);
     if (!response) return;
     alert("수정 요청이 승인되었습니다.");
-    router.push(`/article/detail/${articleId}`);
+    router.push(
+      `/article/detail/${articleId}?season=${requestPeriod.toLowerCase()}`
+    );
   };
 
   return (
@@ -103,6 +109,10 @@ export default function Request({ articleId, requestId }: Props) {
       </section>
       <hr />
       <Diff diff={diff} />
+      <hr />
+      {requestComment !== "" && requestUser && (
+        <Comment requestUser={requestUser} requestComment={requestComment} />
+      )}
       <hr />
       <section className="self-end flex gap-2">
         <OutlinedButton onClick={decline}>거절</OutlinedButton>

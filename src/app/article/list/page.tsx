@@ -7,7 +7,7 @@ export default function ArticleListPage() {
     <div className="flex flex-col gap-4">
       <Search />
       <SharePostingTitle />
-      <section className="flex flex-col items-center w-full">
+      <section className="flex flex-col w-full">
         <ArticleList />
       </section>
     </div>

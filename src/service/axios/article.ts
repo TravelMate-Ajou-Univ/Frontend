@@ -1,5 +1,10 @@
-import { ArticleDetailType, ArticleType, SeasonType } from "@/model/article";
-import { article } from "./api";
+import {
+  ArticleDetailType,
+  ArticleRequestType,
+  ArticleType,
+  SeasonType
+} from "@/model/article";
+import { article, user } from "./api";
 
 export const uploadImage = async (file: File) => {
   try {
@@ -148,13 +153,30 @@ export const editArticle = async (
   }
 };
 
+export const deleteArticle = async (id: string) => {
+  try {
+    const { data } = await article.deleteArticle(id);
+    if (!data) return false;
+    return true;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 export const editArticleRequest = async (
   id: string,
   content: string,
-  period: SeasonType
+  period: SeasonType,
+  comment: string
 ) => {
   try {
-    const { data } = await article.editArticleRequest(id, content, period);
+    const { data } = await article.editArticleRequest(
+      id,
+      content,
+      period,
+      comment
+    );
     if (!data) return false;
     return data.id;
   } catch (error) {
@@ -163,19 +185,32 @@ export const editArticleRequest = async (
   }
 };
 
-export const getArticleRequests = async (
+export const getArticleRequestList = async (
   id: string,
   season: SeasonType | "ALL"
 ) => {
   try {
-    const { data } = await article.getArticleRequests(id, season);
+    const { data } = await article.getArticleRequestList(id, season);
     if (!data) return false;
-    const editRequest = data.map(({ id, articleId, period, userId }: any) => ({
-      id,
-      articleId,
-      period,
-      userId
-    }));
+    const editRequest = data.map(
+      ({
+        id,
+        articleId,
+        period,
+        userId,
+        content,
+        updatedAt,
+        comment
+      }: ArticleRequestType) => ({
+        id,
+        articleId,
+        period,
+        userId,
+        content,
+        updatedAt,
+        comment
+      })
+    );
     return editRequest;
   } catch (error) {
     console.log(error);
@@ -210,6 +245,48 @@ export const declineArticleRequest = async (id: string, requestId: string) => {
     const { data } = await article.declineArticleRequest(id, requestId);
     if (!data) return false;
     return data;
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
+export const getMyArticleList = async (limit: number) => {
+  try {
+    const { data } = await user.getMyArticleList(limit);
+    if (!data) return false;
+
+    const newArticles = data.articles.map(
+      ({
+        id,
+        title,
+        thumbnail,
+        location,
+        authorId,
+        springVersionID,
+        summerVersionID,
+        fallVersionID,
+        winterVersionID,
+        articleTagMap,
+        pendingArticleRequests
+      }: any) => {
+        return {
+          id,
+          title,
+          thumbnail,
+          location,
+          authorId,
+          springVersionID,
+          summerVersionID,
+          fallVersionID,
+          winterVersionID,
+          articleTagMap,
+          requestCount: pendingArticleRequests.length
+        };
+      }
+    );
+
+    return newArticles;
   } catch (error) {
     console.log(error);
     return false;

@@ -10,6 +10,7 @@ import { useSearchParams } from "next/navigation";
 
 type Props = {
   article: ArticlePreviewType;
+  count?: number;
 } & React.ComponentProps<"div">;
 
 const ArticlePreview = forwardRef<HTMLDivElement, Props>(
@@ -24,7 +25,8 @@ const ArticlePreview = forwardRef<HTMLDivElement, Props>(
         summerVersionID,
         fallVersionID,
         winterVersionID
-      }
+      },
+      count
     },
     ref
   ) => {
@@ -61,7 +63,7 @@ const ArticlePreview = forwardRef<HTMLDivElement, Props>(
     ]);
 
     return (
-      <div className="rounded-2xl border overflow-hidden w-96" ref={ref}>
+      <div className="rounded-2xl border overflow-hidden w-[25.8rem]" ref={ref}>
         <Link href={`/article/detail/${id}?season=${season}`}>
           <Image
             className="w-full"
@@ -70,7 +72,7 @@ const ArticlePreview = forwardRef<HTMLDivElement, Props>(
             width={100}
             height={100}
           />
-          <ArticleSummary title={title} keywords={keywords} />
+          <ArticleSummary title={title} keywords={keywords} count={count} />
         </Link>
       </div>
     );

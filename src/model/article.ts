@@ -42,9 +42,23 @@ export type ArticlePreviewType = {
   }[];
 };
 
+export type MyArticleListType = (ArticlePreviewType & {
+  requestCount: number;
+})[];
+
 export type ArticleDetailType = ArticlePreviewType & {
   spring: SeasonContentType;
   summer: SeasonContentType;
   fall: SeasonContentType;
   winter: SeasonContentType;
+};
+
+export type ArticleRequestType = {
+  id: number;
+  articleId: number;
+  period: SeasonType;
+  userId: number;
+  content: string;
+  updatedAt: string;
+  comment?: string;
 };
