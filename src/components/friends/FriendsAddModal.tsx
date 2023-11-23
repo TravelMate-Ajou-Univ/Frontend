@@ -8,9 +8,15 @@ import defaultProfileImg from "/public/image/defaultProfileImg.png";
 
 type Props = {
   toggleModalState: (type: "received" | "sent" | "add" | "") => void;
+  total: number;
+  setTotal: (total: number) => void;
 };
 
-export default function FriendsAddModal({ toggleModalState }: Props) {
+export default function FriendsAddModal({
+  toggleModalState,
+  total,
+  setTotal
+}: Props) {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [searchFriends, setSearchFriends] = useState<FriendType[]>([]);
@@ -29,7 +35,12 @@ export default function FriendsAddModal({ toggleModalState }: Props) {
   const onClick = (id: number) => {
     sendAddFriendRequest(id)
       .then(res => {
-        alert("친구 요청을 보냈습니다.");
+        if (res.data === "친구가 추가되었습니다.") {
+          alert(res.data);
+          setTotal(total + 1);
+        } else {
+          alert("친구 요청을 보냈습니다.");
+        }
         toggleModalState("");
       })
       .catch(err => {

@@ -69,7 +69,11 @@ export default function FriendsListHeader({ total, setTotal }: Props) {
             친구 추가
           </OutlinedButton>
           {lookUpState === "add" ? (
-            <FriendsAddModal toggleModalState={toggleModalState} />
+            <FriendsAddModal
+              total={total}
+              setTotal={setTotal}
+              toggleModalState={toggleModalState}
+            />
           ) : null}
         </div>
       </div>
