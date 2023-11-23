@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import FriendsAddModal from "./FriendsAddModal";
 import FriendsListModal from "./FriendsListModal";
@@ -17,11 +17,11 @@ export default function FriendsListHeader({ total, setTotal }: Props) {
   const toggleModalState = (type: lookUp) => {
     setlookUpState(type);
   };
-  const handleClickOutside = (event: MouseEvent) => {
+  const handleClickOutside = useCallback((event: MouseEvent) => {
     if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
       toggleModalState("");
     }
-  };
+  }, []);
 
   useEffect(() => {
     // Add event listener when the component mounts
@@ -31,7 +31,8 @@ export default function FriendsListHeader({ total, setTotal }: Props) {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-  }, []);
+  }, [handleClickOutside]);
+
   return (
     <div ref={modalRef} className="flex justify-between items-center p-4">
       <p className="text-[2rem]">친구 {total}</p>

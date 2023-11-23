@@ -64,7 +64,7 @@ export default function Chatting({ socket }: { socket: Socket }) {
       setChatList(chatList => [...chatList, newChat]);
     });
     socket.on("disconnected", message => {});
-  }, []);
+  }, [socket, dispatch]);
 
   const sendMessage = (message: string) => {
     socket.emit("sendMessage", {

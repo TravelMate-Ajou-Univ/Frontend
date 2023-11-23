@@ -62,7 +62,7 @@ export default function FriendsListModal({
       setFriendList(response);
     };
     getFriends();
-  }, [page]);
+  }, [page, mode]);
   return (
     <div className="flex flex-col gap-2 justify-center items-center w-[15rem] absolute right-0 bg-white z-10 border-2 rounded-md p-2 mt-4">
       <p className="font-bold ">

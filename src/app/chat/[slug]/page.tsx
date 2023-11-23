@@ -31,7 +31,7 @@ export default function ChatPage() {
     return () => {
       socket.disconnect();
     };
-  }, []);
+  }, [roomId, userName, socket]);
 
   return <Chatting socket={socket} />;
 }

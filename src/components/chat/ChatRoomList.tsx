@@ -23,7 +23,7 @@ export default function ChatRoomList() {
       dispatch(setChatRoom(data));
     };
     getData();
-  }, []);
+  }, [dispatch]);
 
   return (
     <ul className="flex flex-col w-full">
