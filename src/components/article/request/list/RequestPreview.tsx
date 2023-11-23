@@ -54,7 +54,9 @@ export default function RequestPreview({ request }: Props) {
         </section>
       </section>
       {request.comment && (
-        <article className="bg-black/5 border p-2">{request.comment}</article>
+        <article className="bg-black/5 border p-2 whitespace-pre-wrap">
+          {request.comment}
+        </article>
       )}
     </Link>
   );
