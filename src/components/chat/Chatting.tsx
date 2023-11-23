@@ -5,13 +5,13 @@ import GoogleMap from "@/components/googleMap/GoogleMap";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
-import { Socket, io } from "socket.io-client";
+import { Socket } from "socket.io-client";
 import { calculateCenter } from "@/service/googlemap/map";
 import { getAllBookmarks } from "@/service/axios/bookmark";
-import { useSearchParams } from "next/navigation";
 import { useAppSelector } from "@/hooks/redux";
 import { ChatType } from "@/model/chat";
 import OutlinedButton from "../ui/button/OutlinedButton";
+import BookmarkOptionBox from "./BookmarkOptionBox";
 
 type Props = {
   socket: Socket;
@@ -20,13 +20,11 @@ type Props = {
 };
 export default function Chatting({ socket, roomId, roomName }: Props) {
   const { id } = useAppSelector(state => state.userSlice);
-  const params = useSearchParams();
-  // const rooomName = String(params.get("roomName"));
-  // const roomId = String(params.get("roomId"));
   const dispatch = useDispatch();
   const { userName } = useAppSelector(state => state.userSlice);
   const [mapState, setMapState] = useState(false);
   const [chatList, setChatList] = useState<ChatType[]>([]);
+  const [optionsState, setOptionsState] = useState<boolean>(false);
   useEffect(() => {
     const getData = async () => {
       // Todo : 지도에 대한 처리, Message 기록 가져오기
@@ -98,11 +96,19 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
         <div className="w-[50%] h-[40rem] m-2 border-2 rounded-md my-auto relative">
           <GoogleMap modifyState={true} />
           <OutlinedButton
-            className="absolute left-[14rem] top-[0.5rem] z-50 text-sm"
+            onClick={() => {
+              setOptionsState(!optionsState);
+            }}
+            className="absolute left-[14rem] top-[0.5rem] z-20 text-sm"
             size="small"
           >
             북마크 가져오기
           </OutlinedButton>
+          {optionsState ? (
+            <div className="absolute left-[21rem] top-[0.5rem] z-20">
+              <BookmarkOptionBox setOptionsState={setOptionsState} />
+            </div>
+          ) : null}
         </div>
       ) : null}
       <div className="w-[50%] mx-auto mt-2 p-2 border-2 rounded-md">
