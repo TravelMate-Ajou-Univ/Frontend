@@ -25,8 +25,6 @@ export default function ArticleList() {
 
       const data = await getArticleList(page, 10, period, location, word);
 
-      console.log(seasons);
-
       if (!data) return;
       const { count, newArticles } = data;
       setCount(count);

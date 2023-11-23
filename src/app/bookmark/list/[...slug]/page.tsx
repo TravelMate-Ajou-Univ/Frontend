@@ -1,13 +1,9 @@
 "use client";
 
 import Collection from "@/components/Collection";
-import VisibilityButton from "@/components/ui/VisibilityButton";
 import { useAppSelector } from "@/hooks/redux";
 import { setBookmarkCollectionList } from "@/redux/features/bookmarkCollectionListSlice";
-import {
-  getFriendCollectionList,
-  getMyCollectionList
-} from "@/service/axios/bookmark";
+import { getFriendCollectionList } from "@/service/axios/bookmark";
 import { Pagination } from "@mui/material";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -48,10 +44,7 @@ export default function UserBookmarkPage({ params }: Props) {
         <h1 className="font-bold text-2xl text-center my-4">
           {nickname}의 북마크 컬렉션
         </h1>
-        {/* <div className="flex justify-between items-center">
-          <VisibilityButton user={params.slug[0]} scope={params.slug[1]} />
-        </div> */}
-        <div className=" border-4 rounded-md ">
+        <div className=" border-4 rounded-md w-full h-[37rem]">
           <ul className="h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-4">
             {bookmarkCollections.map((bookmarkCollection, index) =>
               index === 12 ? null : (

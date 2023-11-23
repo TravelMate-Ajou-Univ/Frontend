@@ -53,7 +53,7 @@ export default function MyBookmarkPage({ params }: Props) {
           <VisibilityButton user="me" scope={params.slug} />
           <CollectionAddButton />
         </div>
-        <div className=" border-4 rounded-md ">
+        <div className=" border-4 rounded-md h-[37rem]">
           <ul className="h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-4">
             {bookmarkCollections.map((bookmarkCollection, index) =>
               index === 12 ? null : (

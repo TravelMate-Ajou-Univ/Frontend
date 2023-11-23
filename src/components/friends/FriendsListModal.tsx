@@ -40,7 +40,7 @@ export default function FriendsListModal({
         ? await deleteFriend(pk)
         : await acceptAddFriendRequest(pk);
 
-    if (response.status === 201) {
+    if (response.status === 201 || 200) {
       alert(response.data);
       toggleModalState("");
       if (response.statusText === "Created") {
