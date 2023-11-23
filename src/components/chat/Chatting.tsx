@@ -67,6 +67,9 @@ export default function Chatting({ socket }: { socket: Socket }) {
   }, [socket, dispatch]);
 
   const sendMessage = (message: string) => {
+    if (message.length === 0) {
+      return;
+    }
     socket.emit("sendMessage", {
       roomId: roomId,
       userId: id,
