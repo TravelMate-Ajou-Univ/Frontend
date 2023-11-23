@@ -8,6 +8,7 @@ import Chatting from "@/components/chat/Chatting";
 export default function ChatPage() {
   const params = useSearchParams();
   const roomId = String(params.get("roomId"));
+  const roomName = String(params.get("roomName"));
   const { userName } = useAppSelector(state => state.userSlice);
   const socket = io(
     "http://travelmate-chat-env.eba-djvegdyw.ap-northeast-2.elasticbeanstalk.com/",
@@ -33,5 +34,5 @@ export default function ChatPage() {
     };
   }, [roomId, userName, socket]);
 
-  return <Chatting socket={socket} />;
+  return <Chatting socket={socket} roomId={roomId} roomName={roomName} />;
 }

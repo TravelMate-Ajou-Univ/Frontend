@@ -11,12 +11,18 @@ import { getAllBookmarks } from "@/service/axios/bookmark";
 import { useSearchParams } from "next/navigation";
 import { useAppSelector } from "@/hooks/redux";
 import { ChatType } from "@/model/chat";
+import OutlinedButton from "../ui/button/OutlinedButton";
 
-export default function Chatting({ socket }: { socket: Socket }) {
+type Props = {
+  socket: Socket;
+  roomId: string;
+  roomName: string;
+};
+export default function Chatting({ socket, roomId, roomName }: Props) {
   const { id } = useAppSelector(state => state.userSlice);
   const params = useSearchParams();
-  const rooomName = String(params.get("roomName"));
-  const roomId = String(params.get("roomId"));
+  // const rooomName = String(params.get("roomName"));
+  // const roomId = String(params.get("roomId"));
   const dispatch = useDispatch();
   const { userName } = useAppSelector(state => state.userSlice);
   const [mapState, setMapState] = useState(false);
@@ -59,7 +65,8 @@ export default function Chatting({ socket }: { socket: Socket }) {
     socket.on("message", data => {
       const newChat: ChatType = {
         message: data.message,
-        nickname: data.nickname
+        nickname: data.nickname,
+        time: data.time
       };
       setChatList(chatList => [...chatList, newChat]);
     });
@@ -73,8 +80,11 @@ export default function Chatting({ socket }: { socket: Socket }) {
     socket.emit("sendMessage", {
       roomId: roomId,
       userId: id,
+
       nickname: userName,
       message: message
+      // nickname: userName,
+      // content: message
     });
   };
 
@@ -85,12 +95,18 @@ export default function Chatting({ socket }: { socket: Socket }) {
   return (
     <section className="w-[90%] mx-auto flex justify-center mt-4">
       {mapState ? (
-        <div className="w-[50%] h-[40rem] m-2 border-2 rounded-md my-auto">
+        <div className="w-[50%] h-[40rem] m-2 border-2 rounded-md my-auto relative">
           <GoogleMap modifyState={true} />
+          <OutlinedButton
+            className="absolute left-[14rem] top-[0.5rem] z-50 text-sm"
+            size="small"
+          >
+            북마크 가져오기
+          </OutlinedButton>
         </div>
       ) : null}
       <div className="w-[50%] mx-auto mt-2 p-2 border-2 rounded-md">
-        <ChatRoomHeader roomName={rooomName} toggleMapState={toggleMapState} />
+        <ChatRoomHeader roomName={roomName} toggleMapState={toggleMapState} />
         <ChatList chatList={chatList} />
         <ChatForm sendMessage={sendMessage} />
       </div>

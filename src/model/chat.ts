@@ -9,4 +9,5 @@ export type ChatRoomType = {
 export type ChatType = {
   message: string;
   nickname: string;
+  time: string;
 };

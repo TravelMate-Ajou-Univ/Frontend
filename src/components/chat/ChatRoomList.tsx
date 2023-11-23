@@ -31,7 +31,7 @@ export default function ChatRoomList() {
         <li key={index}>
           <Link
             href={{
-              pathname: `/chat/${chatroom.name}`,
+              pathname: `/chat/chatting`,
               query: {
                 roomId: chatroom.roomId,
                 roomName: chatroom.name

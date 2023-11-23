@@ -2,22 +2,42 @@ import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import { ChatType } from "@/model/chat";
 import { useAppSelector } from "@/hooks/redux";
+import { useEffect, useRef } from "react";
 
 type Props = {
   chatList: ChatType[];
 };
 export default function ChatList({ chatList }: Props) {
   const { userName } = useAppSelector(state => state.userSlice);
+  const scrollableContainerRef = useRef<HTMLUListElement>(null);
+  const scrollableContainer = scrollableContainerRef.current;
+
+  const scrollToBottom = () => {
+    if (scrollableContainer) {
+      scrollableContainer.scrollTop = scrollableContainer.scrollHeight;
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [chatList]);
+
   const pre_chat: string = "";
   return (
     <section className="w-full h-[33rem]">
-      <ul className="flex flex-col border-2 rounded-md bg-white h-full relative">
+      <ul
+        ref={scrollableContainerRef}
+        className="flex flex-col border-2 rounded-md bg-white h-full relative overflow-y-auto "
+      >
         {chatList.map((chat: ChatType, index: number) =>
           chat.nickname === userName ? (
             <li key={index} className="justify-end flex items-end">
-              <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-yellow-300">
-                {chat.message}
-              </p>
+              <div className="flex">
+                <p className="self-end text-xs mb-2">time</p>
+                <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-yellow-300">
+                  {chat.message}
+                </p>
+              </div>
               <div className="flex items-center">
                 <Image
                   src={defaultProfileImg}
@@ -33,15 +53,21 @@ export default function ChatList({ chatList }: Props) {
               <div className="flex items-center">
                 <Image
                   src={defaultProfileImg}
-                  className="bg-gray-100 rounded-full"
+                  className="bg-gray-100 rounded-full m-1"
                   width={30}
                   height={30}
                   alt="my Image"
                 />
               </div>
-              <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-gray-200">
-                {chat.message}
-              </p>
+              <div>
+                <p className="text-sm ml-1">{chat.nickname}</p>
+                <div className="flex">
+                  <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-gray-200">
+                    {chat.message}
+                  </p>
+                  <p className="self-end text-xs mb-2">time</p>
+                </div>
+              </div>
             </li>
           )
         )}
