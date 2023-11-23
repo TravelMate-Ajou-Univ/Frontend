@@ -12,6 +12,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { ChatType } from "@/model/chat";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import BookmarkOptionBox from "./BookmarkOptionBox";
+import { CalculateDelayTime } from "@/service/time";
 
 type Props = {
   socket: Socket;
@@ -56,10 +57,6 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
 
     getData();
 
-    // Todo : 관리자 메시지에 대한 처리
-    // socket.on("adminMessage", message => {
-    // console.log(message);
-    // });
     socket.on("message", data => {
       console.log(data);
 
@@ -67,7 +64,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
         userId: data.userId,
         nickname: data.nickname,
         content: data.content,
-        createdAt: data.createdAt
+        createdAt: CalculateDelayTime(data.createdAt)
       };
       setChatList(chatList => [...chatList, newChat]);
     });
@@ -112,7 +109,14 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
         </div>
       ) : null}
       <div className="w-[50%] mx-auto mt-2 p-2 border-2 rounded-md">
-        <ChatRoomHeader roomName={roomName} toggleMapState={toggleMapState} />
+        <ChatRoomHeader
+          socket={socket}
+          userId={id}
+          roomId={roomId}
+          nickname={userName}
+          roomName={roomName}
+          toggleMapState={toggleMapState}
+        />
         <ChatList chatList={chatList} />
         <ChatForm sendMessage={sendMessage} />
       </div>

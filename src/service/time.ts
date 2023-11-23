@@ -1,4 +1,4 @@
-export const CalculateTime = (time: string): string => {
+export const CalculateDelayTime = (time: string): string => {
   const currentDate = new Date();
   const prevDate = new Date(time);
   const timeDifference = currentDate.getTime() - prevDate.getTime();
@@ -23,3 +23,7 @@ export const CalculateTime = (time: string): string => {
     return `${yearsDifference} 년 전`;
   }
 };
+
+// export CalculateTime = (time: string): string => {
+
+// }

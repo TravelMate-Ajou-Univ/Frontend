@@ -32,7 +32,22 @@ export default function ChatList({ chatList }: Props) {
         className="flex flex-col border-2 rounded-md bg-white h-full relative overflow-y-auto "
       >
         {chatList.map((chat: ChatType, index: number) =>
-          chat.nickname === userName ? (
+          chat.userId === 0 ? (
+            <li key={index} className="justify-center flex items-center">
+              <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-gray-300">
+                {chat.content}
+              </p>
+              <div className="flex items-center">
+                <Image
+                  src={defaultProfileImg}
+                  className="bg-gray-100 rounded-full m-2"
+                  width={30}
+                  height={30}
+                  alt="my Image"
+                />
+              </div>
+            </li>
+          ) : chat.nickname === userName ? (
             <li key={index} className="justify-end flex items-end">
               <div className="flex">
                 <p className="self-end text-xs mb-2">{chat.createdAt}</p>

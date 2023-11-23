@@ -11,8 +11,8 @@ export default function ChatPage() {
   const roomName = String(params.get("roomName"));
   const { userName } = useAppSelector(state => state.userSlice);
   const socket = io(
-    // "http://travelmate-chat-env.eba-djvegdyw.ap-northeast-2.elasticbeanstalk.com/",
-    "http://172.16.0.216:8080",
+    "http://travelmate-chat-env.eba-djvegdyw.ap-northeast-2.elasticbeanstalk.com/",
+    // "http://172.16.0.216:8080",
     {
       path: "/socket.io",
       transports: ["websocket"]

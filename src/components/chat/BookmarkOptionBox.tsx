@@ -14,10 +14,12 @@ type CollectionType = {
 };
 
 export default function BookmarkOptionBox({ setOptionsState }: Props) {
-  const [selectedCollection, setSelectedCollection] = useState<CollectionType>({
-    name: "북마크 컬렉션",
-    id: 0
-  });
+  // const [selectedCollection, setSelectedCollection] = useState<CollectionType>({
+  //   name: "북마크 컬렉션",
+  //   id: 0
+  // });
+  const [selectedCollection, setSelectedCollection] =
+    useState<string>("북마크 컬렉션");
   const [collectionNameList, setCollectionNameList] = useState<
     CollectionType[]
   >([]);
@@ -43,22 +45,20 @@ export default function BookmarkOptionBox({ setOptionsState }: Props) {
     getCollections();
   }, []);
 
-  useEffect(() => {
-    const getBookmarks = async (id: number) => {
-      const data: BookmarkType[] = await getAllBookmarks(id);
-      setBookmarks(data);
-    };
-    getBookmarks(selectedCollection.id);
-  }, [selectedCollection.id]);
+  // useEffect(() => {
+  //   const getBookmarks = async (id: number) => {
+  //     const data: BookmarkType[] = await getAllBookmarks(id);
+  //     setBookmarks(data);
+  //   };
+  //   getBookmarks(selectedCollection);
+  // }, [selectedCollection]);
 
   return (
     <div className="z-20 w-[10rem] border-2 rounded-md bg-white flex flex-col justify-center items-center gap-2 p-2">
       <DropDown
-        selected={selectedCollection.name}
+        selected={selectedCollection}
         list={collectionNameList.map(data => data.name)}
-        setSelected={(target: string) =>
-          setSelectedCollection({ name: target, id: 1 })
-        }
+        setSelected={(target: string) => setSelectedCollection(target)}
       />
       <button className="border-2 text-xs">북마크</button>
       <div className="flex gap-4">
