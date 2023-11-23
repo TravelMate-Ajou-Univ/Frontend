@@ -46,7 +46,12 @@ export default function FriendsListContainer({
           />
           <p className="text-xl mx-20">{friend.nickname}</p>
           <Link
-            href={`/bookmark/list/${friend.id}/all`}
+            href={{
+              pathname: `/bookmark/list/${friend.id}`,
+              query: {
+                nickname: friend.nickname
+              }
+            }}
             className="absolute top-10 right-2"
           >
             <p className="text-sm p-2 rounded-md transition-all duration-500 ease-in-out hover:bg-secondary">
