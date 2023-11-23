@@ -15,7 +15,7 @@ export default function OutlinedButton({
     if (size === "mid") {
       return "px-4 py-1";
     } else {
-      return "px-2 py-0.5";
+      return "px-2 py-0.5 text-sm";
     }
   };
   return (

@@ -93,11 +93,7 @@ export default function FriendsAddContainer({ members, setMembers }: Props) {
             <p className="text-sm text-center truncate hover:text-clip">
               {member.nickname}
             </p>
-            <OutlinedButton
-              onClick={() => subMember(member)}
-              className=" w-[3rem] "
-              size="small"
-            >
+            <OutlinedButton onClick={() => subMember(member)} size="small">
               취소
             </OutlinedButton>
           </li>

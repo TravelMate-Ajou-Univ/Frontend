@@ -24,6 +24,17 @@ export const CalculateDelayTime = (time: string): string => {
   }
 };
 
-// export CalculateTime = (time: string): string => {
+export const CalculateAmPmTime = (time: string): string => {
+  const date: Date = new Date(time);
 
-// }
+  const currentHour: number = date.getHours();
+  const currentMinute: number = date.getMinutes();
+
+  console.log(currentHour);
+
+  if (currentHour >= 12) {
+    return `오후 ${currentHour - 12}시 ${currentMinute}분`;
+  } else {
+    return `오전 ${currentHour}시 ${currentMinute}분`;
+  }
+};

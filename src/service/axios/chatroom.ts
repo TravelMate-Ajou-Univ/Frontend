@@ -19,8 +19,8 @@ export const getMyChatRooms = async (): Promise<ChatRoomType[]> => {
         roomId: data.chatRoom._id,
         name: data.chatRoom.name,
         memberIds: data.chatRoom.memberIds,
-        lastChat: data.chatRoom.lastChat,
-        lastChatTime: data.chatRoom.created_at
+        lastChat: data.lastChat.content,
+        lastChatTime: data.lastChat.createdAt
       };
 
       return chatroom;

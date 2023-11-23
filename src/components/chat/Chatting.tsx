@@ -12,7 +12,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { ChatType } from "@/model/chat";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import BookmarkOptionBox from "./BookmarkOptionBox";
-import { CalculateDelayTime } from "@/service/time";
+import { CalculateAmPmTime, CalculateDelayTime } from "@/service/time";
 
 type Props = {
   socket: Socket;
@@ -58,13 +58,12 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
     getData();
 
     socket.on("message", data => {
-      console.log(data);
-
+      CalculateAmPmTime(data.createdAt);
       const newChat: ChatType = {
         userId: data.userId,
         nickname: data.nickname,
         content: data.content,
-        createdAt: CalculateDelayTime(data.createdAt)
+        createdAt: CalculateAmPmTime(data.createdAt)
       };
       setChatList(chatList => [...chatList, newChat]);
     });

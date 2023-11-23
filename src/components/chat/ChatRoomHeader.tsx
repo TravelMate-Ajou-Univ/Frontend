@@ -38,7 +38,11 @@ export default function ChatRoomHeader({
   };
 
   const addMemberHandler = () => {
-    console.log(members);
+    socket.emit("inviteFriend", {
+      roomId,
+      nickname,
+      members
+    });
   };
   return (
     <div className="flex justify-between items-center p-2">
@@ -51,7 +55,11 @@ export default function ChatRoomHeader({
           <SettingIcon />
         </div>
         {settingState ? (
-          <div className="absolute left-[3rem] -top-[0.5rem] w-[12rem] flex flex-col items-center gap-2 border-2 rounded-md p-2">
+          <div className="absolute left-[3rem] -top-[0.5rem] w-[13rem] gap-2 border-2 rounded-md p-2">
+            <div>
+              <p>채팅방 멤버들</p>
+              <ul></ul>
+            </div>
             {addModalState ? (
               <div>
                 <FriendsAddContainer
@@ -66,17 +74,23 @@ export default function ChatRoomHeader({
                 </div>
               </div>
             ) : (
-              <OutlinedButton
-                size="small"
-                onClick={() => setAddModalState(true)}
-                className=""
-              >
-                멤버 추가하기
-              </OutlinedButton>
+              <div className=" flex flex-col items-center gap-2">
+                <OutlinedButton
+                  size="small"
+                  onClick={() => setAddModalState(true)}
+                  className=""
+                >
+                  멤버 추가하기
+                </OutlinedButton>
+                <OutlinedButton
+                  size="small"
+                  onClick={exitChatRoom}
+                  className=""
+                >
+                  채팅방 나가기
+                </OutlinedButton>
+              </div>
             )}
-            <OutlinedButton size="small" onClick={exitChatRoom} className="">
-              채팅방 나가기
-            </OutlinedButton>
           </div>
         ) : null}
       </div>

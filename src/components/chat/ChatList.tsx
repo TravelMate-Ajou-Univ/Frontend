@@ -22,8 +22,6 @@ export default function ChatList({ chatList }: Props) {
     scrollToBottom();
   }, [chatList]);
 
-  console.log(chatList);
-
   const pre_chat: string = "";
   return (
     <section className="w-full h-[33rem]">
@@ -34,24 +32,15 @@ export default function ChatList({ chatList }: Props) {
         {chatList.map((chat: ChatType, index: number) =>
           chat.userId === 0 ? (
             <li key={index} className="justify-center flex items-center">
-              <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-gray-300">
+              <p className="border-2 rounded-md m-1 p-2 w-[15rem] text-sm text-white font-thin break-words bg-gray-400">
                 {chat.content}
               </p>
-              <div className="flex items-center">
-                <Image
-                  src={defaultProfileImg}
-                  className="bg-gray-100 rounded-full m-2"
-                  width={30}
-                  height={30}
-                  alt="my Image"
-                />
-              </div>
             </li>
           ) : chat.nickname === userName ? (
             <li key={index} className="justify-end flex items-end">
               <div className="flex">
                 <p className="self-end text-xs mb-2">{chat.createdAt}</p>
-                <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-yellow-300">
+                <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[12rem] break-words bg-yellow-300">
                   {chat.content}
                 </p>
               </div>
@@ -79,7 +68,7 @@ export default function ChatList({ chatList }: Props) {
               <div>
                 <p className="text-sm ml-1">{chat.nickname}</p>
                 <div className="flex">
-                  <p className="border-2 rounded-md m-1 p-2 w-[15rem] break-words bg-gray-200">
+                  <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[12rem] break-words bg-gray-200">
                     {chat.content}
                   </p>
                   <p className="self-end text-xs mb-2">{chat.createdAt}</p>
