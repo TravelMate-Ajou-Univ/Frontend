@@ -29,7 +29,7 @@ export default function Comment({ requestUser, requestComment }: Props) {
             <p>{requestUser?.userName}</p>
           </div>
         )}
-        <p className="mt-3">{requestComment}</p>
+        <p className="mt-3 whitespace-pre-wrap">{requestComment}</p>
       </div>
     </section>
   );
