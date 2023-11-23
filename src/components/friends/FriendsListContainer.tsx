@@ -1,11 +1,13 @@
-import { FriendType } from "@/model/friend";
+import { FriendWithPkType } from "@/model/friend";
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import { Pagination } from "@mui/material";
 import { deleteFriend } from "@/service/axios/friends";
+import Link from "next/link";
+import BookmarkCollectionIcon from "../ui/icons/BookmarkCollectionIcon";
 
 type Props = {
-  friends: FriendType[];
+  friends: FriendWithPkType[];
   setPage: (page: number) => void;
   total: number;
   setTotal: (total: number) => void;
@@ -19,8 +21,12 @@ export default function FriendsListContainer({
 }: Props) {
   const onClick = async (id: number) => {
     const response = await deleteFriend(id);
-    // Todo : error 처리
-    setTotal(total - 1);
+    if (response.statusText === "OK") {
+      alert(response.data);
+      setTotal(total - 1);
+    } else {
+      alert(`실패하였습니다.`);
+    }
   };
   return (
     <ul className="relative border-2 h-[37rem]">
@@ -39,8 +45,21 @@ export default function FriendsListContainer({
             priority
           />
           <p className="text-xl mx-20">{friend.nickname}</p>
+          <Link
+            href={{
+              pathname: `/bookmark/list/${friend.id}`,
+              query: {
+                nickname: friend.nickname
+              }
+            }}
+            className="absolute top-10 right-2"
+          >
+            <p className="text-sm p-2 rounded-md transition-all duration-500 ease-in-out hover:bg-secondary">
+              북마크 보기
+            </p>
+          </Link>
           <button
-            onClick={() => onClick(friend.id)}
+            onClick={() => onClick(friend.pk)}
             className="text-sm absolute top-2 right-2 text-red-500"
           >
             삭제

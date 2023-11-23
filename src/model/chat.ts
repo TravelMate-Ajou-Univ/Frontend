@@ -5,3 +5,8 @@ export type ChatRoomType = {
   lastChat: string;
   lastChatTime: string;
 };
+
+export type ChatType = {
+  message: string;
+  nickname: string;
+};

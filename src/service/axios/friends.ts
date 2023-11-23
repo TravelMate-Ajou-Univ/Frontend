@@ -1,15 +1,15 @@
-import { FriendType, FriendsListType } from "./../../model/friend";
+import {
+  FriendType,
+  FriendWithPkType,
+  FriendsListType,
+  FriendsWithPkListType
+} from "./../../model/friend";
 import { api } from "./api";
 
-type FriendsListProps = {
-  page: number;
-  limit: number;
-};
-
-export const getMyFriendsList = async ({
-  page,
-  limit
-}: FriendsListProps): Promise<FriendsListType> => {
+export const getMyFriendsList = async (
+  page: number,
+  limit: number
+): Promise<FriendsWithPkListType> => {
   try {
     const response = await api({
       method: "get",
@@ -20,8 +20,9 @@ export const getMyFriendsList = async ({
       }
     });
     const data = response.data;
-    const friends: FriendType[] = data.friends.map((data: any) => {
+    const friends: FriendWithPkType[] = data.friends.map((data: any) => {
       return {
+        pk: data.id,
         id: data.friend.id,
         nickname: data.friend.nickname,
         profileImageId: data.friend.profileImageId
@@ -41,23 +42,115 @@ export const getMyFriendsList = async ({
   }
 };
 
-export const searchUser = async (id: string): Promise<FriendType[]> => {
+export const searchUser = async (nickname: string): Promise<FriendType[]> => {
   try {
     const response = await api({
       method: "get",
-      url: "/users",
+      url: "/users/info",
       params: {
-        userIds: id
+        nickname: nickname
       }
     });
-    return response.data;
+    const datas = response.data;
+
+    const friends: FriendType[] = datas.map((data: any) => {
+      return {
+        id: data.id,
+        nickname: data.nickname,
+        profileImageId: data.profileImageId
+      };
+    });
+    return friends;
   } catch (error) {
-    console.error(error);
     return [];
   }
 };
 
-export const addFriend = async (id: number) => {
+export const viewReceivedFriendRequest = async (
+  page: number,
+  limit: number
+): Promise<FriendsWithPkListType> => {
+  try {
+    const response = await api({
+      method: "get",
+      url: "/users/me/friend-invitation/received",
+      params: {
+        page,
+        limit
+      }
+    });
+    const datas = response.data;
+
+    const friends: FriendWithPkType[] = datas.friends.map((data: any) => {
+      return {
+        pk: data.id,
+        id: data.user.id,
+        nickname: data.user.nickname,
+        profileImageId: data.user.profileImageId
+      };
+    });
+
+    return {
+      friends,
+      count: datas.count
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      friends: [],
+      count: 0
+    };
+  }
+};
+
+export const viewSentFriendRequest = async (
+  page: number,
+  limit: number
+): Promise<FriendsWithPkListType> => {
+  try {
+    const response = await api({
+      method: "get",
+      url: "/users/me/friend-invitation/sent",
+      params: {
+        page,
+        limit
+      }
+    });
+    const datas = response.data;
+
+    const friends: FriendWithPkType[] = datas.friends.map((data: any) => {
+      return {
+        pk: data.id,
+        id: data.friend.id,
+        nickname: data.friend.nickname,
+        profileImageId: data.friend.profileImageId
+      };
+    });
+    return {
+      friends,
+      count: datas.count
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      friends: [],
+      count: 0
+    };
+  }
+};
+
+export const acceptAddFriendRequest = async (pk: number) => {
+  const response = await api({
+    method: "post",
+    url: `/users/me/friend-invitation/received/${pk}/accept`,
+    data: {
+      id: pk
+    }
+  });
+  return response;
+};
+
+export const sendAddFriendRequest = async (id: number) => {
   const response = await api({
     method: "post",
     url: "/users/invite-friend",
@@ -68,10 +161,10 @@ export const addFriend = async (id: number) => {
   return response;
 };
 
-export const deleteFriend = async (id: number) => {
+export const deleteFriend = async (pk: number) => {
   const response = await api({
     method: "delete",
-    url: `users/me/friend/${id}`
+    url: `users/me/friend/${pk}`
   });
   return response;
 };

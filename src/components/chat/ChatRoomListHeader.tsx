@@ -18,10 +18,7 @@ export default function ChatRoomListHeader() {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await getMyFriendsList({
-        page: page,
-        limit: 5
-      });
+      const res = await getMyFriendsList(page, 5);
       setFriends(res.friends);
       setTotal(res.count);
     };

@@ -2,19 +2,20 @@
 
 import FriendsListContainer from "@/components/friends/FriendsListContainer";
 import FriendsListHeader from "@/components/friends/FriendsListHeader";
-import { FriendType } from "@/model/friend";
+import { FriendWithPkType } from "@/model/friend";
 import { getMyFriendsList } from "@/service/axios/friends";
 import { useEffect, useState } from "react";
 
 export default function FriendsListPage() {
   const [page, setPage] = useState(1);
-  const [friends, setFriends] = useState<FriendType[]>([]);
+  const [friends, setFriends] = useState<FriendWithPkType[]>([]);
   const [total, setTotal] = useState(0);
   const limit = 12;
 
   useEffect(() => {
     const getFriends = async () => {
-      const data = await getMyFriendsList({ page, limit });
+      const data = await getMyFriendsList(page, limit);
+
       setFriends(data.friends);
       setTotal(data.count);
     };
@@ -22,7 +23,7 @@ export default function FriendsListPage() {
   }, [page, total]);
   return (
     <section className="flex flex-col w-[70%] m-auto">
-      <FriendsListHeader total={total} />
+      <FriendsListHeader total={total} setTotal={setTotal} />
       <FriendsListContainer
         friends={friends}
         setPage={setPage}

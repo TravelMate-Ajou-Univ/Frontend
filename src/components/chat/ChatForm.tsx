@@ -13,13 +13,21 @@ export default function ChatForm({ sendMessage }: Props) {
       className="flex gap-2"
       onSubmit={(e: FormEvent<HTMLFormElement>) => e.preventDefault()}
     >
-      <textarea
+      <input
+        type="text"
         className="border rounded-md  flex-grow p-2"
         placeholder="Message.."
         value={message}
         onChange={e => setMessage(e.target.value)}
       />
-      <FilledButton onClick={() => sendMessage(message)}>전송</FilledButton>
+      <FilledButton
+        onClick={() => {
+          setMessage("");
+          sendMessage(message);
+        }}
+      >
+        전송
+      </FilledButton>
     </form>
   );
 }
