@@ -1,11 +1,18 @@
 "use client";
 import { useAppSelector } from "@/hooks/redux";
 import { BookmarkType, PinType } from "@/model/bookmark";
-import { addPins, subBookmarks, subPins } from "@/redux/features/mapSlice";
+import {
+  addPins,
+  initBookmarks,
+  initPins,
+  subBookmarks,
+  subPins
+} from "@/redux/features/mapSlice";
 import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
 import Script from "next/script";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import { BeatLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 declare global {
   interface Window {
@@ -47,8 +54,17 @@ export default function GoogleMap({ modifyState }: Props) {
       window.initMap();
     } else if (center.latitude == 0 && center.longitude == 0) {
       console.log("wait");
+      <BeatLoader size={8} color="red" />;
     }
   }, [center, modifyState, pins]);
+
+  // page를 나갈 때 pins, bookmarks 초기화.
+  useEffect(() => {
+    return () => {
+      dispatch(initPins());
+      dispatch(initBookmarks());
+    };
+  }, [dispatch]);
 
   // 북마크 컬렉션에 있는 북마크들 marker로 표시
   const setMarker = (initmap: google.maps.Map) => {

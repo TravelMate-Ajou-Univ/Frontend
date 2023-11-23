@@ -25,7 +25,7 @@ const mapSlice = createSlice({
     setCenter: (state, action: PayloadAction<LocationType>) => {
       state.center = action.payload;
     },
-    setPins: state => {
+    initPins: state => {
       state.pins = [];
     },
     addPins: (state, action: PayloadAction<PinType>) => {
@@ -37,6 +37,9 @@ const mapSlice = createSlice({
           pin.latitude !== action.payload.latitude &&
           pin.longitude !== action.payload.longitude
       );
+    },
+    initBookmarks: state => {
+      state.bookmarks = [];
     },
     setBookmarks: (state, action: PayloadAction<BookmarkType[]>) => {
       state.bookmarks = [...action.payload];
@@ -55,9 +58,10 @@ const mapSlice = createSlice({
 
 export const {
   setCenter,
-  setPins,
+  initPins,
   addPins,
   subPins,
+  initBookmarks,
   setBookmarks,
   subBookmarks,
   setDeleteBookmarks
