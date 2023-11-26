@@ -26,15 +26,27 @@ export const CalculateDelayTime = (time: string): string => {
 
 export const CalculateAmPmTime = (time: string): string => {
   const date: Date = new Date(time);
-
   const currentHour: number = date.getHours();
   const currentMinute: number = date.getMinutes();
-
-  console.log(currentHour);
 
   if (currentHour >= 12) {
     return `오후 ${currentHour - 12}시 ${currentMinute}분`;
   } else {
     return `오전 ${currentHour}시 ${currentMinute}분`;
+  }
+};
+
+export const CheckChatTime = (
+  prevTime: string,
+  targetTime: string
+): boolean => {
+  const prevDate = new Date(prevTime);
+  const targetDate = new Date(targetTime);
+  const timeDifference = targetDate.getTime() - prevDate.getTime();
+  const minutesDifference = Math.floor(timeDifference / (1000 * 60));
+  if (minutesDifference <= 1) {
+    return false;
+  } else {
+    return true;
   }
 };

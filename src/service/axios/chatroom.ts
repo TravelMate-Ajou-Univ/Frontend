@@ -20,9 +20,9 @@ export const getMyChatRooms = async (): Promise<ChatRoomType[]> => {
         name: data.chatRoom.name,
         memberIds: data.chatRoom.memberIds,
         lastChat: data.lastChat.content,
-        lastChatTime: data.lastChat.createdAt
+        lastChatTime: data.lastChat.createdAt,
+        unReadChat: data.unReadCount
       };
-
       return chatroom;
     });
 
@@ -47,13 +47,13 @@ export const makeChatRoom = async ({
       }
     });
     const data = response.data;
-
     const newChatRoom: ChatRoomType = {
       roomId: data.chatRoom._id,
       name: data.chatRoom.name,
       memberIds: data.chatRoom.memberIds,
-      lastChat: "",
-      lastChatTime: data.chatRoom.created_at
+      lastChat: data.lastChat.content,
+      lastChatTime: data.lastChat.createdAt,
+      unReadChat: 0
     };
     return newChatRoom;
   } catch (error) {
@@ -63,7 +63,8 @@ export const makeChatRoom = async ({
       name: "",
       memberIds: [],
       lastChat: "",
-      lastChatTime: ""
+      lastChatTime: "",
+      unReadChat: 0
     };
   }
 };

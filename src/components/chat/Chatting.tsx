@@ -9,10 +9,11 @@ import { Socket } from "socket.io-client";
 import { calculateCenter } from "@/service/googlemap/map";
 import { getAllBookmarks } from "@/service/axios/bookmark";
 import { useAppSelector } from "@/hooks/redux";
-import { ChatType } from "@/model/chat";
+import { ChatType, ChatWithVisibilityType } from "@/model/chat";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import BookmarkOptionBox from "./BookmarkOptionBox";
-import { CalculateAmPmTime, CalculateDelayTime } from "@/service/time";
+import { CalculateAmPmTime } from "@/service/time";
+import { checkVisibility } from "@/service/chat";
 
 type Props = {
   socket: Socket;
@@ -24,15 +25,16 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
   const dispatch = useDispatch();
   const { userName } = useAppSelector(state => state.userSlice);
   const [mapState, setMapState] = useState(false);
-  const [chatList, setChatList] = useState<ChatType[]>([]);
+  const [chatList, setChatList] = useState<ChatWithVisibilityType[]>([]);
   const [optionsState, setOptionsState] = useState<boolean>(false);
+
+  // 지도, chat기록 데이터 가져오기
   useEffect(() => {
     const getData = async () => {
       // Todo : 지도에 대한 처리, Message 기록 가져오기
       const data: any[] = [];
 
       dispatch(setBookmarks(data));
-
       // bookmark들이 있다면 지도 center을 bookmark들의 가운데로
       // 없다면 내 위치를 center로 설정
       if (data.length === 0) {
@@ -53,22 +55,87 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       } else {
         dispatch(setCenter(calculateCenter(data)));
       }
+
+      // chat Data
+      const response: ChatType[] = [
+        {
+          userId: 1,
+          nickname: "test1",
+          content: "test chat 1",
+          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+        },
+        {
+          userId: 1,
+          nickname: "test1",
+          content: "test chat 2",
+          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+        },
+        {
+          userId: 2,
+          nickname: "test2",
+          content: "test chat 3",
+          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+        },
+        {
+          userId: 2,
+          nickname: "test2",
+          content: "test chat 4",
+          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+        },
+        {
+          userId: 1,
+          nickname: "test1",
+          content: "test chat 5",
+          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+        }
+      ];
+
+      const chatWithVisibilityList: ChatWithVisibilityType[] =
+        checkVisibility(response);
+
+      setChatList(chatWithVisibilityList);
     };
-
     getData();
+  }, [dispatch]);
 
+  useEffect(() => {
     socket.on("message", data => {
-      CalculateAmPmTime(data.createdAt);
-      const newChat: ChatType = {
-        userId: data.userId,
-        nickname: data.nickname,
-        content: data.content,
-        createdAt: CalculateAmPmTime(data.createdAt)
-      };
+      let newChat: ChatWithVisibilityType;
+      const time = CalculateAmPmTime(data.createdAt);
+
+      if (chatList[chatList.length - 1].nickname !== data.nickname) {
+        newChat = {
+          userId: data.userId,
+          nickname: data.nickname,
+          content: data.content,
+          createdAt: time,
+          timeVisibility: true,
+          userVisibility: true
+        };
+      } else if (chatList[chatList.length - 1].createdAt !== time) {
+        newChat = {
+          userId: data.userId,
+          nickname: data.nickname,
+          content: data.content,
+          createdAt: time,
+          timeVisibility: true,
+          userVisibility: false
+        };
+      } else {
+        newChat = {
+          userId: data.userId,
+          nickname: data.nickname,
+          content: data.content,
+          createdAt: time,
+          timeVisibility: false,
+          userVisibility: false
+        };
+      }
+
       setChatList(chatList => [...chatList, newChat]);
     });
     socket.on("disconnected", message => {});
-  }, [socket, dispatch]);
+  }, [socket]);
 
   const sendMessage = (content: string) => {
     if (content.length === 0) {

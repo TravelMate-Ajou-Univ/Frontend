@@ -6,18 +6,23 @@ type Props = {
   setSelected: (selected: string) => void;
   isSearchWord?: boolean;
   isKeyword?: boolean;
+  size?: "small" | "mid";
 };
 
 function DropDownList({
   list,
   setSelected,
   isSearchWord = false,
-  isKeyword = false
+  isKeyword = false,
+  size = "mid"
 }: Props) {
   return (
     <ul
-      className={`absolute left-0 w-full border rounded-md bg-white z-50 
-      ${isSearchWord ? "top-0" : "top-10"}`}
+      className={
+        `absolute left-0 w-full border rounded-md bg-white z-50 
+      ${isSearchWord ? "top-0" : "top-10"}` +
+        (size == "small" ? " max-h-[7rem] h-fit overflow-y-auto" : "")
+      }
     >
       {list.map((item, index) => (
         <li
