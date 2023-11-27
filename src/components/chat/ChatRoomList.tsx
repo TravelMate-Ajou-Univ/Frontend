@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { getMyChatRooms } from "@/service/axios/chatroom";
 import { setChatRoom } from "@/redux/features/chatRoomSlice";
-import { CalculateTime } from "@/service/time";
+import { CalculateDelayTime } from "@/service/time";
 
 export default function ChatRoomList() {
   const dispatch = useDispatch();
@@ -31,7 +31,7 @@ export default function ChatRoomList() {
         <li key={index}>
           <Link
             href={{
-              pathname: `/chat/${chatroom.name}`,
+              pathname: `/chat/chatting`,
               query: {
                 roomId: chatroom.roomId,
                 roomName: chatroom.name
@@ -39,7 +39,7 @@ export default function ChatRoomList() {
             }}
             className="flex items-center border-b-2 h-[8rem] px-4 py-2"
           >
-            <div className="w-[20%]">
+            <div className="w-[10rem]">
               {chatroom.memberIds.length === 2 ? (
                 <Image
                   src={defaultProfileImg}
@@ -60,14 +60,21 @@ export default function ChatRoomList() {
                 />
               )}
             </div>
-            <div className="w-[80%] h-full">
+            <div className="w-full h-full">
               <div className="flex justify-between">
                 <p className="text-xl">{chatroom.name}</p>
                 <p className="text-xs font-thin">
-                  {CalculateTime(chatroom.lastChatTime)}
+                  {CalculateDelayTime(chatroom.lastChatTime)}
                 </p>
               </div>
-              <p className="py-2">{chatroom.lastChat}</p>
+              <div className="flex justify-between gap-4">
+                <p className="py-2">{chatroom.lastChat}</p>
+                {chatroom.unReadChat === 0 ? null : (
+                  <p className="w-6 h-6 rounded-full bg-red-400 text-white text-sm text-center flex items-center justify-center">
+                    {chatroom.unReadChat}
+                  </p>
+                )}
+              </div>
             </div>
           </Link>
         </li>

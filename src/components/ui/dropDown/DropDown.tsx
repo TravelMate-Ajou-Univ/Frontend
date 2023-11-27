@@ -9,6 +9,7 @@ type Props = {
   setSelected: (selected: string) => void;
   disabled?: boolean;
   border?: boolean;
+  size?: "small" | "mid";
 };
 
 export default function DropDown({
@@ -16,7 +17,8 @@ export default function DropDown({
   list,
   setSelected,
   disabled = false,
-  border = true
+  border = true,
+  size = "mid"
 }: Props) {
   const [isOpen, setIsOpen] = useState(false);
   const dropDownRef = useOutsideRef(() => setIsOpen(false));
@@ -30,7 +32,8 @@ export default function DropDown({
     <div
       className={
         "flex justify-between items-center w-40 h-9 px-2 rounded-full cursor-pointer relative" +
-        (border ? " border" : "")
+        (border ? " border" : "") +
+        (size == "small" ? " text-sm " : "")
       }
       onClick={handleOpen}
       ref={dropDownRef}
@@ -41,7 +44,9 @@ export default function DropDown({
       <span>
         <DownIcon />
       </span>
-      {isOpen && <DropDownList list={list} setSelected={setSelected} />}
+      {isOpen && (
+        <DropDownList list={list} setSelected={setSelected} size={size} />
+      )}
     </div>
   );
 }

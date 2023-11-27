@@ -22,7 +22,7 @@ declare global {
 type Props = {
   modifyState: boolean;
 };
-export default function GoogleMap({ modifyState }: Props) {
+export default function ChatMap({ modifyState }: Props) {
   const dispatch = useDispatch();
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
@@ -45,8 +45,8 @@ export default function GoogleMap({ modifyState }: Props) {
         streetViewControl: false
       }
     );
-    setMap(initmap);
-    setMarker(initmap);
+    // setMap(initmap);
+    // setMarker(initmap);
   };
 
   useEffect(() => {

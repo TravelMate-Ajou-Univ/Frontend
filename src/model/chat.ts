@@ -4,9 +4,17 @@ export type ChatRoomType = {
   memberIds: number[];
   lastChat: string;
   lastChatTime: string;
+  unReadChat: number;
 };
 
 export type ChatType = {
-  message: string;
+  userId: number;
   nickname: string;
+  content: string;
+  createdAt: string;
+};
+
+export type ChatWithVisibilityType = ChatType & {
+  userVisibility: boolean;
+  timeVisibility: boolean;
 };
