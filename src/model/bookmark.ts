@@ -14,6 +14,10 @@ export type BookmarkType = PinType & {
   id: number;
 };
 
+export type BookmarkWithCollectionNameType = BookmarkType & {
+  collectionName: string;
+};
+
 export type BookmarkCollectionType = {
   id: number;
   title: string;

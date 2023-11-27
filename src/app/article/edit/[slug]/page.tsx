@@ -9,7 +9,7 @@ interface Props {
 
 export default function EditPage({ params: { slug } }: Props) {
   return (
-    <section className="flex flex-col w-[53rem] mx-auto">
+    <section className="flex flex-col w-mainSection mx-auto">
       <PageTitle>게시글 수정</PageTitle>
       <Editable id={slug} />
     </section>
