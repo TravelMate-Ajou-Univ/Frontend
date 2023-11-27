@@ -24,17 +24,23 @@ function DropDownList({
         (size == "small" ? " max-h-[7rem] h-fit overflow-y-auto" : "")
       }
     >
-      {list.map((item, index) => (
-        <li
-          key={index}
-          className={`py-1 hover:bg-gray-200 ${
-            isSearchWord ? "px-3 text-sm" : "text-center"
-          }`}
-          onClick={() => setSelected(item)}
-        >
-          {isKeyword ? <Keyword keyword={item} /> : item}
+      {list.length === 0 ? (
+        <li className="text-center text-red-400 py-1 hover:bg-gray-200">
+          목록이 없습니다.
         </li>
-      ))}
+      ) : (
+        list.map((item, index) => (
+          <li
+            key={index}
+            className={`py-1 hover:bg-gray-200 ${
+              isSearchWord ? "px-3 text-sm" : "text-center"
+            }`}
+            onClick={() => setSelected(item)}
+          >
+            {isKeyword ? <Keyword keyword={item} /> : item}
+          </li>
+        ))
+      )}
     </ul>
   );
 }

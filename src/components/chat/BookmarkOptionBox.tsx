@@ -1,7 +1,11 @@
 import React, { useEffect, useState } from "react";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import { getAllBookmarks, getMyCollectionList } from "@/service/axios/bookmark";
-import { BookmarkCollectionListType, BookmarkType } from "@/model/bookmark";
+import {
+  BookmarkCollectionListType,
+  BookmarkType,
+  BookmarkWithCollectionNameType
+} from "@/model/bookmark";
 import DropDown from "../ui/dropDown/DropDown";
 
 type Props = {
@@ -18,22 +22,14 @@ const initCollection: CollectionType = {
   id: 0
 };
 
-const initBookmark: BookmarkType = {
-  content: "북마크",
-  placeId: "test",
-  id: 0,
-  latitude: 0,
-  longitude: 0
-};
-
 export default function BookmarkOptionBox({ setOptionsState }: Props) {
   const [collectionList, setCollectionList] = useState<CollectionType[]>([]);
+  const [bookmarkList, setBookmarkList] = useState<BookmarkType[]>([]);
   const [selectedCollection, setSelectedCollection] =
     useState<CollectionType>(initCollection);
-  const [bookmarkList, setBookmarkList] = useState<BookmarkType[]>([]);
-  const [selectedBookmark, setSelectedBookmark] =
-    useState<BookmarkType>(initBookmark);
-  const [bookmarkToAdd, setBookmarkToAdd] = useState<BookmarkType[]>([]);
+  const [bookmarkToAdd, setBookmarkToAdd] = useState<
+    BookmarkWithCollectionNameType[]
+  >([]);
 
   useEffect(() => {
     const getCollections = async () => {
@@ -65,10 +61,22 @@ export default function BookmarkOptionBox({ setOptionsState }: Props) {
   }, [selectedCollection]);
 
   const addBookmarkToList = (bookmark: BookmarkType) => {
-    if (bookmarkToAdd.indexOf(bookmark) !== -1) {
+    const isDuplicate = bookmarkToAdd.some(
+      existingBookmark =>
+        existingBookmark.id === bookmark.id &&
+        existingBookmark.latitude === bookmark.latitude &&
+        existingBookmark.longitude === bookmark.longitude
+    );
+
+    if (isDuplicate) {
       return;
     }
-    setBookmarkToAdd(bookmarkToAdd => [...bookmarkToAdd, bookmark]);
+    const newBookmark: BookmarkWithCollectionNameType = {
+      ...bookmark,
+      ...{ collectionName: selectedCollection.name }
+    };
+
+    setBookmarkToAdd(bookmarkToAdd => [...bookmarkToAdd, newBookmark]);
   };
 
   const subBookmarkToList = (target: BookmarkType) => {
@@ -93,23 +101,29 @@ export default function BookmarkOptionBox({ setOptionsState }: Props) {
         size="small"
       />
       <DropDown
-        selected={selectedBookmark.content as string}
+        selected="가져올 북마크"
         list={bookmarkList.map(bookmark => bookmark.content as string)}
         setSelected={(selected: string) => {
           const target = bookmarkList.find((bookmark: BookmarkType) => {
             return (bookmark.content as string) == selected;
           }) as BookmarkType;
           addBookmarkToList(target);
-          setSelectedBookmark(target);
         }}
         size="small"
       />
       {bookmarkToAdd.length === 0 ? null : (
-        <div className="flex flex-col w-full justify-center items-center">
-          <p className="text-xs font-bold self-start">추가할 북마크</p>
+        <div className="flex flex-col w-full justify-center items-center text-center">
+          <p className="text-xs font-bold self-start my-2">추가할 북마크</p>
           <ul>
+            <div className="flex gap-2 text-sm border-b-2">
+              <p className="w-[3rem] border-r-2">북마크</p>
+              <p className="w-[5rem]">memo</p>
+            </div>
             {bookmarkToAdd.map((bookmark, index) => (
-              <li key={index} className="flex gap-2 text-sm">
+              <li key={index} className="flex gap-2 text-sm border-b-2">
+                <p className="w-[3rem] truncate hover:text-clip border-r-2">
+                  {bookmark.collectionName}
+                </p>
                 <p className="w-[5rem] truncate hover:text-clip">
                   {bookmark.content}
                 </p>
@@ -117,7 +131,7 @@ export default function BookmarkOptionBox({ setOptionsState }: Props) {
                   onClick={() => subBookmarkToList(bookmark)}
                   className="text-red-400 text-xs hover:scale-110"
                 >
-                  취소
+                  X
                 </button>
               </li>
             ))}

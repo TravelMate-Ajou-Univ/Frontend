@@ -19,16 +19,30 @@ export default function ChatList({ chatList }: Props) {
     }
   };
 
+  const infiniteScrollHandler = () => {
+    if (scrollableContainer == undefined) {
+      return;
+    }
+    const scrollPosition = scrollableContainer.scrollTop;
+    const containerHeight = scrollableContainer.clientHeight;
+    const contentHeight = scrollableContainer.scrollHeight;
+
+    if (scrollPosition + containerHeight >= contentHeight) {
+      console.log("get forward message");
+    } else if (scrollPosition === 0) {
+      console.log("get backward message");
+    }
+  };
   useEffect(() => {
     scrollToBottom();
   }, [chatList]);
 
-  const pre_chat: string = "";
   return (
     <section className="w-full h-[33rem]">
       <ul
         ref={scrollableContainerRef}
         className="flex flex-col border-2 rounded-md bg-white h-full relative overflow-y-auto "
+        onScroll={infiniteScrollHandler}
       >
         {chatList.map((chat: ChatWithVisibilityType, index: number) =>
           chat.userId === 0 ? (

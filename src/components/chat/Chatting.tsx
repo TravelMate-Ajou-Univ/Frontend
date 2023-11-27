@@ -1,7 +1,6 @@
 import ChatForm from "@/components/chat/ChatForm";
 import ChatList from "@/components/chat/ChatList";
 import ChatRoomHeader from "@/components/chat/ChatRoomHeader";
-import GoogleMap from "@/components/googleMap/GoogleMap";
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
@@ -13,13 +12,119 @@ import { ChatType, ChatWithVisibilityType } from "@/model/chat";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import BookmarkOptionBox from "./BookmarkOptionBox";
 import { CalculateAmPmTime } from "@/service/time";
-import { checkVisibility } from "@/service/chat";
+import { checkVisibility, makeNewChat } from "@/service/chat";
+import ChatMap from "../googleMap/ChatMap";
 
 type Props = {
   socket: Socket;
   roomId: string;
   roomName: string;
 };
+
+const test_chat = [
+  {
+    userId: 1,
+    nickname: "test1",
+    content: "test chat 1",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 1,
+    nickname: "test1",
+    content: "test chat 2",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 2,
+    nickname: "test2",
+    content: "test chat 3",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 2,
+    nickname: "test2",
+    content: "test chat 4",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 1,
+    nickname: "test1",
+    content: "test chat 5",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 1,
+    nickname: "test1",
+    content: "test chat 2",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 2,
+    nickname: "test2",
+    content: "test chat 3",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 2,
+    nickname: "test2",
+    content: "test chat 4",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 1,
+    nickname: "test1",
+    content: "test chat 5",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 1,
+    nickname: "test1",
+    content: "test chat 2",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 2,
+    nickname: "test2",
+    content: "test chat 3",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 2,
+    nickname: "test2",
+    content: "test chat 4",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 1,
+    nickname: "test1",
+    content: "test chat 5",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 1,
+    nickname: "test1",
+    content: "test chat 2",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 2,
+    nickname: "test2",
+    content: "test chat 3",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 2,
+    nickname: "test2",
+    content: "test chat 4",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  },
+  {
+    userId: 1,
+    nickname: "test1",
+    content: "test chat 5",
+    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
+  }
+];
 export default function Chatting({ socket, roomId, roomName }: Props) {
   const { id } = useAppSelector(state => state.userSlice);
   const dispatch = useDispatch();
@@ -57,38 +162,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       }
 
       // chat Data
-      const response: ChatType[] = [
-        {
-          userId: 1,
-          nickname: "test1",
-          content: "test chat 1",
-          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-        },
-        {
-          userId: 1,
-          nickname: "test1",
-          content: "test chat 2",
-          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-        },
-        {
-          userId: 2,
-          nickname: "test2",
-          content: "test chat 3",
-          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-        },
-        {
-          userId: 2,
-          nickname: "test2",
-          content: "test chat 4",
-          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-        },
-        {
-          userId: 1,
-          nickname: "test1",
-          content: "test chat 5",
-          createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-        }
-      ];
+      const response: ChatType[] = test_chat;
 
       const chatWithVisibilityList: ChatWithVisibilityType[] =
         checkVisibility(response);
@@ -100,10 +174,21 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
 
   useEffect(() => {
     socket.on("message", data => {
+      // const newChatList = makeNewChat(data, chatList);
       let newChat: ChatWithVisibilityType;
       const time = CalculateAmPmTime(data.createdAt);
 
-      if (chatList[chatList.length - 1].nickname !== data.nickname) {
+      if (chatList.length === 0) {
+        newChat = {
+          userId: data.userId,
+          nickname: data.nickname,
+          content: data.content,
+          createdAt: time,
+          timeVisibility: true,
+          userVisibility: true
+        };
+      } else if (chatList[chatList.length - 1].nickname !== data.nickname) {
+        // 이전 챗이 다른 사용자인 경우
         newChat = {
           userId: data.userId,
           nickname: data.nickname,
@@ -113,6 +198,8 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           userVisibility: true
         };
       } else if (chatList[chatList.length - 1].createdAt !== time) {
+        // 이전 챗이 나이며, 시간 차이가 안나는 경우
+        chatList[chatList.length - 1].timeVisibility = false; // 이전 챗 시간 안 보여주기
         newChat = {
           userId: data.userId,
           nickname: data.nickname,
@@ -122,6 +209,8 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           userVisibility: false
         };
       } else {
+        // 이전 챗이 나이지만 시간 차이가 나는 경우
+        chatList[chatList.length - 1].timeVisibility = true; // 이전 챗 시간 보여주기
         newChat = {
           userId: data.userId,
           nickname: data.nickname,
@@ -157,7 +246,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
     <section className="w-[90%] mx-auto flex justify-center mt-4">
       {mapState ? (
         <div className="w-[50%] h-[40rem] m-2 border-2 rounded-md my-auto relative">
-          <GoogleMap modifyState={true} />
+          <ChatMap modifyState={true} />
           <OutlinedButton
             onClick={() => {
               setOptionsState(!optionsState);
