@@ -133,8 +133,8 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
     if (!content) return alert("내용을 입력해주세요");
     if (!thumbnailFile) return alert("썸네일을 등록해주세요");
 
-    const imgId = await uploadImage(thumbnailFile);
-    const thumbnail = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
+    const imgId = await uploadImage(thumbnailFile, "thumbnail");
+    const thumbnail = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=thumbnail`;
     const article: ArticleType = {
       title,
       period: seasonMapper[season] as SeasonType,

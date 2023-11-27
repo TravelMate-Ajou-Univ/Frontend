@@ -33,7 +33,7 @@ export default function TextEditor({ setContents, receivedContent }: Props) {
       const file = input.files[0];
 
       try {
-        const imgId = await uploadImage(file);
+        const imgId = await uploadImage(file, "article");
         if (!imgId) return;
         const editor = quillRef.current?.getEditor();
         if (!editor) return;

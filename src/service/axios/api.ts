@@ -1,4 +1,5 @@
 import { ArticleType, SeasonType } from "@/model/article";
+import { ImageType } from "@/model/image";
 import axios from "axios";
 
 export const apiWithoutAuth = axios.create({
@@ -57,7 +58,7 @@ export const user = {
 };
 
 export const article = {
-  getS3Url: () => api.get("s3/presigned-post?type=article"),
+  getS3Url: (type: ImageType) => api.get(`s3/presigned-post?type=${type}`),
   uploadImgToS3: (s3url: string, data: File) => axios.put(s3url, data),
   confirmUpload: (id: string) =>
     api.get(`s3/upload-success/?type=article&id=${id}`),
