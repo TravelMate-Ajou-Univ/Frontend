@@ -5,10 +5,11 @@ import {
   SeasonType
 } from "@/model/article";
 import { article, user } from "./api";
+import { ImageType } from "@/model/image";
 
-export const uploadImage = async (file: File) => {
+export const uploadImage = async (file: File, type: ImageType) => {
   try {
-    const { data: s3data } = await article.getS3Url();
+    const { data: s3data } = await article.getS3Url(type);
     const { url, id } = s3data;
     const res = await article.uploadImgToS3(url, file);
     if (res.status === 200) {
