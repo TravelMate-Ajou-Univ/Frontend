@@ -17,7 +17,7 @@ export const searchPlace = async ({
         lat: center.latitude,
         lng: center.longitude
       },
-      radius: 500,
+      radius: 150000,
       query: search
     };
 

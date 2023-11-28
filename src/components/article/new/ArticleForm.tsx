@@ -27,6 +27,8 @@ import FilledButton from "@/components/ui/button/FilledButton";
 import OutlinedButton from "@/components/ui/button/OutlinedButton";
 import { useAppSelector } from "@/hooks/redux";
 import CommentForm from "./CommentForm";
+import GoogleMap from "@/components/googleMap/GoogleMap";
+import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
 
 const INPUT_CLASSNAME = "flex items-center gap-4";
 
@@ -47,6 +49,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   const [keywords, setKeywords] = useState<KeywordType[]>([]);
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
+  const [bookmarkIds, setBookmarkIds] = useState<number[]>([]);
   const [receivedContent, setReceivedContent] = useState<string>("");
   const [receivedThumbnail, setReceivedThumbnail] = useState<string>("");
   const [comment, setComment] = useState<string>("");
@@ -141,7 +144,8 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       location,
       content,
       tagIds: keywords.map(keyword => keyword.id),
-      thumbnail
+      thumbnail,
+      bookmarkIds
     };
 
     const articleId = await submitArticle(article);
@@ -224,6 +228,13 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         setContents={value => setContent(value)}
         receivedContent={receivedContent}
       />
+      <section className="w-full h-96">
+        <ArticleGoogleMap
+          modifyState={true}
+          location={location}
+          setBookmarkIds={setBookmarkIds}
+        />
+      </section>
       {!id && (
         <ImageSection
           handleImage={handleThumbnail}

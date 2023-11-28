@@ -5,6 +5,7 @@ export type KeywordType = {
 
 export type KoreanSeasonType = "봄" | "여름" | "가을" | "겨울";
 export type SeasonType = "SPRING" | "SUMMER" | "FALL" | "WINTER";
+export type SeasonLowerCaseType = "spring" | "summer" | "fall" | "winter";
 
 export type SeasonContentType = {
   content: string;
@@ -17,6 +18,7 @@ export type ArticleType = {
   tagIds: number[];
   location: string;
   thumbnail: string;
+  bookmarkIds?: number[];
 };
 
 export type ArticlePreviewType = {
@@ -51,6 +53,7 @@ export type ArticleDetailType = ArticlePreviewType & {
   summer: SeasonContentType;
   fall: SeasonContentType;
   winter: SeasonContentType;
+  articleBookmarkMap: any[];
 };
 
 export type ArticleRequestType = {

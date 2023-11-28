@@ -69,8 +69,8 @@ const ArticlePreview = forwardRef<HTMLDivElement, Props>(
             className="w-full"
             src={thumbnail ? thumbnail : travelIcon}
             alt="썸네일"
-            width={100}
-            height={100}
+            width={10000}
+            height={10000}
           />
           <ArticleSummary title={title} keywords={keywords} count={count} />
         </Link>
