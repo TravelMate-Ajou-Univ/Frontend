@@ -5,6 +5,8 @@ import { Open_Sans } from "next/font/google";
 import Header from "@/components/layout/Header";
 import { ProviderContext } from "@/context/ProviderContext";
 import Background from "@/components/layout/Background";
+import Footer from "@/components/layout/Footer";
+import Main from "@/components/layout/Main";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
 
@@ -31,10 +33,8 @@ export default function RootLayout({
         <ProviderContext>
           <AuthContext>
             <Header />
-            <main className="max-w-screen-xl mx-auto mt-16 w-full flex-grow">
-              {children}
-            </main>
-            <footer></footer>
+            <Main>{children}</Main>
+            <Footer />
           </AuthContext>
         </ProviderContext>
         <div id="portal" />
