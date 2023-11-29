@@ -87,7 +87,7 @@ export default function Article({ articleId }: Props) {
 
   return (
     <article className="relative flex flex-col items-center gap-8 w-full bg-white shadow-lg rounded-xl pb-10 mb-16">
-      <section className="w-full px-12 py-8">
+      <section className="w-full lg:px-12 md:px-10 sm:px-8 px-4 md:py-8 py-6">
         <nav className="mb-4 mx-auto">
           <SeasonNav
             season={season}
@@ -99,14 +99,16 @@ export default function Article({ articleId }: Props) {
           />
         </nav>
         {article && (
-          <div className="w-full flex flex-col gap-4">
+          <div className="w-full flex flex-col md:gap-4 gap-2">
             <section className="flex items-end gap-2">
-              <h1 className="text-2xl font-bold flex-grow">{article.title}</h1>
+              <h1 className="md:text-2xl text-xl font-bold flex-grow">
+                {article.title}
+              </h1>
               <section className="flex flex-col items-end gap-1">
                 {article && <Author authorId={article.authorId} />}
                 {article && userId === article.authorId && (
                   <Link
-                    className="rounded-full border w-fit px-3 py-0.5"
+                    className="rounded-full border w-fit px-3 py-0.5 md:text-base text-sm"
                     href={`/article/request/${articleId}?season=${season.toLowerCase()}`}
                   >
                     수정요청{" "}
@@ -119,7 +121,10 @@ export default function Article({ articleId }: Props) {
             </section>
             <ul className="mb-4">
               {article.articleTagMap.map(keyword => (
-                <li className="inline-block mr-2" key={keyword.tagId}>
+                <li
+                  className="inline-block md:mr-2 mr-1 md:mb-1.5 mb-1"
+                  key={keyword.tagId}
+                >
                   <Keyword keyword={keyword.tag.name} />
                 </li>
               ))}
