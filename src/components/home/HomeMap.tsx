@@ -7,7 +7,7 @@ import Image from "next/image";
 import map from "/public/image/map.png";
 
 const ARTICLE_NUM_CLASS =
-  "rounded-full px-5 py-1 border absolute bg-white hover:bg-gray-100 cursor-pointer";
+  "rounded-full md:px-5 sm:px-4 px-3 py-1 md:py-0.5 border absolute bg-white hover:bg-gray-100 md:text-base sm:text-sm text-xs cursor-pointer";
 
 export default function HomeMap() {
   const [season, setSeason] = useState<SeasonType>("SPRING");
