@@ -15,15 +15,24 @@ const config: Config = {
       },
       backgroundColor: {
         primary: "#2C3B84",
-        secondary: "#3D4FA6"
+        secondary: "#3D4FA6",
+        spring: "#FFF0F1",
+        summer: "#E6F2FF",
+        fall: "#FFE7E6",
+        winter: "#F2F2F2"
       },
       textColor: {
         primary: "#2C3B84",
-        secondary: "#3D4FA6"
+        secondary: "#3D4FA6",
+        sky: "#9FB5D7"
       },
       borderColor: {
         primary: "#2C3B84",
-        secondary: "#3D4FA6"
+        secondary: "#3D4FA6",
+        spring: "#FFB5B8",
+        summer: "#58B3FF",
+        fall: "#C15F5B",
+        winter: "#C2C2C2"
       },
       keyframes: {
         menuSlide: {

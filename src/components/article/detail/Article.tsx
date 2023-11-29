@@ -66,39 +66,43 @@ export default function Article({ articleId }: Props) {
 
   return (
     <article className="relative flex flex-col items-center gap-8 w-full bg-white shadow-lg rounded-xl pb-10 mb-16">
-      <nav className="absolute -left-12 top-5">
-        <SeasonNav
-          season={season}
-          onClick={value =>
-            router.push(
-              `/article/detail/${articleId}?season=${value.toLowerCase()}`
-            )
-          }
-        />
-      </nav>
-      <section className="absolute top-8 right-12 flex flex-col items-end gap-1">
-        {article && <Author authorId={article.authorId} />}
-        {article && userId === article.authorId && (
-          <Link
-            className="rounded-full border w-fit px-3 py-0.5"
-            href={`/article/request/${articleId}?season=${season.toLowerCase()}`}
-          >
-            수정요청{" "}
-            <span className="text-red-500 font-semibold">{requestCount}</span>
-          </Link>
-        )}
-      </section>
       <section className="w-full px-12 py-8">
+        <nav className="mb-4 mx-auto">
+          <SeasonNav
+            season={season}
+            onClick={value =>
+              router.push(
+                `/article/detail/${articleId}?season=${value.toLowerCase()}`
+              )
+            }
+          />
+        </nav>
         {article && (
           <div className="w-full flex flex-col gap-4">
-            <ul>
+            <section className="flex items-end gap-2">
+              <h1 className="text-2xl font-bold flex-grow">{article.title}</h1>
+              <section className="flex flex-col items-end gap-1">
+                {article && <Author authorId={article.authorId} />}
+                {article && userId === article.authorId && (
+                  <Link
+                    className="rounded-full border w-fit px-3 py-0.5"
+                    href={`/article/request/${articleId}?season=${season.toLowerCase()}`}
+                  >
+                    수정요청{" "}
+                    <span className="text-red-500 font-semibold">
+                      {requestCount}
+                    </span>
+                  </Link>
+                )}
+              </section>
+            </section>
+            <ul className="mb-4">
               {article.articleTagMap.map(keyword => (
                 <li className="inline-block mr-2" key={keyword.tagId}>
                   <Keyword keyword={keyword.tag.name} />
                 </li>
               ))}
             </ul>
-            <h1 className="text-2xl font-bold">{article.title}</h1>
             <ArticleContent article={article} season={season} userId={userId} />
           </div>
         )}
