@@ -80,13 +80,15 @@ export default function Search() {
 
   return (
     <section>
-      <div className="flex gap-8 items-center mt-12">
-        <span className="text-primary text-xl font-semibold">검색하기</span>
-        <div className="flex-grow h-12 px-6 border rounded-full bg-white flex flex-row justify-between items-center gap-3">
+      <div className="flex lg:gap-8 md:gap-6 items-center lg:mt-12 md:mt-8 mt-4 md:mx-0 mx-2">
+        <span className="md:inline-block hidden text-primary text-xl font-semibold">
+          검색하기
+        </span>
+        <div className="flex-grow md:h-12 h-10 md:px-6 px-3 border rounded-full bg-white flex flex-row justify-between items-center gap-3">
           <SearchIcon />
-          <form className="flex-grow" onSubmit={search}>
+          <form className="flex-grow h-fit" onSubmit={search}>
             <input
-              className="w-full h-8 outline-none"
+              className="w-full h-8 outline-none md:text-base text-sm"
               type="text"
               placeholder="제목, 키워드로 쉐어포스팅을 검색해보세요!"
               value={word}
@@ -101,10 +103,10 @@ export default function Search() {
           />
         </div>
       </div>
-      <ul className="ml-32 mt-4">
+      <ul className="md:ml-32 ml-2 md:mt-4 mt-2">
         {seasonList.map((season, index) => (
           <li
-            className="inline-block mx-2 cursor-pointer"
+            className="inline-block md:mx-2 mx-1 cursor-pointer"
             key={index}
             onClick={() => handleSeason(season)}
           >
