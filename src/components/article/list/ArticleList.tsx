@@ -16,7 +16,6 @@ export default function ArticleList() {
 
   const getArticles = useCallback(
     async (command: "new" | "add") => {
-      // async () => {
       const location = searchParams.get("location") ?? "";
       const word = searchParams.get("word") ?? "";
       const seasons = searchParams.getAll("seasons");
