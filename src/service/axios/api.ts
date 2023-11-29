@@ -1,5 +1,6 @@
 import { ArticleType, SeasonType } from "@/model/article";
 import { ImageType } from "@/model/image";
+import { PinType } from "@/model/bookmark";
 import axios from "axios";
 
 export const apiWithoutAuth = axios.create({
@@ -78,6 +79,7 @@ export const article = {
         keyword === "" ? "" : `&keyword=${keyword}`
       }`
     ),
+  createBookmark: (bookmark: PinType) => api.post("bookmark", bookmark),
   submitArticle: (article: ArticleType) => api.post("articles", article),
   getArticle: (id: string) => api.get(`articles/${id}`),
   editArticle: (id: string, article: ArticleType) =>

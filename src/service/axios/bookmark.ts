@@ -4,7 +4,7 @@ import {
   BookmarkCollectionListType,
   PinType
 } from "@/model/bookmark";
-import { api } from "./api";
+import { api, article } from "./api";
 
 type CollectionList = {
   page: number;
@@ -161,6 +161,19 @@ export const modifyCollection = async (
     return true;
   } catch (error) {
     console.log(error);
+    return false;
+  }
+};
+
+export const createBookmark = async (
+  bookmark: PinType
+): Promise<number | false> => {
+  try {
+    const { data } = await article.createBookmark(bookmark);
+    if (!data) return false;
+    return data.id;
+  } catch (error) {
+    console.error(error);
     return false;
   }
 };

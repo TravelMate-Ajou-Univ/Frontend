@@ -130,7 +130,8 @@ export const getArticle = async (
       spring: data.spring,
       summer: data.summer,
       fall: data.fall,
-      winter: data.winter
+      winter: data.winter,
+      articleBookmarkMap: data.articleBookmarkMap
     };
 
     return articleData;

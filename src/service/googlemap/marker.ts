@@ -1,4 +1,3 @@
-import { subBookmarks } from "@/redux/features/mapSlice";
 import { BookmarkType, PinType } from "@/model/bookmark";
 import { placeDetail } from "./place";
 
@@ -21,16 +20,16 @@ export const makeContentString = ({
   mode
 }: StringProps): string => {
   let contentString =
-    `<div style="display: flex; flex-direction: column; justify-content: center; align-items: center; width: 12rem;">` +
-    `<div style="display: flex; flex-direction: row">`;
+    `<div style="display: flex; flex-direction: column; width: 12rem;">` +
+    `<div style="display: flex; flex-direction: column; gap: 0.3rem;">`;
   if (photoUrl !== undefined) {
     contentString =
       contentString +
-      `<img src=${photoUrl} style="width: 3rem; height: 3rem"/>`;
+      `<img src=${photoUrl} style="width: 100%; height: 100%; max-height: 8rem; object-fit: contain;"/>`;
   }
   contentString =
     contentString +
-    `<div style="display: flex; flex-direction: column; text-align: start">` +
+    `<div style="display: flex; flex-direction: column; gap: 0.3rem; text-align: start">` +
     `<p style="font-size: 1rem; font-weight: bold; margin: 0">${name}</p>` +
     `<p style="font-size: 0.7rem; margin: 0">${address}</p>`;
   if (rating !== undefined) {
@@ -47,8 +46,8 @@ export const makeContentString = ({
   if (memo) {
     contentString =
       contentString +
-      `<p style="align-self: start; margin: 0px 0px 0px 0.5rem; font-size: 0.7rem">메모</p>` +
-      `<p style="font-size: 0.7rem; margin: 0px; font-weight: 400">${memo}</p>`;
+      `<p style="align-self: start; font-size: 0.7rem">메모</p>` +
+      `<p style="align-self: start; font-size: 0.7rem; margin: 0.5rem 0; font-weight: 400; padding: 2px 4px; background-color: rgb(254 243 199); width: 100%; min-height: 3rem;">${memo}</p>`;
   }
   if (modifyState && mode === "add") {
     contentString =
@@ -78,8 +77,8 @@ type MarkerProps = {
   service: google.maps.places.PlacesService;
   modifyState: boolean;
   map: google.maps.Map;
-  subPinHandler: (pin: PinType) => void;
-  subBookmarkHandler: (bookmark: BookmarkType) => void;
+  subPinHandler?: (pin: PinType) => void;
+  subBookmarkHandler?: (bookmark: BookmarkType) => void;
 };
 
 export const makeMarker = ({
@@ -132,11 +131,18 @@ export const makeMarker = ({
     });
     google.maps.event.addListener(infoWindow, "domready", () => {
       const btn = document.getElementById("btn");
-      if (btn) {
+      if (btn && subPinHandler && subBookmarkHandler) {
         btn.addEventListener("click", () => {
           type === "pin"
             ? subPinHandler(pin)
             : subBookmarkHandler(pin as BookmarkType);
+          infoWindow.close();
+          marker.setMap(null);
+        });
+      }
+      if (btn && subPinHandler) {
+        btn.addEventListener("click", () => {
+          subPinHandler(pin);
           infoWindow.close();
           marker.setMap(null);
         });

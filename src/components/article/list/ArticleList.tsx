@@ -16,6 +16,7 @@ export default function ArticleList() {
 
   const getArticles = useCallback(
     async (command: "new" | "add") => {
+      // async () => {
       const location = searchParams.get("location") ?? "";
       const word = searchParams.get("word") ?? "";
       const seasons = searchParams.getAll("seasons");
@@ -23,21 +24,24 @@ export default function ArticleList() {
         .map(season => season.toUpperCase())
         .join("&period=");
 
+      if (command === "new" && page !== 1) return;
+      if (command === "add" && page === 1) return;
+
       const data = await getArticleList(page, 10, period, location, word);
 
       if (!data) return;
       const { count, newArticles } = data;
       setCount(count);
-      if (command === "new") {
+      if (page === 1) {
         setList(newArticles);
+        setPage(prev => prev + 1);
         return;
       }
 
       setPage(prev => prev + 1);
 
       setList(prev => {
-        if (prev.length === 0) return newArticles;
-        return [...prev, newArticles];
+        return [...prev, ...newArticles];
       });
     },
     [page, searchParams]
@@ -45,18 +49,21 @@ export default function ArticleList() {
 
   const handleIntersect = useCallback(
     ([entry]: IntersectionObserverEntry[]) => {
-      if (entry.isIntersecting) {
-        if (list.length >= count) {
-          return;
+      setTimeout(() => {
+        if (entry.isIntersecting) {
+          if (list.length >= count) {
+            return;
+          }
+          getArticles("add");
         }
-        getArticles("add");
-      }
+      }, 400);
     },
     [list, count, getArticles]
   );
 
   useEffect(() => {
     setCount(0);
+    setPage(1);
     setList([]);
   }, [searchParams]);
 
@@ -66,17 +73,20 @@ export default function ArticleList() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
-      threshold: 0.9,
+      threshold: 1,
       root: null
     });
 
-    targetRef.current && observer.observe(targetRef.current);
+    const timeoutId = setTimeout(() => {
+      targetRef.current && observer.observe(targetRef.current);
+    }, 300);
     if (list.length >= count) {
       observer.disconnect();
     }
 
     return () => {
       observer.disconnect();
+      clearTimeout(timeoutId);
     };
   }, [handleIntersect, list, count]);
 

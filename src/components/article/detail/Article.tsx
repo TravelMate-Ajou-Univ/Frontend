@@ -1,6 +1,10 @@
 "use client";
 
-import { ArticleDetailType, SeasonType } from "@/model/article";
+import {
+  ArticleDetailType,
+  SeasonLowerCaseType,
+  SeasonType
+} from "@/model/article";
 import {
   deleteArticle,
   getArticle,
@@ -16,6 +20,8 @@ import Author from "./Author";
 import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
 import FilledButton from "@/components/ui/button/FilledButton";
+import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
+import { BookmarkType, PinType } from "@/model/bookmark";
 
 interface Props {
   articleId: string;
@@ -23,6 +29,9 @@ interface Props {
 
 export default function Article({ articleId }: Props) {
   const [article, setArticle] = useState<ArticleDetailType | null>(null);
+  const [bookmarks, setBookmarks] = useState<
+    (BookmarkType & { period: SeasonType })[]
+  >([]);
   const [requestCount, setRequestCount] = useState<number>(0);
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -34,6 +43,18 @@ export default function Article({ articleId }: Props) {
       const data = await getArticle(articleId);
       if (!data) return;
       setArticle(data);
+      const bookmarkList: (BookmarkType & { period: SeasonType })[] =
+        data.articleBookmarkMap
+          .filter(bookmark => bookmark.period === season)
+          .map(bookmark => ({
+            id: bookmark.bookmark.id,
+            period: bookmark.period as SeasonType,
+            placeId: bookmark.bookmark.location.placeId,
+            content: bookmark.bookmark.content,
+            latitude: Number(bookmark.bookmark.location.latitude),
+            longitude: Number(bookmark.bookmark.location.longitude)
+          }));
+      setBookmarks(bookmarkList);
 
       if (userId === data.authorId) {
         const requests = await getArticleRequestList(
