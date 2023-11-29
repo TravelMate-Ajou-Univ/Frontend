@@ -40,15 +40,15 @@ export default function Author({ authorId }: Props) {
   }, [authorId]);
 
   return (
-    <div className="flex flex-col items-center gap-2" ref={ref}>
+    <div className="relative flex flex-col items-center gap-2" ref={ref}>
       <div
         className="flex items-center gap-2 cursor-pointer"
         onClick={() => setIsBookmarkCollectionsOpen(!isBookmarkCollectionsOpen)}
         title="북마크 컬렉션 보기"
       >
-        <div className="bg-gray-200 overflow-hidden rounded-full w-8 h-8">
+        <div className="bg-gray-200 overflow-hidden rounded-full md:w-8 md:h-8 w-6 h-6">
           <Image
-            className="p-1.5"
+            className="p-1"
             src={
               author.profileImageId === ""
                 ? DefaultProfile
@@ -59,10 +59,10 @@ export default function Author({ authorId }: Props) {
             alt="프로필 이미지"
           />
         </div>
-        <span>{author.userName}</span>
+        <span className="md:text-base text-sm">{author.userName}</span>
       </div>
       {isBookmarkCollectionsOpen && (
-        <ul className="flex flex-col items-center w-full border divide-y text-sm text-gray-500 text-center">
+        <ul className="absolute md:top-9 top-7 flex flex-col items-center w-full border divide-y md:text-sm text-xs text-gray-500 text-center bg-white">
           {bookmarkCollections.length === 0 ? (
             <div>
               <p>보유하고 있는</p>
@@ -71,7 +71,7 @@ export default function Author({ authorId }: Props) {
           ) : (
             bookmarkCollections.map(bookmarkCollection => (
               <li
-                className="py-1 w-full bg-white hover:bg-gray-100"
+                className="py-1 w-full hover:bg-gray-100"
                 key={bookmarkCollection.id}
               >
                 <Link href={`/bookmark/${bookmarkCollection.id}`}>

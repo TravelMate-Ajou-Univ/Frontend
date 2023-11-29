@@ -6,7 +6,7 @@ interface Props {
 
 export default function NoContent({ season, authorId, userId }: Props) {
   return (
-    <section className="w-full flex flex-col justify-center items-center h-96 text-gray-500 text-2xl gap-4">
+    <section className="w-full flex flex-col justify-center items-center md:h-96 h-64 text-gray-500 md:text-2xl text-xl text-center gap-4">
       <p>아직 {season} 포스팅이 작성되지 않았어요!</p>
       <p>
         {authorId === userId
