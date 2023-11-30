@@ -80,7 +80,7 @@ export default function ArticleGoogleMap({
           }
         },
         error => {
-          prompt("현재 위치를 가져오는 데 실패하였습니다.");
+          alert("현재 위치를 가져오는 데 실패하였습니다.");
           console.log(error);
         }
       );
