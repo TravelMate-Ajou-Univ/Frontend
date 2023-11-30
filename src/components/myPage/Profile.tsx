@@ -4,14 +4,20 @@ import { useAppSelector } from "@/hooks/redux";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import Image from "next/image";
 import OutlinedButton from "../ui/button/OutlinedButton";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import ProfileImage from "./ProfileImage";
+import NicknameForm from "./NicknameForm";
 
 export default function Profile() {
   const { userName, profileImageId } = useAppSelector(state => state.userSlice);
-  const [modifyState, setModifyState] = useState(false);
+  const [modifyState, setModifyState] = useState<boolean>(false);
+  const [nickname, setNickname] = useState<string>("");
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
+
+  useEffect(() => {
+    setNickname(userName);
+  }, [modifyState]);
 
   const handleProfile = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
@@ -31,7 +37,7 @@ export default function Profile() {
     setModifyState(false);
   };
   return (
-    <div className="w-full flex justify-around items-center border-b-2">
+    <div className="w-full flex justify-around items-center py-4 border-b-2">
       <div className="relative">
         <Image
           src={
@@ -46,14 +52,16 @@ export default function Profile() {
           alt="개인 채팅"
           priority
         />
-        <ProfileImage
-          className="absolute bottom-1 right-1 text-gray-500 hover:scale-110 hover:cursor-pointer"
-          handleImage={handleProfile}
-        />
-      </div>
-      <div className="flex flex-col gap-4">
         {modifyState ? (
-          <></>
+          <ProfileImage
+            className="absolute bottom-1 right-1 text-gray-500 hover:scale-110 hover:cursor-pointer"
+            handleImage={handleProfile}
+          />
+        ) : null}
+      </div>
+      <div className="flex flex-col gap-4 w-[20rem] text-center">
+        {modifyState ? (
+          <NicknameForm nickname={nickname} setNickname={setNickname} />
         ) : (
           <p className="text-3xl font-bold ">{userName}</p>
         )}
@@ -68,7 +76,7 @@ export default function Profile() {
                 setModifyState(true);
               }}
             >
-              수정
+              프로필 수정
             </OutlinedButton>
           )}
           <OutlinedButton onClick={() => {}}>탈퇴</OutlinedButton>
