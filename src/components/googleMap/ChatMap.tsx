@@ -12,7 +12,6 @@ import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
 import Script from "next/script";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
-import { BeatLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 declare global {
   interface Window {
@@ -45,16 +44,13 @@ export default function ChatMap({ modifyState }: Props) {
         streetViewControl: false
       }
     );
-    // setMap(initmap);
+    setMap(initmap);
     // setMarker(initmap);
   };
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.google && window.google.maps) {
       window.initMap();
-    } else if (center.latitude == 0 && center.longitude == 0) {
-      console.log("wait");
-      <BeatLoader size={8} color="red" />;
     }
   }, [center, modifyState, pins]);
 
@@ -119,7 +115,7 @@ export default function ChatMap({ modifyState }: Props) {
     setPlaces([]);
 
     // 검색어로 검색.
-    const response = await searchPlace({ service, search, map, center });
+    const response = await searchPlace({ service, search, map });
 
     if (response === null) {
       alert("검색 실패");

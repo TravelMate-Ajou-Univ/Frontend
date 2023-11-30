@@ -149,7 +149,7 @@ export default function ArticleGoogleMap({
     setPlaces([]);
 
     // 검색어로 검색.
-    const response = await searchPlace({ service, search, map, center });
+    const response = await searchPlace({ service, search, map });
 
     if (response === null) {
       alert("검색 실패");
