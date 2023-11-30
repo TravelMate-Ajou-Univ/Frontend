@@ -9,7 +9,7 @@ interface Props {
 
 export default function ArticlePage({ params: { slug } }: Props) {
   return (
-    <div className="flex flex-col lg:w-mainSection md:w-[46rem] sm:w-[37rem] mx-auto">
+    <div className="flex flex-col lg:w-mainSection md:w-mainSectionMd sm:w-mainSectionSm w-full mx-auto">
       <SharePostingTitle />
       <Article articleId={slug} />
     </div>
