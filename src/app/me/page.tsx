@@ -1,5 +1,12 @@
+import ActivitySection from "@/components/myPage/ActivitySection";
+import Profile from "@/components/myPage/Profile";
 import React from "react";
 
 export default function MyPage() {
-  return <div className="w-[70%] mx-auto border-x-2">MyPage</div>;
+  return (
+    <div className="w-mainSection mx-auto">
+      <Profile />
+      <ActivitySection />
+    </div>
+  );
 }
