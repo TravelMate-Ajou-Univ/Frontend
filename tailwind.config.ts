@@ -24,6 +24,7 @@ const config: Config = {
       textColor: {
         primary: "#2C3B84",
         secondary: "#3D4FA6",
+        secondaryHover: "#82A7DE",
         sky: "#9FB5D7"
       },
       borderColor: {
