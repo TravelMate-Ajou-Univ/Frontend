@@ -10,6 +10,7 @@ import Menu from "./menu/Menu";
 import { getCookie } from "cookies-next";
 import { GetUserInfo } from "@/service/axios/userSign";
 import { setUser } from "@/redux/features/userSlice";
+import MenuIcon from "../ui/icons/MenuIcon";
 
 export default function Header() {
   const { userName, profileImageId } = useAppSelector(state => state.userSlice);
@@ -46,21 +47,7 @@ export default function Header() {
         <Link href="/auth">로그인/회원가입</Link>
       ) : (
         <button onClick={openMenu}>
-          <div
-            className={`w-10 h-10 rounded-full ${
-              profileImageId === "" && "bg-gray-200 p-2"
-            }`}
-          >
-            <Image
-              src={
-                profileImageId === ""
-                  ? defaultProfileImg
-                  : `process.env.NEXT_PUBLIC_SERVER_BASE_URL/attachment/${profileImageId}`
-              }
-              alt="profile"
-              priority
-            />
-          </div>
+          <MenuIcon />
         </button>
       )}
       {menu && <Menu closeMenu={closeMenu} />}
