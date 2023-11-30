@@ -4,9 +4,10 @@ import { useAppSelector } from "@/hooks/redux";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import Image from "next/image";
 import OutlinedButton from "../ui/button/OutlinedButton";
-import { SyntheticEvent, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import ProfileImage from "./ProfileImage";
 import NicknameForm from "./NicknameForm";
+import FilledButton from "../ui/button/FilledButton";
 
 export default function Profile() {
   const { userName, profileImageId } = useAppSelector(state => state.userSlice);
@@ -65,7 +66,7 @@ export default function Profile() {
         ) : (
           <p className="text-3xl font-bold ">{userName}</p>
         )}
-        <div className="flex justify-around">
+        <div className="flex justify-center items-center mt-8 gap-2">
           {modifyState ? (
             <OutlinedButton onClick={() => modifyProfile()}>
               완료
@@ -79,7 +80,7 @@ export default function Profile() {
               프로필 수정
             </OutlinedButton>
           )}
-          <OutlinedButton onClick={() => {}}>탈퇴</OutlinedButton>
+          <FilledButton onClick={() => {}}>탈퇴</FilledButton>
         </div>
       </div>
     </div>

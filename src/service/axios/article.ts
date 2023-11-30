@@ -294,3 +294,20 @@ export const getMyArticleList = async (limit: number) => {
     return false;
   }
 };
+
+export const getMyArticleByRequest = async (
+  page: number,
+  limit: number,
+  request: "pending" | "accepted" | "declined"
+) => {
+  try {
+    const { data } = await user.getMyArticleByRequest(page, limit, request);
+    const articles = data.map((poster: any) => {
+      return poster.article;
+    });
+    console.log(articles);
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
