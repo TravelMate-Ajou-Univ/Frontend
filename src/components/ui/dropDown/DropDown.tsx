@@ -31,7 +31,7 @@ export default function DropDown({
   return (
     <div
       className={
-        "flex justify-between items-center md:w-40 w-28 h-9 md:px-2 rounded-full cursor-pointer relative" +
+        "flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative" +
         (border ? " border" : "") +
         (size == "small" ? " text-sm " : " md:text-base text-sm")
       }

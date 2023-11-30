@@ -13,7 +13,7 @@ export default function OutlinedButton({
 }: Props) {
   const btnSize = (size: "mid" | "small"): string => {
     if (size === "mid") {
-      return "px-4 py-1";
+      return "md:px-4 px-3 py-1 md:text-base text-sm";
     } else {
       return "px-2 py-0.5 text-sm";
     }

@@ -45,7 +45,9 @@ const config: Config = {
         }
       },
       width: {
-        mainSection: "53rem"
+        mainSection: "53rem",
+        mainSectionMd: "46rem",
+        mainSectionSm: "37rem"
       },
       animation: {
         menuSlide: "menuSlide 0.3s ease-in-out"
