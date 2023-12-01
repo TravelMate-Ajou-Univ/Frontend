@@ -7,6 +7,17 @@ import {
 import { article, user } from "./api";
 import { ImageType } from "@/model/image";
 
+export const articleCount = async (season: SeasonType) => {
+  try {
+    const { data } = await article.articleCount(season);
+    if (!data) return false;
+    return data;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
 export const uploadImage = async (file: File, type: ImageType) => {
   try {
     const { data: s3data } = await article.getS3Url(type);
@@ -17,7 +28,7 @@ export const uploadImage = async (file: File, type: ImageType) => {
       return data.id;
     }
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -27,7 +38,7 @@ export const getKeywords = async (word: string) => {
     const { data } = await article.getKeywords(word);
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -40,7 +51,7 @@ export const postKeyword = async (name: string) => {
       name: data.name
     };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -93,7 +104,7 @@ export const getArticleList = async (
 
     return { count, newArticles };
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -104,7 +115,7 @@ export const submitArticle = async (newArticle: ArticleType) => {
     if (!data) return false;
     return data.id;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -136,7 +147,7 @@ export const getArticle = async (
 
     return articleData;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -150,7 +161,7 @@ export const editArticle = async (
     if (!data) return false;
     return data.id;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -161,7 +172,7 @@ export const deleteArticle = async (id: string) => {
     if (!data) return false;
     return true;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -182,7 +193,7 @@ export const editArticleRequest = async (
     if (!data) return false;
     return data.id;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -215,7 +226,7 @@ export const getArticleRequestList = async (
     );
     return editRequest;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
@@ -226,7 +237,7 @@ export const getArticleRequest = async (id: string, requestId: string) => {
     if (!data) return false;
     return data;
   } catch (error) {
-    console.log(error);
+    console.error(error);
     return false;
   }
 };
