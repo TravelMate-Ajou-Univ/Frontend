@@ -83,7 +83,7 @@ export default function Article({ articleId }: Props) {
 
   return (
     <article className="relative flex flex-col items-center w-full bg-white shadow-lg rounded-xl pb-10 mb-16">
-      <div className="w-full h-96 rounded-t-xl overflow-hidden">
+      <div className="w-full h-[30rem] rounded-t-xl overflow-hidden">
         <ArticleGoogleMap
           modifyState={false}
           bookmarks={bookmarks}

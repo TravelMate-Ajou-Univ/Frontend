@@ -88,6 +88,8 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
             longitude: Number(bookmark.bookmark.location.longitude)
           }));
       setReceivedBookmarks(bookmarkList);
+      const bookmarkIdList = bookmarkList.map(bookmark => bookmark.id);
+      setBookmarkIds(bookmarkIdList);
       switch (edittngSeason) {
         case "SPRING":
           setSeason("봄");
