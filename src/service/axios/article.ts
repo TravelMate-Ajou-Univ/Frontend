@@ -2,6 +2,7 @@ import {
   ArticleDetailType,
   ArticleRequestType,
   ArticleType,
+  MyPageArticleType,
   SeasonType
 } from "@/model/article";
 import { article, user } from "./api";
@@ -299,15 +300,31 @@ export const getMyArticleByRequest = async (
   page: number,
   limit: number,
   request: "pending" | "accepted" | "declined"
-) => {
+): Promise<MyPageArticleType[]> => {
   try {
     const { data } = await user.getMyArticleByRequest(page, limit, request);
     const articles = data.map((poster: any) => {
-      return poster.article;
+      const season =
+        poster.article.springVersionID !== null
+          ? "spring"
+          : poster.article.summerVersionID !== null
+          ? "summer"
+          : poster.article.fallVersionID !== null
+          ? "fall"
+          : "winter";
+      const article: MyPageArticleType = {
+        id: poster.article.id,
+        title: poster.article.title,
+        season,
+        thumbnail: poster.article.thumbnail
+      };
+      return article;
     });
+
     console.log(articles);
+    return articles;
   } catch (error) {
     console.error(error);
-    return false;
+    return [];
   }
 };
