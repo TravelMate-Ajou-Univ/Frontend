@@ -181,7 +181,8 @@ export const editArticleRequest = async (
   id: string,
   content: string,
   period: SeasonType,
-  comment: string
+  comment: string,
+  bookmarkIds?: number[]
 ) => {
   try {
     const { data } = await article.editArticleRequest(

@@ -27,8 +27,8 @@ import FilledButton from "@/components/ui/button/FilledButton";
 import OutlinedButton from "@/components/ui/button/OutlinedButton";
 import { useAppSelector } from "@/hooks/redux";
 import CommentForm from "./CommentForm";
-import GoogleMap from "@/components/googleMap/GoogleMap";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
+import { BookmarkType } from "@/model/bookmark";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -52,6 +52,9 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   const [bookmarkIds, setBookmarkIds] = useState<number[]>([]);
   const [receivedContent, setReceivedContent] = useState<string>("");
   const [receivedThumbnail, setReceivedThumbnail] = useState<string>("");
+  const [receivedBookmarks, setReceivedBookmarks] = useState<
+    (BookmarkType & { period: SeasonType })[]
+  >([]);
   const [comment, setComment] = useState<string>("");
   const { id: userId } = useAppSelector(state => state.userSlice);
   const [authorId, setAuthorId] = useState<number>(-1);
@@ -71,6 +74,20 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         })
       );
       setReceivedThumbnail(article.thumbnail);
+      const bookmarkList: (BookmarkType & { period: SeasonType })[] =
+        article.articleBookmarkMap
+          .filter(
+            bookmark => bookmark.period === (seasonMapper[season] as SeasonType)
+          )
+          .map(bookmark => ({
+            id: bookmark.bookmark.id,
+            period: bookmark.period as SeasonType,
+            placeId: bookmark.bookmark.location.placeId,
+            content: bookmark.bookmark.content,
+            latitude: Number(bookmark.bookmark.location.latitude),
+            longitude: Number(bookmark.bookmark.location.longitude)
+          }));
+      setReceivedBookmarks(bookmarkList);
       switch (edittngSeason) {
         case "SPRING":
           setSeason("봄");
@@ -92,7 +109,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
     };
 
     getOrigin();
-  }, [id, edittngSeason]);
+  }, [id, edittngSeason, season]);
 
   const handleLocation = (location: string) => {
     if (id) return;
@@ -169,7 +186,8 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         location,
         content,
         tagIds: keywords.map(keyword => keyword.id),
-        thumbnail: receivedThumbnail
+        thumbnail: receivedThumbnail,
+        bookmarkIds
       };
       const result = await editArticle(id as string, article);
       if (result) {
@@ -183,7 +201,8 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         id as string,
         content,
         editingSeason,
-        comment
+        comment,
+        bookmarkIds
       );
       if (result) {
         alert("수정 요청이 완료되었습니다.");
@@ -233,6 +252,8 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
           modifyState={true}
           location={location}
           setBookmarkIds={setBookmarkIds}
+          bookmarks={id ? receivedBookmarks : undefined}
+          season={seasonMapper[season] as SeasonType}
         />
       </section>
       {!id && (
