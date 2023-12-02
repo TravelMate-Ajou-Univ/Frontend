@@ -12,7 +12,6 @@ import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
 import Script from "next/script";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
-import { BeatLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
 declare global {
   interface Window {
@@ -36,7 +35,7 @@ export default function GoogleMap({ modifyState }: Props) {
           lat: center.latitude,
           lng: center.longitude
         },
-        zoom: 12,
+        zoom: 10,
         zoomControl: true,
         zoomControlOptions: {
           position: google.maps.ControlPosition.RIGHT_BOTTOM
@@ -52,9 +51,6 @@ export default function GoogleMap({ modifyState }: Props) {
   useEffect(() => {
     if (typeof window !== "undefined" && window.google && window.google.maps) {
       window.initMap();
-    } else if (center.latitude == 0 && center.longitude == 0) {
-      console.log("wait");
-      <BeatLoader size={8} color="red" />;
     }
   }, [center, modifyState, pins]);
 
@@ -119,7 +115,7 @@ export default function GoogleMap({ modifyState }: Props) {
     setPlaces([]);
 
     // 검색어로 검색.
-    const response = await searchPlace({ service, search, map, center });
+    const response = await searchPlace({ service, search, map });
 
     if (response === null) {
       alert("검색 실패");

@@ -8,7 +8,7 @@ export default function Main({ children }: { children: React.ReactNode }) {
   return (
     <main
       className={`mx-auto mt-16 w-full flex-grow ${
-        pathname === "/" ? "" : "max-w-screen-xl"
+        pathname === "/" ? "" : "max-w-screen-xl md:px-0 px-2"
       }`}
     >
       {children}

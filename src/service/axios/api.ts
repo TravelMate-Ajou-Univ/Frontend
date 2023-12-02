@@ -73,6 +73,8 @@ export const user = {
 };
 
 export const article = {
+  articleCount: (season: SeasonType) =>
+    api.get(`articles/count?period=${season}`),
   getS3Url: (type: ImageType) => api.get(`s3/presigned-post?type=${type}`),
   uploadImgToS3: (s3url: string, data: File) => axios.put(s3url, data),
   confirmUpload: (id: string) =>

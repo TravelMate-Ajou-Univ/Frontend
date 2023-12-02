@@ -63,7 +63,10 @@ const ArticlePreview = forwardRef<HTMLDivElement, Props>(
     ]);
 
     return (
-      <div className="rounded-2xl border overflow-hidden w-[25.8rem]" ref={ref}>
+      <div
+        className="rounded-2xl border overflow-hidden xl:w-[25.8rem] lg:w-[20rem] md:w-[15rem] w-[11rem]"
+        ref={ref}
+      >
         <Link href={`/article/detail/${id}?season=${season}`}>
           <Image
             className="w-full"

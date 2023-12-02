@@ -13,21 +13,20 @@ export default function HomeBG() {
         width={1920}
         height={1080}
       />
-      <div className="absolute top-[25%] left-[15%]">
+      <div className="absolute md:top-[25%] top-[15%] md:left-[15%] left-[10%]">
         <FadeReveal>
-          <p className="text-secondary text-7xl font-semibold">TravelMate</p>
-          <p className="text-sky text-3xl mt-3">
+          <p className="text-secondary 2xl:text-7xl xl:text-6xl lg:text-5xl md:text-4xl text-3xl font-semibold">
+            TravelMate
+          </p>
+          <p className="text-sky 2xl:text-3xl xl:text-2xl lg:text-xl md:text-lg text-base mt-3">
             모두가 만들어가는 <b>여행 플랫폼</b>
           </p>
-          <div className="absolute top-20 -right-52">
-            <Image src={tooltip} alt="툴팁" width={150} height={150} />
-            <p className="w-full absolute top-[3.3rem] text-xs text-center">
-              <span className="text-blue-700">수정요청</span>을 해보세요.
-              <br />
-              <span className="text-blue-700">다같이</span> 여행기록을
-              <br />
-              꾸며보세요!
-            </p>
+          <div className="absolute top-20 md:-right-52 -right-36">
+            <Image
+              className="2xl:w-36 xl:w-32 lg:w-28 w-20"
+              src={tooltip}
+              alt="툴팁"
+            />
           </div>
         </FadeReveal>
       </div>

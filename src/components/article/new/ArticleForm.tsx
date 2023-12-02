@@ -30,7 +30,7 @@ import CommentForm from "./CommentForm";
 import GoogleMap from "@/components/googleMap/GoogleMap";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
 
-const INPUT_CLASSNAME = "flex items-center gap-4";
+const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
 const TextEditor = dynamic(() => import("@/components/reactQuill/TextEditor"), {
   ssr: false
@@ -195,16 +195,16 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   };
 
   return (
-    <section className="flex flex-col gap-6 bg-white w-full mx-auto px-16 py-12 mb-12 border">
+    <section className="flex flex-col gap-6 bg-white w-full mx-auto lg:px-16 md:px-12 sm:px-8 px-4 lg:py-12 md:py-9 sm:py-6 py-3 mb-12 border">
       <input
-        className="focus:outline-none border-b px-2 py-1 text-lg disabled:bg-white"
+        className="focus:outline-none border-b px-2 py-1 md:text-lg disabled:bg-white"
         type="text"
         placeholder="제목"
         value={title}
         onChange={e => setTitle(e.target.value)}
         disabled={!!id}
       />
-      <div className="flex flex-row gap-28">
+      <div className="flex flex-row lg:gap-28 md:gap-20 sm:gap-12 gap-4">
         <div className={INPUT_CLASSNAME}>
           <label>지역 </label>
           <DropDown
@@ -248,7 +248,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       <ul className="text-sm">
         {keywords.map((keyword, index) => (
           <li
-            className="inline-block mr-4 cursor-pointer"
+            className="inline-block md:mr-4 mr-2 cursor-pointer"
             key={keyword.id}
             onClick={() => removeKeyword(index)}
           >

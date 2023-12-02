@@ -11,18 +11,25 @@ interface Props {
 }
 
 const LIST_CLASS =
-  "flex justify-center items-center gap-2 py-2.5 w-40 cursor-pointer rounded-full border text-gray-900";
+  "flex justify-center items-center md:gap-2 gap-1 md:py-2.5 sm:py-2 py-1.5 md:w-40 sm:w-28 w-20 cursor-pointer rounded-full border text-gray-900 md:text-base text-sm";
+const ICON_CLASS = "md:w-7 md:h-7 w-5 h-5";
 
 export default function SeasonNav({ season, onClick }: Props) {
   return (
-    <ul className="flex justify-around items-center gap-4 bg-white">
+    <ul className="flex justify-around items-center lg:gap-4 md:gap-3 gap-2 bg-white">
       <li
         className={
           LIST_CLASS + (season === "SPRING" ? " border-spring bg-spring" : "")
         }
         onClick={() => onClick("SPRING")}
       >
-        <Image src={springIcon} alt="봄 아이콘" width={25} height={25} />
+        <Image
+          className={ICON_CLASS}
+          src={springIcon}
+          alt="봄 아이콘"
+          width={25}
+          height={25}
+        />
         <span>봄</span>
       </li>
       <li
@@ -31,7 +38,13 @@ export default function SeasonNav({ season, onClick }: Props) {
         }
         onClick={() => onClick("SUMMER")}
       >
-        <Image src={summerIcon} alt="여름 아이콘" width={25} height={25} />
+        <Image
+          className={ICON_CLASS}
+          src={summerIcon}
+          alt="여름 아이콘"
+          width={25}
+          height={25}
+        />
         <span>여름</span>
       </li>
       <li
@@ -40,7 +53,13 @@ export default function SeasonNav({ season, onClick }: Props) {
         }
         onClick={() => onClick("FALL")}
       >
-        <Image src={fallIcon} alt="가을 아이콘" width={25} height={25} />
+        <Image
+          className={ICON_CLASS}
+          src={fallIcon}
+          alt="가을 아이콘"
+          width={25}
+          height={25}
+        />
         <span>가을</span>
       </li>
       <li
@@ -49,7 +68,13 @@ export default function SeasonNav({ season, onClick }: Props) {
         }
         onClick={() => onClick("WINTER")}
       >
-        <Image src={winterIcon} alt="겨울 아이콘" width={25} height={25} />
+        <Image
+          className={ICON_CLASS}
+          src={winterIcon}
+          alt="겨울 아이콘"
+          width={25}
+          height={25}
+        />
         <span>겨울</span>
       </li>
     </ul>

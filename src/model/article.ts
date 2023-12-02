@@ -72,3 +72,16 @@ export type ArticleRequestType = {
   updatedAt: string;
   comment?: string;
 };
+
+export type ArticleCountType = {
+  location:
+    | "서울"
+    | "경기/인천"
+    | "강원"
+    | "충청/대전"
+    | "전라/광주"
+    | "경북/대구"
+    | "경남/울산/부산"
+    | "제주";
+  count: number;
+};

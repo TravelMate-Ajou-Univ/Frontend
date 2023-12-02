@@ -45,7 +45,7 @@ export default function KeywordInput({ addKeyword, disabled = false }: Props) {
     <div className="flex flex-col">
       <form className="flex" onSubmit={e => addKeywordList(e)}>
         <input
-          className="focus:outline-none border-b px-2 py-1 text-sm w-80"
+          className="focus:outline-none border-b px-2 py-1 text-sm md:w-80 sm:w-72 w-64 rounded-none"
           type="text"
           placeholder="#맛집, #카페, #숙소 등의 키워드를 입력해주세요 :)"
           value={keyword}
@@ -57,7 +57,7 @@ export default function KeywordInput({ addKeyword, disabled = false }: Props) {
         </button>
       </form>
       {dropdown && searchedKeyword.length !== 0 && (
-        <div className="w-80 relative" ref={ref}>
+        <div className="md:w-80 sm:w-72 w-64 relative" ref={ref}>
           <DropDownList
             list={searchedKeyword}
             setSelected={handleDropdownKeyword}

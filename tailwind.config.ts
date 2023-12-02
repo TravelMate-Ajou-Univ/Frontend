@@ -24,6 +24,7 @@ const config: Config = {
       textColor: {
         primary: "#2C3B84",
         secondary: "#3D4FA6",
+        secondaryHover: "#82A7DE",
         sky: "#9FB5D7"
       },
       borderColor: {
@@ -45,7 +46,9 @@ const config: Config = {
         }
       },
       width: {
-        mainSection: "53rem"
+        mainSection: "53rem",
+        mainSectionMd: "46rem",
+        mainSectionSm: "37rem"
       },
       animation: {
         menuSlide: "menuSlide 0.3s ease-in-out"

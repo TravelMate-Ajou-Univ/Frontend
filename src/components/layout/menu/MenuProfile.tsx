@@ -6,9 +6,9 @@ export default function MenuProfile() {
   const { userName, profileImageId } = useAppSelector(state => state.userSlice);
 
   return (
-    <div className="flex flex-row items-center gap-4">
+    <div className="flex flex-col items-center gap-4">
       <div
-        className={`w-12 h-12 rounded-full ${
+        className={`overflow-hidden w-28 h-28 rounded-full ${
           profileImageId === "" && "bg-gray-200 p-2"
         }`}
       >
@@ -22,7 +22,7 @@ export default function MenuProfile() {
           priority
         />
       </div>
-      <span className="text-lg">{userName}</span>
+      <span className="text-lg font-semibold">{userName}</span>
     </div>
   );
 }
