@@ -11,6 +11,13 @@ export type SeasonContentType = {
   content: string;
 };
 
+export type MyPageArticleType = {
+  id: number;
+  title: string;
+  season: string;
+  thumbnail: string;
+};
+
 export type ArticleType = {
   title: string;
   period: SeasonType;
