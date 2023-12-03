@@ -35,7 +35,7 @@ export default function ChatList({ chatList }: Props) {
   };
   useEffect(() => {
     scrollToBottom();
-  }, [chatList]);
+  }, [chatList, scrollToBottom]);
 
   return (
     <section className="w-full h-[33rem]">
