@@ -182,14 +182,17 @@ export const editArticleRequest = async (
   content: string,
   period: SeasonType,
   comment: string,
-  bookmarkIds?: number[]
+  bookmarksToRemove: number[],
+  bookmarksToAdd: number[]
 ) => {
   try {
     const { data } = await article.editArticleRequest(
       id,
       content,
       period,
-      comment
+      comment,
+      bookmarksToRemove,
+      bookmarksToAdd
     );
     if (!data) return false;
     return data.id;

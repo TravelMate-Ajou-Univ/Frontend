@@ -62,11 +62,13 @@ export default function ArticleGoogleMap({
   };
 
   useEffect(() => {
-    if (bookmarks && bookmarks.length > 0 && season) {
+    if (bookmarks && bookmarks.length > 0) {
       setCenter(calculateCenter(bookmarks));
-      setZoom(9);
+      setZoom(12);
       setPins(bookmarks);
     } else if (location === "") {
+      setPins([]);
+      setZoom(14);
       navigator.geolocation.getCurrentPosition(
         position => {
           setCenter({
@@ -80,6 +82,7 @@ export default function ArticleGoogleMap({
         }
       );
     } else {
+      setPins([]);
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({ address: location }, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK && results) {

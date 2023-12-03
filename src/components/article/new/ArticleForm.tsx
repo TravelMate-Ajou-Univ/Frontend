@@ -55,6 +55,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   const [receivedBookmarks, setReceivedBookmarks] = useState<
     (BookmarkType & { period: SeasonType })[]
   >([]);
+  const [receivedBookmarkIds, setReceivedBookmarkIds] = useState<number[]>([]);
   const [comment, setComment] = useState<string>("");
   const { id: userId } = useAppSelector(state => state.userSlice);
   const [authorId, setAuthorId] = useState<number>(-1);
@@ -73,6 +74,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
           return { id: tag.tag.id, name: tag.tag.name };
         })
       );
+      setThumbnailPreview(article.thumbnail);
       setReceivedThumbnail(article.thumbnail);
       const bookmarkList: (BookmarkType & { period: SeasonType })[] =
         article.articleBookmarkMap
@@ -90,6 +92,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       setReceivedBookmarks(bookmarkList);
       const bookmarkIdList = bookmarkList.map(bookmark => bookmark.id);
       setBookmarkIds(bookmarkIdList);
+      setReceivedBookmarkIds(bookmarkIdList);
       switch (edittngSeason) {
         case "SPRING":
           setSeason("봄");
@@ -123,7 +126,6 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   };
 
   const addKeyword = async (keyword: string) => {
-    if (id) return;
     const returnedKeyword = await postKeyword(keyword);
     if (!returnedKeyword) return;
     if (returnedKeyword.name.charAt(0) === "#") {
@@ -182,13 +184,18 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   const edit = async () => {
     const editingSeason = seasonMapper[season] as SeasonType;
     if (authorId === userId) {
+      let thumbnail = receivedThumbnail;
+      if (thumbnailFile) {
+        const imgId = await uploadImage(thumbnailFile, "thumbnail");
+        thumbnail = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=thumbnail`;
+      }
       const article: ArticleType = {
         title,
         period: editingSeason,
         location,
         content,
         tagIds: keywords.map(keyword => keyword.id),
-        thumbnail: receivedThumbnail,
+        thumbnail: thumbnail,
         bookmarkIds
       };
       const result = await editArticle(id as string, article);
@@ -199,12 +206,20 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         );
       }
     } else {
+      const bookmarksToRemove = receivedBookmarkIds.filter(
+        bookmarkId => !bookmarkIds.includes(bookmarkId)
+      );
+      const bookmarksToAdd = bookmarkIds.filter(
+        bookmarkId => !receivedBookmarkIds.includes(bookmarkId)
+      );
+
       const result = await editArticleRequest(
         id as string,
         content,
         editingSeason,
         comment,
-        bookmarkIds
+        bookmarksToRemove,
+        bookmarksToAdd
       );
       if (result) {
         alert("수정 요청이 완료되었습니다.");
@@ -223,7 +238,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         placeholder="제목"
         value={title}
         onChange={e => setTitle(e.target.value)}
-        disabled={!!id}
+        disabled={id && authorId !== userId ? true : false}
       />
       <div className="flex flex-row lg:gap-28 md:gap-20 sm:gap-12 gap-4">
         <div className={INPUT_CLASSNAME}>
@@ -258,7 +273,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
           season={seasonMapper[season] as SeasonType}
         />
       </section>
-      {!id && (
+      {(!id || authorId === userId) && (
         <ImageSection
           handleImage={handleThumbnail}
           thumbnailPreview={thumbnailPreview}
@@ -266,7 +281,10 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       )}
       <div className={INPUT_CLASSNAME}>
         <label>키워드 </label>
-        <KeywordInput addKeyword={addKeyword} disabled={!!id} />
+        <KeywordInput
+          addKeyword={addKeyword}
+          disabled={id && authorId !== userId ? true : false}
+        />
       </div>
       <ul className="text-sm">
         {keywords.map((keyword, index) => (

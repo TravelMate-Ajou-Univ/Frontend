@@ -91,19 +91,23 @@ export const article = {
     id: string,
     content: string,
     period: SeasonType,
-    comment: string
+    comment: string,
+    bookmarksToRemove: number[],
+    bookmarksToAdd: number[]
   ) =>
-    api.post(`articles/${id}/reqeusts`, {
+    api.post(`articles/${id}/requests`, {
       content,
       period,
-      comment
+      comment,
+      bookmarksToRemove,
+      bookmarksToAdd
     }),
   getArticleRequestList: (id: string, season: SeasonType | "ALL") =>
-    api.get(`articles/${id}/reqeusts?period=${season}`),
+    api.get(`articles/${id}/requests?period=${season}`),
   getArticleRequest: (id: string, requestId: string) =>
-    api.get(`articles/${id}/reqeusts/${requestId}`),
+    api.get(`articles/${id}/requests/${requestId}`),
   acceptArticleRequest: (id: string, requestId: string) =>
-    api.get(`articles/${id}/reqeusts/accept/${requestId}`),
+    api.get(`articles/${id}/requests/accept/${requestId}`),
   declineArticleRequest: (id: string, requestId: string) =>
-    api.get(`articles/${id}/reqeusts/decline/${requestId}`)
+    api.get(`articles/${id}/requests/decline/${requestId}`)
 };

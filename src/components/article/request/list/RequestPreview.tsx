@@ -13,6 +13,8 @@ interface Props {
 
 export default function RequestPreview({ request }: Props) {
   const [user, setUser] = useState<User>(initialUser);
+  // const [time, setTime] = useState<string>("");
+  const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
 
   useEffect(() => {
@@ -23,10 +25,16 @@ export default function RequestPreview({ request }: Props) {
     };
 
     getAuthor();
-    const curTime = new Date(request.updatedAt)
-      .toLocaleString()
-      .substring(0, 21);
-    setTime(curTime);
+    const curTime = new Date(request.updatedAt).toLocaleString().split(" ");
+    console.log(curTime);
+    setDate(curTime[0] + " " + curTime[1] + " " + curTime[2]);
+    setTime(
+      curTime[3] +
+        " " +
+        curTime[4].split(":")[0] +
+        ":" +
+        curTime[4].split(":")[1]
+    );
   }, [request]);
 
   return (
@@ -49,8 +57,8 @@ export default function RequestPreview({ request }: Props) {
         </div>
         <p className="flex-grow">{user.userName}</p>
         <section className="text-gray-600 text-sm text-end leading-4">
-          <p>{time.slice(0, 12)}</p>
-          <p>{time.slice(14)}</p>
+          <p>{date}</p>
+          <p>{time}</p>
         </section>
       </section>
       {request.comment && (
