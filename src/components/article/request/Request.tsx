@@ -68,13 +68,28 @@ export default function Request({ articleId, requestId }: Props) {
           }));
 
       setOriginBookmarks(bookmarkList);
-      // const requestBookmarkList: (BookmarkType & { period: SeasonType })[] =
-      //     request.PendingArticleRequestBookmarkMap.map(bookmark => ({
-      //       id: bookmark.bookmark.id,
-      //       period: request.period,
-
-      //       )
-      // setRequestBookmarks([...bookmarkList, ])
+      setRequestBookmarks(bookmarkList);
+      request.PendingArticleRequestBookmarkMap.map((bookmark: any) => {
+        if (bookmark.type === "REMOVE") {
+          setRequestBookmarks(prev =>
+            prev.filter(
+              requestBookmark => requestBookmark.id !== bookmark.bookmark.id
+            )
+          );
+        } else {
+          setRequestBookmarks(prev => [
+            ...prev,
+            {
+              id: bookmark.bookmark.id,
+              period: request.period as SeasonType,
+              placeId: bookmark.bookmark.location.placeId,
+              content: bookmark.bookmark.content,
+              latitude: Number(bookmark.bookmark.location.latitude),
+              longitude: Number(bookmark.bookmark.location.longitude)
+            }
+          ]);
+        }
+      });
 
       switch (request.period as SeasonType) {
         case "SPRING":
@@ -160,16 +175,20 @@ export default function Request({ articleId, requestId }: Props) {
         <Tab label="Request" />
       </Tabs>
 
-      <div
-        className={`w-full h-[30rem] rounded-xl overflow-hidden ${
-          value === 0 ? "block" : "hidden"
-        }`}
-      >
-        <ArticleGoogleMap
-          modifyState={false}
-          bookmarks={originBookmarks}
-          location={originBookmarks.length === 0 ? location : undefined}
-        />
+      <div className={`w-full h-[30rem] rounded-xl overflow-hidden`}>
+        {value === 0 ? (
+          <ArticleGoogleMap
+            modifyState={false}
+            bookmarks={originBookmarks}
+            location={originBookmarks.length === 0 ? location : undefined}
+          />
+        ) : (
+          <ArticleGoogleMap
+            modifyState={false}
+            bookmarks={requestBookmarks}
+            location={requestBookmarks.length === 0 ? location : undefined}
+          />
+        )}
       </div>
 
       <Diff diff={diff} originArticle={originArticle} />

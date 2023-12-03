@@ -21,6 +21,7 @@ type Props = {
   setBookmarkIds?: React.Dispatch<React.SetStateAction<number[]>>;
   bookmarks?: (BookmarkType & { period: SeasonType })[];
   season?: SeasonType;
+  className?: string;
 };
 
 export default function ArticleGoogleMap({
@@ -28,7 +29,8 @@ export default function ArticleGoogleMap({
   location = "",
   setBookmarkIds,
   bookmarks,
-  season
+  season,
+  className = ""
 }: Props) {
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
@@ -259,7 +261,7 @@ export default function ArticleGoogleMap({
   };
 
   return (
-    <div className="w-full h-full relative">
+    <div className={`${className} w-full h-full relative`}>
       {modifyState && (
         <form className="absolute z-10 left-2 top-2 flex items-center">
           <input
