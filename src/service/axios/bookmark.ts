@@ -49,8 +49,6 @@ export const getMyCollectionListWithoutPagination = async () => {
       method: "get",
       url: "users/me/total-bookmark-collections"
     });
-    console.log(response);
-
     return response;
     // return {
     //   bookmarkCollections: response.data.bookmarkCollections,

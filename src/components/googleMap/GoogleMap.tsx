@@ -76,7 +76,6 @@ export default function GoogleMap({ modifyState }: Props) {
   // 북마크 컬렉션에 있는 북마크들 marker로 표시
   const setMarker = (initmap: google.maps.Map) => {
     if (initmap === undefined) {
-      console.log("map is undefined");
       return;
     }
     const service = new google.maps.places.PlacesService(

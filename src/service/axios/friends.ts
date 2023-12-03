@@ -183,8 +183,6 @@ export const getFriendListToInvite = async (
       }
     });
 
-    console.log(response);
-
     return response.data;
   } catch (error) {
     console.error(error);

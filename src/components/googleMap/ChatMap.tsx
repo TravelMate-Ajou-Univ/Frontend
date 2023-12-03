@@ -71,7 +71,7 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
       dispatch(addBookmarks(newBookmarks));
     });
     socket.on("deleteBookmark", data => {
-      console.log(data);
+      // Todo : delete bookmark
     });
   }, [socket, dispatch]);
 
@@ -101,8 +101,6 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
   };
 
   const subBookmarkHandler = (bookmark: BookmarkType) => {
-    console.log("delete : ", bookmark);
-
     socket.emit("deleteBookmark", {
       bookmarkIds: [bookmark.id],
       bookmarkCollectionId: collectionId

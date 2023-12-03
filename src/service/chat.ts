@@ -13,8 +13,6 @@ export const checkVisibility = (
   members: FriendType[]
 ): ChatWithVisibilityType[] => {
   // key & value
-  console.log(members);
-
   const dict = new Map<number, string>();
 
   members.map(member => {
@@ -25,7 +23,6 @@ export const checkVisibility = (
   let check_time: string = "";
   let newChatList: ChatWithVisibilityType[] = [];
   let newChat: ChatWithVisibilityType;
-  console.log(chatList);
 
   for (let i = 0; i < chatList.length; i++) {
     if (chatList[i].userId !== check_userId) {
@@ -63,8 +60,6 @@ export const checkVisibility = (
     }
     newChatList = [...newChatList, newChat];
   }
-
-  console.log(newChatList);
 
   return newChatList;
 };

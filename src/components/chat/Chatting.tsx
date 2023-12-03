@@ -35,7 +35,6 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
   // 지도, chat기록 데이터 가져오기
   useEffect(() => {
     const getData = async () => {
-      // Todo : 지도에 대한 처리, Message 기록 가져오기
       const data = await getChatRoomData(roomId);
       const chatList = await getChatList(roomId);
 
@@ -59,8 +58,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
             );
           },
           error => {
-            prompt("현재 위치를 가져오는 데 실패하였습니다.");
-            console.log(error);
+            alert("현재 위치를 가져오는 데 실패하였습니다.");
           }
         );
       } else {
@@ -118,7 +116,13 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           userVisibility: false
         };
       }
-
+      socket.on("exitChatRoom", data => {
+        const exitmember = data.leaveUserId;
+        const filterMember = roomMembers.filter(
+          member => member.id !== exitmember
+        );
+        setRoomMembers(filterMember);
+      });
       setChatList(chatList => [...chatList, newChat]);
     });
     socket.on("disconnected", message => {});
