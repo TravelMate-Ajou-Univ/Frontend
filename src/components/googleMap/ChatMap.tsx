@@ -1,10 +1,9 @@
-"use client";
 import { useAppSelector } from "@/hooks/redux";
 import { BookmarkType, PinType } from "@/model/bookmark";
 import {
-  addPins,
   initBookmarks,
   initPins,
+  setBookmarks,
   subBookmarks,
   subPins
 } from "@/redux/features/mapSlice";
@@ -13,15 +12,17 @@ import { placeDetail, searchPlace } from "@/service/googlemap/place";
 import Script from "next/script";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import { Socket } from "socket.io-client";
 declare global {
   interface Window {
     initMap: () => void;
   }
 }
 type Props = {
+  socket: Socket;
   modifyState: boolean;
 };
-export default function ChatMap({ modifyState }: Props) {
+export default function ChatMap({ modifyState, socket }: Props) {
   const dispatch = useDispatch();
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
@@ -45,14 +46,29 @@ export default function ChatMap({ modifyState }: Props) {
       }
     );
     setMap(initmap);
-    // setMarker(initmap);
+    setMarker(initmap);
   };
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.google && window.google.maps) {
       window.initMap();
     }
-  }, [center, modifyState, pins]);
+  }, [center, modifyState, bookmarks]);
+
+  useEffect(() => {
+    socket.on("postBookmark", data => {
+      const newBookmarks: BookmarkType[] = data.bookmark.map(
+        (chatBookmark: any) => ({
+          latitude: Number(chatBookmark.location.latitude),
+          longitude: Number(chatBookmark.location.longitude),
+          content: chatBookmark.content,
+          placeId: chatBookmark.location.placeId,
+          id: chatBookmark.id
+        })
+      );
+      dispatch(setBookmarks(newBookmarks));
+    });
+  }, [socket]);
 
   // page를 나갈 때 pins, bookmarks 초기화.
   useEffect(() => {
@@ -70,18 +86,6 @@ export default function ChatMap({ modifyState }: Props) {
     bookmarks.map(bookmark => {
       makeMarker({
         pin: bookmark,
-        initmap,
-        service,
-        modifyState,
-        map: map as google.maps.Map,
-        subPinHandler,
-        subBookmarkHandler
-      });
-    });
-
-    pins.map(pin => {
-      makeMarker({
-        pin: pin,
         initmap,
         service,
         modifyState,
@@ -138,10 +142,12 @@ export default function ChatMap({ modifyState }: Props) {
           service,
           place_id: place.place_id as string
         });
-        if (result === null) {
+        if (result === null || map === undefined) {
           return;
         }
 
+        // click한 marker를 맵 중앙에 오고, 정보창 띄우기
+        map.setCenter(marker.getPosition() as google.maps.LatLng);
         const contentString = makeContentString({
           photoUrl: result?.photos?.[0].getUrl(),
           name: result.name,
@@ -198,14 +204,20 @@ export default function ChatMap({ modifyState }: Props) {
                   const text = document.getElementById(
                     "text"
                   ) as HTMLInputElement;
-                  const newPin: PinType = {
-                    latitude: result.geometry?.location?.lat() as number,
-                    longitude: result.geometry?.location?.lng() as number,
-                    placeId: place.place_id as string,
-                    content: text.value
-                  };
 
-                  dispatch(addPins(newPin));
+                  // 검색한 bookmark chatting map에 emit
+                  socket.emit("postBookmark", {
+                    locationsWithContent: [
+                      {
+                        latitude: result.geometry?.location?.lat() as number,
+                        longitude: result.geometry?.location?.lng() as number,
+                        content: text.value,
+                        placeId: place.place_id as string
+                      }
+                    ],
+                    bookmarkCollectionId: 1
+                  });
+
                   addWindow.close();
                   marker.setMap(null);
                 });

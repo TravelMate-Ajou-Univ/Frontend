@@ -231,10 +231,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       return;
     }
     socket.emit("sendMessage", {
-      roomId: roomId,
-      userId: id,
-      nickname: userName,
-      content: content
+      message: content
     });
   };
 
@@ -246,7 +243,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
     <section className="w-[90%] mx-auto flex justify-center mt-4">
       {mapState ? (
         <div className="w-[50%] h-[40rem] m-2 border-2 rounded-md my-auto relative">
-          <ChatMap modifyState={true} />
+          <ChatMap modifyState={true} socket={socket} />
           <OutlinedButton
             onClick={() => {
               setOptionsState(!optionsState);
@@ -258,7 +255,10 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           </OutlinedButton>
           {optionsState ? (
             <div className="absolute left-[21rem] top-[0.5rem] z-20">
-              <BookmarkOptionBox setOptionsState={setOptionsState} />
+              <BookmarkOptionBox
+                setOptionsState={setOptionsState}
+                socket={socket}
+              />
             </div>
           ) : null}
         </div>

@@ -7,9 +7,11 @@ import {
   BookmarkWithCollectionNameType
 } from "@/model/bookmark";
 import DropDown from "../ui/dropDown/DropDown";
+import { Socket } from "socket.io-client";
 
 type Props = {
   setOptionsState: (state: boolean) => void;
+  socket: Socket;
 };
 
 type CollectionType = {
@@ -22,7 +24,7 @@ const initCollection: CollectionType = {
   id: 0
 };
 
-export default function BookmarkOptionBox({ setOptionsState }: Props) {
+export default function BookmarkOptionBox({ setOptionsState, socket }: Props) {
   const [collectionList, setCollectionList] = useState<CollectionType[]>([]);
   const [bookmarkList, setBookmarkList] = useState<BookmarkType[]>([]);
   const [selectedCollection, setSelectedCollection] =
@@ -86,6 +88,14 @@ export default function BookmarkOptionBox({ setOptionsState }: Props) {
     setBookmarkToAdd(filteredBookmarkList);
   };
 
+  const bringBookmarksHandler = () => {
+    // TODO: emit(postBookmarks)
+    socket.emit("postBookmark", {
+      locationsWithContent: bookmarkToAdd,
+      bookmarkCollectionId: 1
+    });
+  };
+
   return (
     <div className="z-20 w-[10rem] border-2 rounded-md bg-white flex flex-col justify-center items-center gap-2 p-2">
       <DropDown
@@ -146,7 +156,11 @@ export default function BookmarkOptionBox({ setOptionsState }: Props) {
         >
           취소
         </OutlinedButton>
-        <OutlinedButton className="text-xs" size="small">
+        <OutlinedButton
+          onClick={bringBookmarksHandler}
+          className="text-xs"
+          size="small"
+        >
           가져오기
         </OutlinedButton>
       </div>

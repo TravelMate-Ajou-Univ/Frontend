@@ -39,8 +39,6 @@ export default function ChatRoomHeader({
 
   const addMemberHandler = () => {
     socket.emit("inviteFriend", {
-      roomId,
-      nickname,
       members
     });
   };

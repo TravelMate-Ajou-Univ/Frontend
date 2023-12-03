@@ -23,7 +23,7 @@ export default function ContentList({ articles }: Props) {
               <Link
                 key={index}
                 href={`/article/detail/${article.id}?season=${article.season}`}
-                className="flex flex-col justify-center items-center"
+                className="flex flex-col justify-center items-center w-[10rem] h-[10rem] shadow-2xl"
               >
                 <div className="h-[8rem] w-[8rem]">
                   <Image

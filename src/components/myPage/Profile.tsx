@@ -15,6 +15,7 @@ export default function Profile() {
   const [nickname, setNickname] = useState<string>("");
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
+  // const [check]
 
   useEffect(() => {
     setNickname(userName);
@@ -24,8 +25,6 @@ export default function Profile() {
     if (!e.target.files) return;
     const file = e.target.files[0];
     setProfileFile(file);
-
-    console.log(URL.createObjectURL(file));
     setProfilePreview(URL.createObjectURL(file));
   };
 
