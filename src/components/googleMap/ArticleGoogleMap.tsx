@@ -66,7 +66,7 @@ export default function ArticleGoogleMap({
   useEffect(() => {
     if (bookmarks && bookmarks.length > 0) {
       setCenter(calculateCenter(bookmarks));
-      setZoom(12);
+      setZoom(9);
       setPins(bookmarks);
     } else if (location === "") {
       setPins([]);
