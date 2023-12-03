@@ -14,3 +14,18 @@ export const checkDuplicateName = async (nickname: string) => {
   }
   return response;
 };
+
+export const changeNickname = async (nickname: string) => {
+  const response = await api({
+    method: "patch",
+    url: "/users/change-nickname",
+    data: {
+      nickname
+    }
+  });
+
+  if (response.status === 400) {
+    return new Error();
+  }
+  return response.data;
+};
