@@ -9,13 +9,17 @@ import {
   getArticleRequest
 } from "@/service/axios/article";
 import { getUserInfoById } from "@/service/axios/userSign";
-import { useEffect, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { parseDiff } from "react-diff-view";
 import Diff from "./Diff";
 import OutlinedButton from "@/components/ui/button/OutlinedButton";
 import FilledButton from "@/components/ui/button/FilledButton";
 import { useRouter } from "next/navigation";
 import Comment from "./Comment";
+import { BookmarkType } from "@/model/bookmark";
+import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
+import Tabs from "@mui/material/Tabs";
+import Tab from "@mui/material/Tab";
 const { formatLines, diffLines } = require("unidiff");
 
 interface Props {
@@ -24,12 +28,20 @@ interface Props {
 }
 
 export default function Request({ articleId, requestId }: Props) {
+  const [location, setLocation] = useState<string>("");
   const [originArticle, setOriginArticle] = useState<string>("");
+  const [originBookmarks, setOriginBookmarks] = useState<
+    (BookmarkType & { period: SeasonType })[]
+  >([]);
   const [requestArticle, setRequestArticle] = useState<string>("");
+  const [requestBookmarks, setRequestBookmarks] = useState<
+    (BookmarkType & { period: SeasonType })[]
+  >([]);
   const [requestUser, setRequestUser] = useState<User>();
   const [requestComment, setRequestComment] = useState<string>("");
   const [requestPeriod, setRequestPeriod] = useState<SeasonType>("SPRING");
   const [diff, setDiff] = useState<any>();
+  const [value, setValue] = useState<number>(1);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,8 +52,30 @@ export default function Request({ articleId, requestId }: Props) {
       if (!user) return;
       setRequestUser(user);
       const origin = await getArticle(articleId);
-
       if (!origin) return;
+
+      setLocation(origin.location);
+      const bookmarkList: (BookmarkType & { period: SeasonType })[] =
+        origin.articleBookmarkMap
+          .filter(bookmark => bookmark.period === request.period)
+          .map(bookmark => ({
+            id: bookmark.bookmark.id,
+            period: bookmark.period as SeasonType,
+            placeId: bookmark.bookmark.location.placeId,
+            content: bookmark.bookmark.content,
+            latitude: Number(bookmark.bookmark.location.latitude),
+            longitude: Number(bookmark.bookmark.location.longitude)
+          }));
+
+      setOriginBookmarks(bookmarkList);
+      // const requestBookmarkList: (BookmarkType & { period: SeasonType })[] =
+      //     request.PendingArticleRequestBookmarkMap.map(bookmark => ({
+      //       id: bookmark.bookmark.id,
+      //       period: request.period,
+
+      //       )
+      // setRequestBookmarks([...bookmarkList, ])
+
       switch (request.period as SeasonType) {
         case "SPRING":
           if (!origin.spring) break;
@@ -77,6 +111,13 @@ export default function Request({ articleId, requestId }: Props) {
     setDiff(textDiff);
   }, [originArticle, requestArticle]);
 
+  const handleChange = (
+    _: SyntheticEvent<Element, Event>,
+    newValue: number
+  ) => {
+    setValue(newValue);
+  };
+
   const decline = async () => {
     const confirm = window.confirm("수정 요청을 정말 거절하시겠습니까?");
     if (!confirm) return;
@@ -87,6 +128,7 @@ export default function Request({ articleId, requestId }: Props) {
   };
 
   const accept = async () => {
+    // TODO: 미리보기 페이지로 이동
     const confirm = window.confirm("수정 요청을 정말 승인하시겠습니까?");
     if (!confirm) return;
     const response = await acceptArticleRequest(articleId, requestId);
@@ -108,7 +150,29 @@ export default function Request({ articleId, requestId }: Props) {
         </div>
       </section>
       <hr />
-      <Diff diff={diff} />
+      <Tabs
+        value={value}
+        onChange={handleChange}
+        variant="fullWidth"
+        aria-label="disabled tabs example"
+      >
+        <Tab label="Origin" />
+        <Tab label="Request" />
+      </Tabs>
+
+      <div
+        className={`w-full h-[30rem] rounded-xl overflow-hidden ${
+          value === 0 ? "block" : "hidden"
+        }`}
+      >
+        <ArticleGoogleMap
+          modifyState={false}
+          bookmarks={originBookmarks}
+          location={originBookmarks.length === 0 ? location : undefined}
+        />
+      </div>
+
+      <Diff diff={diff} originArticle={originArticle} />
       <hr />
       {requestComment !== "" && requestUser && (
         <Comment requestUser={requestUser} requestComment={requestComment} />

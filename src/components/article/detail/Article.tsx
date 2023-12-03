@@ -1,10 +1,6 @@
 "use client";
 
-import {
-  ArticleDetailType,
-  SeasonLowerCaseType,
-  SeasonType
-} from "@/model/article";
+import { ArticleDetailType, SeasonType } from "@/model/article";
 import {
   deleteArticle,
   getArticle,
@@ -21,7 +17,7 @@ import { useAppSelector } from "@/hooks/redux";
 import Link from "next/link";
 import FilledButton from "@/components/ui/button/FilledButton";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
-import { BookmarkType, PinType } from "@/model/bookmark";
+import { BookmarkType } from "@/model/bookmark";
 
 interface Props {
   articleId: string;
@@ -54,6 +50,7 @@ export default function Article({ articleId }: Props) {
             latitude: Number(bookmark.bookmark.location.latitude),
             longitude: Number(bookmark.bookmark.location.longitude)
           }));
+
       setBookmarks(bookmarkList);
 
       if (userId === data.authorId) {
@@ -86,7 +83,16 @@ export default function Article({ articleId }: Props) {
   };
 
   return (
-    <article className="relative flex flex-col items-center gap-8 w-full bg-white shadow-lg rounded-xl pb-10 mb-16">
+    <article className="relative flex flex-col items-center w-full bg-white shadow-lg rounded-xl pb-10 mb-16">
+      {bookmarks.length > 0 && (
+        <div className="w-full h-[30rem] rounded-t-xl overflow-hidden">
+          <ArticleGoogleMap
+            modifyState={false}
+            bookmarks={bookmarks}
+            season={season}
+          />
+        </div>
+      )}
       <section className="w-full lg:px-12 md:px-10 sm:px-8 px-4 md:py-8 py-6">
         <nav className="mb-4 mx-auto">
           <SeasonNav
@@ -133,7 +139,7 @@ export default function Article({ articleId }: Props) {
           </div>
         )}
       </section>
-      <section className="flex flex-row gap-2">
+      <section className="flex flex-row gap-2 mt-8">
         {userId === article?.authorId && (
           <FilledButton onClick={deleteThisArticle}>게시글 삭제</FilledButton>
         )}

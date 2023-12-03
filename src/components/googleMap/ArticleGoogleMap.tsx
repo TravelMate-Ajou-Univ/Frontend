@@ -62,22 +62,19 @@ export default function ArticleGoogleMap({
   };
 
   useEffect(() => {
-    if (location === "") {
+    if (bookmarks && bookmarks.length > 0) {
+      setCenter(calculateCenter(bookmarks));
+      setZoom(12);
+      setPins(bookmarks);
+    } else if (location === "") {
+      setPins([]);
+      setZoom(14);
       navigator.geolocation.getCurrentPosition(
         position => {
-          if (bookmarks) {
-            const seasonBookmarks = bookmarks.filter(
-              bookmark => bookmark.period === season
-            );
-            setCenter(calculateCenter(seasonBookmarks));
-            setZoom(9);
-            setPins(seasonBookmarks);
-          } else {
-            setCenter({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            });
-          }
+          setCenter({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
         },
         error => {
           prompt("현재 위치를 가져오는 데 실패하였습니다.");
@@ -85,6 +82,7 @@ export default function ArticleGoogleMap({
         }
       );
     } else {
+      setPins([]);
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({ address: location }, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK && results) {

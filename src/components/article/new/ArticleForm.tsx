@@ -27,8 +27,8 @@ import FilledButton from "@/components/ui/button/FilledButton";
 import OutlinedButton from "@/components/ui/button/OutlinedButton";
 import { useAppSelector } from "@/hooks/redux";
 import CommentForm from "./CommentForm";
-import GoogleMap from "@/components/googleMap/GoogleMap";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
+import { BookmarkType } from "@/model/bookmark";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -52,6 +52,10 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   const [bookmarkIds, setBookmarkIds] = useState<number[]>([]);
   const [receivedContent, setReceivedContent] = useState<string>("");
   const [receivedThumbnail, setReceivedThumbnail] = useState<string>("");
+  const [receivedBookmarks, setReceivedBookmarks] = useState<
+    (BookmarkType & { period: SeasonType })[]
+  >([]);
+  const [receivedBookmarkIds, setReceivedBookmarkIds] = useState<number[]>([]);
   const [comment, setComment] = useState<string>("");
   const { id: userId } = useAppSelector(state => state.userSlice);
   const [authorId, setAuthorId] = useState<number>(-1);
@@ -70,7 +74,25 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
           return { id: tag.tag.id, name: tag.tag.name };
         })
       );
+      setThumbnailPreview(article.thumbnail);
       setReceivedThumbnail(article.thumbnail);
+      const bookmarkList: (BookmarkType & { period: SeasonType })[] =
+        article.articleBookmarkMap
+          .filter(
+            bookmark => bookmark.period === (seasonMapper[season] as SeasonType)
+          )
+          .map(bookmark => ({
+            id: bookmark.bookmark.id,
+            period: bookmark.period as SeasonType,
+            placeId: bookmark.bookmark.location.placeId,
+            content: bookmark.bookmark.content,
+            latitude: Number(bookmark.bookmark.location.latitude),
+            longitude: Number(bookmark.bookmark.location.longitude)
+          }));
+      setReceivedBookmarks(bookmarkList);
+      const bookmarkIdList = bookmarkList.map(bookmark => bookmark.id);
+      setBookmarkIds(bookmarkIdList);
+      setReceivedBookmarkIds(bookmarkIdList);
       switch (edittngSeason) {
         case "SPRING":
           setSeason("봄");
@@ -92,7 +114,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
     };
 
     getOrigin();
-  }, [id, edittngSeason]);
+  }, [id, edittngSeason, season]);
 
   const handleLocation = (location: string) => {
     if (id) return;
@@ -104,7 +126,6 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   };
 
   const addKeyword = async (keyword: string) => {
-    if (id) return;
     const returnedKeyword = await postKeyword(keyword);
     if (!returnedKeyword) return;
     if (returnedKeyword.name.charAt(0) === "#") {
@@ -163,13 +184,19 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   const edit = async () => {
     const editingSeason = seasonMapper[season] as SeasonType;
     if (authorId === userId) {
+      let thumbnail = receivedThumbnail;
+      if (thumbnailFile) {
+        const imgId = await uploadImage(thumbnailFile, "thumbnail");
+        thumbnail = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=thumbnail`;
+      }
       const article: ArticleType = {
         title,
         period: editingSeason,
         location,
         content,
         tagIds: keywords.map(keyword => keyword.id),
-        thumbnail: receivedThumbnail
+        thumbnail: thumbnail,
+        bookmarkIds
       };
       const result = await editArticle(id as string, article);
       if (result) {
@@ -179,11 +206,20 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         );
       }
     } else {
+      const bookmarksToRemove = receivedBookmarkIds.filter(
+        bookmarkId => !bookmarkIds.includes(bookmarkId)
+      );
+      const bookmarksToAdd = bookmarkIds.filter(
+        bookmarkId => !receivedBookmarkIds.includes(bookmarkId)
+      );
+
       const result = await editArticleRequest(
         id as string,
         content,
         editingSeason,
-        comment
+        comment,
+        bookmarksToRemove,
+        bookmarksToAdd
       );
       if (result) {
         alert("수정 요청이 완료되었습니다.");
@@ -202,7 +238,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         placeholder="제목"
         value={title}
         onChange={e => setTitle(e.target.value)}
-        disabled={!!id}
+        disabled={id && authorId !== userId ? true : false}
       />
       <div className="flex flex-row lg:gap-28 md:gap-20 sm:gap-12 gap-4">
         <div className={INPUT_CLASSNAME}>
@@ -233,9 +269,11 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
           modifyState={true}
           location={location}
           setBookmarkIds={setBookmarkIds}
+          bookmarks={id ? receivedBookmarks : undefined}
+          season={seasonMapper[season] as SeasonType}
         />
       </section>
-      {!id && (
+      {(!id || authorId === userId) && (
         <ImageSection
           handleImage={handleThumbnail}
           thumbnailPreview={thumbnailPreview}
@@ -243,7 +281,10 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       )}
       <div className={INPUT_CLASSNAME}>
         <label>키워드 </label>
-        <KeywordInput addKeyword={addKeyword} disabled={!!id} />
+        <KeywordInput
+          addKeyword={addKeyword}
+          disabled={id && authorId !== userId ? true : false}
+        />
       </div>
       <ul className="text-sm">
         {keywords.map((keyword, index) => (
