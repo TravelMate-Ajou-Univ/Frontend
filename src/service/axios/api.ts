@@ -55,7 +55,21 @@ export const user = {
   getBookmarkCollectionsById: (id: number) =>
     api.get(`users/${id}/bookmark-collections`),
   getMyArticleList: (limit: number) =>
-    api.get(`users/me/articles?limit=${limit}`)
+    api.get(`users/me/articles?limit=${limit}`),
+  getMyArticleByRequest: (
+    page: number,
+    limit: number,
+    request: "pending" | "accepted" | "declined"
+  ) =>
+    api({
+      method: "get",
+      url: "/users/me/article/requests",
+      params: {
+        page,
+        limit,
+        type: request
+      }
+    })
 };
 
 export const article = {

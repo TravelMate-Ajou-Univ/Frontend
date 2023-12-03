@@ -30,6 +30,8 @@ export default function FriendsAddContainer({ members, setMembers }: Props) {
 
   useEffect(() => {
     const getData = async () => {
+      // Todo : 채팅방에 있는 멤버들 api 호출 후 채팅방 멤버들에 뿌려주고, 친구목록에서는 제외하기
+
       const res = await getMyFriendsList(page, 5);
       setFriends(res.friends);
       setTotal(res.count);
