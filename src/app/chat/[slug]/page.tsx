@@ -34,11 +34,13 @@ export default function ChatPage() {
       }
 
       return () => {
-        socket.emit("leaveRoom", {});
+        socket.emit("leaveRoom", {
+          roomId: roomId
+        });
         socket.disconnect();
       };
     } catch (err) {
-      console.log("authorized 다시 해라");
+      // Todo : refresh JWT
     }
   }, [roomId, userName, socket]);
 

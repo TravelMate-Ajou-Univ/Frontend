@@ -27,7 +27,6 @@ export default function UserBookmarkPage({ params }: Props) {
   const limit = 12;
 
   useEffect(() => {
-    // Todo : 다른 사용자의 bookmarkcollection을 받아오는 api
     const getData = async () => {
       const data = await getFriendCollectionList(params.slug, page, limit);
       dispatch(setBookmarkCollectionList(data));

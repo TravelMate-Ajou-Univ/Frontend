@@ -107,9 +107,6 @@ export const getChatList = async (roomId: string) => {
       url: `/chatroom/${roomId}/chats`
     });
 
-    console.log("roomId", roomId);
-
-    console.log(response);
     return response.data;
   } catch (error) {
     console.error(error);
