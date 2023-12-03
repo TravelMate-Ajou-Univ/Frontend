@@ -1,5 +1,6 @@
 import { ChatRoomType } from "@/model/chat";
 import { chatApi } from "./api";
+import { BookmarkType } from "@/model/bookmark";
 
 type ChatRoomProps = {
   name: string;
@@ -66,5 +67,52 @@ export const makeChatRoom = async ({
       lastChatTime: "",
       unReadChat: 0
     };
+  }
+};
+
+export const getChatRoomData = async (roomId: string) => {
+  try {
+    const response = await chatApi({
+      method: "get",
+      url: `chatroom/${roomId}`
+    });
+    const data = response.data;
+    const bookmarks: BookmarkType[] = data.bookmarks.map((bookmark: any) => ({
+      latitude: Number(bookmark.location.latitude),
+      longitude: Number(bookmark.location.longitude),
+      content: bookmark.content,
+      placeId: bookmark.location.placeId,
+      id: bookmark.id
+    }));
+
+    return {
+      members: data.members,
+      collectionId: data.collectionId,
+      bookmarks
+    };
+  } catch (error) {
+    console.error(error);
+    return {
+      members: [],
+      collectionId: 0,
+      bookmarks: []
+    };
+  }
+};
+
+export const getChatList = async (roomId: string) => {
+  try {
+    const response = await chatApi({
+      method: "get",
+      url: `/chatroom/${roomId}/chats`
+    });
+
+    console.log("roomId", roomId);
+
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
   }
 };

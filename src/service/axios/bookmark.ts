@@ -43,6 +43,25 @@ export const getMyCollectionList = async ({
   }
 };
 
+export const getMyCollectionListWithoutPagination = async () => {
+  try {
+    const response = await api({
+      method: "get",
+      url: "users/me/total-bookmark-collections"
+    });
+    console.log(response);
+
+    return response;
+    // return {
+    //   bookmarkCollections: response.data.bookmarkCollections,
+    //   count: response.data.count
+    // };
+  } catch (error) {
+    console.log(error);
+    return false;
+  }
+};
+
 export const getFriendCollectionList = async (
   id: number,
   page: number,

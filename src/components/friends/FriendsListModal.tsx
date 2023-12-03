@@ -42,10 +42,8 @@ export default function FriendsListModal({
 
     if (response.status === 201 || 200) {
       alert(response.data);
+      setTotal(total + 1);
       toggleModalState("");
-      if (response.statusText === "Created") {
-        setTotal(total + 1);
-      }
     } else {
       alert(`실패하였습니다.`);
       toggleModalState("");

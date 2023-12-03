@@ -44,6 +44,9 @@ const mapSlice = createSlice({
     setBookmarks: (state, action: PayloadAction<BookmarkType[]>) => {
       state.bookmarks = [...action.payload];
     },
+    addBookmarks: (state, action: PayloadAction<BookmarkType[]>) => {
+      state.bookmarks = [...state.bookmarks, ...action.payload];
+    },
     subBookmarks: (state, action: PayloadAction<BookmarkType>) => {
       state.bookmarks = state.bookmarks.filter(
         bookmark => bookmark.id !== action.payload.id
@@ -63,6 +66,7 @@ export const {
   subPins,
   initBookmarks,
   setBookmarks,
+  addBookmarks,
   subBookmarks,
   setDeleteBookmarks
 } = mapSlice.actions;
