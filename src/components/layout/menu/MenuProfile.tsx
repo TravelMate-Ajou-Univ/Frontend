@@ -16,7 +16,7 @@ export default function MenuProfile() {
           src={
             profileImageId === ""
               ? defaultProfileImg
-              : `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}/attachment/${profileImageId}`
+              : `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachment/${profileImageId}`
           }
           alt="profile"
           priority
