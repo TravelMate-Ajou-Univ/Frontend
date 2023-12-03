@@ -122,7 +122,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       setChatList(chatList => [...chatList, newChat]);
     });
     socket.on("disconnected", message => {});
-  }, [socket, chatList]);
+  }, [socket]);
 
   const sendMessage = (content: string) => {
     if (content.length === 0) {
