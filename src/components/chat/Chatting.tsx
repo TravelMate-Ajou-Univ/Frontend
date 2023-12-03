@@ -43,6 +43,9 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       setCollectionId(data.collectionId);
       dispatch(setBookmarks(data.bookmarks));
 
+      const newChatList = checkVisibility(chatList, data.members);
+      setChatList(newChatList);
+
       // bookmark들이 있다면 지도 center을 bookmark들의 가운데로
       // 없다면 내 위치를 center로 설정
       if (data.bookmarks.length === 0) {
@@ -65,7 +68,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       }
     };
     getData();
-  }, [dispatch]);
+  }, [dispatch, roomId]);
 
   useEffect(() => {
     socket.on("message", data => {
@@ -119,7 +122,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       setChatList(chatList => [...chatList, newChat]);
     });
     socket.on("disconnected", message => {});
-  }, [socket]);
+  }, [socket, chatList]);
 
   const sendMessage = (content: string) => {
     if (content.length === 0) {

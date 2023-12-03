@@ -110,7 +110,7 @@ export const getChatList = async (roomId: string) => {
     console.log("roomId", roomId);
 
     console.log(response);
-    return response;
+    return response.data;
   } catch (error) {
     console.error(error);
     return error;
