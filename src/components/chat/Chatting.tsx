@@ -14,6 +14,8 @@ import BookmarkOptionBox from "./BookmarkOptionBox";
 import { CalculateAmPmTime } from "@/service/time";
 import { checkVisibility, makeNewChat } from "@/service/chat";
 import ChatMap from "../googleMap/ChatMap";
+import { getChatRoomData } from "@/service/axios/chatroom";
+import { FriendType } from "@/model/friend";
 
 type Props = {
   socket: Socket;
@@ -21,110 +23,6 @@ type Props = {
   roomName: string;
 };
 
-const test_chat = [
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 1",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 2",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 3",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 4",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 5",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 2",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 3",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 4",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 5",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 2",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 3",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 4",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 5",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 2",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 3",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 4",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 5",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  }
-];
 export default function Chatting({ socket, roomId, roomName }: Props) {
   const { id } = useAppSelector(state => state.userSlice);
   const dispatch = useDispatch();
@@ -132,17 +30,22 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
   const [mapState, setMapState] = useState(false);
   const [chatList, setChatList] = useState<ChatWithVisibilityType[]>([]);
   const [optionsState, setOptionsState] = useState<boolean>(false);
+  const [roomMembers, setRoomMembers] = useState<FriendType[]>([]);
+  const [collectionId, setCollectionId] = useState<number>(0);
 
   // 지도, chat기록 데이터 가져오기
   useEffect(() => {
     const getData = async () => {
       // Todo : 지도에 대한 처리, Message 기록 가져오기
-      const data: any[] = [];
+      const data = await getChatRoomData(roomId);
 
-      dispatch(setBookmarks(data));
+      setRoomMembers(data.members);
+      setCollectionId(data.collectionId);
+      dispatch(setBookmarks(data.bookmarks));
+
       // bookmark들이 있다면 지도 center을 bookmark들의 가운데로
       // 없다면 내 위치를 center로 설정
-      if (data.length === 0) {
+      if (data.bookmarks.length === 0) {
         navigator.geolocation.getCurrentPosition(
           position => {
             dispatch(
@@ -158,16 +61,8 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           }
         );
       } else {
-        dispatch(setCenter(calculateCenter(data)));
+        dispatch(setCenter(calculateCenter(data.bookmarks)));
       }
-
-      // chat Data
-      const response: ChatType[] = test_chat;
-
-      const chatWithVisibilityList: ChatWithVisibilityType[] =
-        checkVisibility(response);
-
-      setChatList(chatWithVisibilityList);
     };
     getData();
   }, [dispatch]);
@@ -270,6 +165,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           roomId={roomId}
           nickname={userName}
           roomName={roomName}
+          roomMembers={roomMembers}
           toggleMapState={toggleMapState}
         />
         <ChatList chatList={chatList} />

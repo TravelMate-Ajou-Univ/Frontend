@@ -15,7 +15,7 @@ export default function Profile() {
   const [nickname, setNickname] = useState<string>("");
   const [profileFile, setProfileFile] = useState<File | null>(null);
   const [profilePreview, setProfilePreview] = useState<string | null>(null);
-  // const [check]
+  const [checkDuplicate, setCheckDuplicate] = useState<boolean>(false);
 
   useEffect(() => {
     setNickname(userName);
@@ -31,10 +31,13 @@ export default function Profile() {
   const modifyProfile = () => {
     const answer = confirm("프로필을 수정하시겠습니까?");
     if (answer) {
-      // Todo : profile 수정 반영
-    } else {
+      if (checkDuplicate) {
+        alert("닉네임이 중복되었습니다.");
+        return;
+      }
+      // Todo : change axios
+      setModifyState(false);
     }
-    setModifyState(false);
   };
   return (
     <div className="w-full flex justify-around items-center py-4 border-b-2">
@@ -61,7 +64,11 @@ export default function Profile() {
       </div>
       <div className="flex flex-col gap-4 w-[20rem] text-center">
         {modifyState ? (
-          <NicknameForm nickname={nickname} setNickname={setNickname} />
+          <NicknameForm
+            nickname={nickname}
+            setNickname={setNickname}
+            setCheckDuplicate={setCheckDuplicate}
+          />
         ) : (
           <p className="text-3xl font-bold ">{userName}</p>
         )}

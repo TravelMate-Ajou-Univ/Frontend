@@ -89,7 +89,6 @@ export default function BookmarkOptionBox({ setOptionsState, socket }: Props) {
   };
 
   const bringBookmarksHandler = () => {
-    // TODO: emit(postBookmarks)
     socket.emit("postBookmark", {
       locationsWithContent: bookmarkToAdd,
       bookmarkCollectionId: 1

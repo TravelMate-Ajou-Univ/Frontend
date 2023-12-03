@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/hooks/redux";
 import { BookmarkType, PinType } from "@/model/bookmark";
 import {
+  addBookmarks,
   initBookmarks,
   initPins,
   setBookmarks,
@@ -66,7 +67,10 @@ export default function ChatMap({ modifyState, socket }: Props) {
           id: chatBookmark.id
         })
       );
-      dispatch(setBookmarks(newBookmarks));
+      dispatch(addBookmarks(newBookmarks));
+    });
+    socket.on("deleteBookmark", data => {
+      console.log(data);
     });
   }, [socket]);
 
@@ -90,18 +94,18 @@ export default function ChatMap({ modifyState, socket }: Props) {
         service,
         modifyState,
         map: map as google.maps.Map,
-        subPinHandler,
         subBookmarkHandler
       });
     });
   };
 
-  const subPinHandler = (pin: PinType) => {
-    dispatch(subPins(pin));
-  };
-
   const subBookmarkHandler = (bookmark: BookmarkType) => {
-    dispatch(subBookmarks(bookmark));
+    console.log("delete : ", bookmark);
+
+    socket.emit("deleteBookmark", {
+      bookmarkIds: [bookmark.id],
+      bookmarkCollectionId: 1
+    });
   };
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = e.target;
