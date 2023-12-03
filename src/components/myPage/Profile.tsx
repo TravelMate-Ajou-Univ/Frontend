@@ -20,7 +20,7 @@ export default function Profile() {
 
   useEffect(() => {
     setNickname(userName);
-  }, [modifyState]);
+  }, [modifyState, userName]);
 
   const handleProfile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;

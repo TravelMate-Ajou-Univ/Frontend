@@ -99,3 +99,20 @@ export const getChatRoomData = async (roomId: string) => {
     };
   }
 };
+
+export const getChatList = async (roomId: string) => {
+  try {
+    const response = await chatApi({
+      method: "get",
+      url: `/chatroom/${roomId}/chats`
+    });
+
+    console.log("roomId", roomId);
+
+    console.log(response);
+    return response;
+  } catch (error) {
+    console.error(error);
+    return error;
+  }
+};

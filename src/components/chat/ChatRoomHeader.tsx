@@ -85,10 +85,10 @@ export default function ChatRoomHeader({
             {addModalState ? (
               <div>
                 <FriendsAddContainer
-                  nickname={nickname}
                   members={members}
-                  roomMembers={roomMembers}
                   setMembers={setMembers}
+                  roomMembers={roomMembers}
+                  nickname={nickname}
                 />
                 <div className="flex justify-between mx-2">
                   <OutlinedButton onClick={cancleHandler}>취소</OutlinedButton>

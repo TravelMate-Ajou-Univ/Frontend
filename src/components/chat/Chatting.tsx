@@ -6,7 +6,6 @@ import { useDispatch } from "react-redux";
 import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
 import { Socket } from "socket.io-client";
 import { calculateCenter } from "@/service/googlemap/map";
-import { getAllBookmarks } from "@/service/axios/bookmark";
 import { useAppSelector } from "@/hooks/redux";
 import { ChatType, ChatWithVisibilityType } from "@/model/chat";
 import OutlinedButton from "../ui/button/OutlinedButton";
@@ -14,7 +13,7 @@ import BookmarkOptionBox from "./BookmarkOptionBox";
 import { CalculateAmPmTime } from "@/service/time";
 import { checkVisibility, makeNewChat } from "@/service/chat";
 import ChatMap from "../googleMap/ChatMap";
-import { getChatRoomData } from "@/service/axios/chatroom";
+import { getChatList, getChatRoomData } from "@/service/axios/chatroom";
 import { FriendType } from "@/model/friend";
 
 type Props = {
@@ -38,6 +37,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
     const getData = async () => {
       // Todo : 지도에 대한 처리, Message 기록 가져오기
       const data = await getChatRoomData(roomId);
+      const chatList = await getChatList(roomId);
 
       setRoomMembers(data.members);
       setCollectionId(data.collectionId);
@@ -138,7 +138,11 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
     <section className="w-[90%] mx-auto flex justify-center mt-4">
       {mapState ? (
         <div className="w-[50%] h-[40rem] m-2 border-2 rounded-md my-auto relative">
-          <ChatMap modifyState={true} socket={socket} />
+          <ChatMap
+            modifyState={true}
+            socket={socket}
+            collectionId={collectionId}
+          />
           <OutlinedButton
             onClick={() => {
               setOptionsState(!optionsState);

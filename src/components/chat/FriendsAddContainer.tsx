@@ -10,17 +10,17 @@ import {
 import OutlinedButton from "../ui/button/OutlinedButton";
 
 type Props = {
-  nickname: string;
   members: FriendType[];
-  roomMembers: FriendType[];
   setMembers: (friends: FriendType[]) => void;
+  roomMembers?: FriendType[];
+  nickname?: string;
 };
 
 export default function FriendsAddContainer({
-  nickname,
   members,
+  setMembers,
   roomMembers,
-  setMembers
+  nickname
 }: Props) {
   const [friends, setFriends] = useState<FriendType[]>([]);
   const [page, setPage] = useState(1);
@@ -40,14 +40,20 @@ export default function FriendsAddContainer({
 
   useEffect(() => {
     const getData = async () => {
-      const membersId = roomMembers.map(member => member.id);
-      const membersIdStr = String(membersId);
-      const res = await getFriendListToInvite(nickname, membersIdStr);
-      setFriends(res);
-      setTotal(res.length);
+      if (roomMembers && nickname) {
+        const membersId = roomMembers.map(member => member.id);
+        const membersIdStr = String(membersId);
+        const res = await getFriendListToInvite(nickname, membersIdStr);
+        setFriends(res);
+        setTotal(res.length);
+      } else {
+        const res = await getMyFriendsList(page, 5);
+        setFriends(res.friends);
+        setTotal(res.count);
+      }
     };
     getData();
-  }, [page]);
+  }, [page, nickname, roomMembers]);
 
   return (
     <div>

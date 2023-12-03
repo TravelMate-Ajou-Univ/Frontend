@@ -29,3 +29,15 @@ export const changeNickname = async (nickname: string) => {
   }
   return response.data;
 };
+
+export const changeProfileImg = async (profileImageId: number) => {
+  const response = await api({
+    method: "put",
+    url: "/users/me/profile-image",
+    data: {
+      profileImageId
+    }
+  });
+
+  return response;
+};

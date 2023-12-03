@@ -22,8 +22,9 @@ declare global {
 type Props = {
   socket: Socket;
   modifyState: boolean;
+  collectionId: number;
 };
-export default function ChatMap({ modifyState, socket }: Props) {
+export default function ChatMap({ modifyState, socket, collectionId }: Props) {
   const dispatch = useDispatch();
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
@@ -54,7 +55,7 @@ export default function ChatMap({ modifyState, socket }: Props) {
     if (typeof window !== "undefined" && window.google && window.google.maps) {
       window.initMap();
     }
-  }, [center, modifyState, bookmarks]);
+  }, [center, bookmarks]);
 
   useEffect(() => {
     socket.on("postBookmark", data => {
@@ -72,7 +73,7 @@ export default function ChatMap({ modifyState, socket }: Props) {
     socket.on("deleteBookmark", data => {
       console.log(data);
     });
-  }, [socket]);
+  }, [socket, dispatch]);
 
   // page를 나갈 때 pins, bookmarks 초기화.
   useEffect(() => {
@@ -104,7 +105,7 @@ export default function ChatMap({ modifyState, socket }: Props) {
 
     socket.emit("deleteBookmark", {
       bookmarkIds: [bookmark.id],
-      bookmarkCollectionId: 1
+      bookmarkCollectionId: collectionId
     });
   };
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
