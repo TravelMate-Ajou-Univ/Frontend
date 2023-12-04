@@ -297,7 +297,6 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
           location={location}
           setBookmarkIds={setBookmarkIds}
           bookmarks={id ? receivedBookmarks : undefined}
-          season={seasonMapper[season] as SeasonType}
         />
       </section>
       {(!id || authorId === userId) && (

@@ -14,6 +14,7 @@ import FriendsOnlyIcon from "@/components/ui/icons/FriendsOnlyIcon";
 import CharacterIcon from "@/components/ui/icons/CharacterIcon";
 import MenuClass from "./MenuClass";
 import SignOutIcon from "@/components/ui/icons/SignOutIcon";
+import FilledFavoriteIcon from "@/components/ui/icons/favorite/FilledFavoriteIcon";
 
 interface Props {
   closeMenu: () => void;
@@ -54,7 +55,6 @@ export default function Menu({ closeMenu }: Props) {
                 </MenuItem>
               </div>
             </section>
-            {/* <hr /> */}
             <section>
               <MenuClass>채팅/친구</MenuClass>
               <div className={MENU_CLASSIFICATION_CLASS}>
@@ -68,13 +68,16 @@ export default function Menu({ closeMenu }: Props) {
                 </MenuItem>
               </div>
             </section>
-            {/* <hr /> */}
             <section>
               <MenuClass>내 항목</MenuClass>
               <div className={MENU_CLASSIFICATION_CLASS}>
                 <MenuItem href="/article/list/me" onClick={closeMenu}>
                   <DocsIcon />
                   내가 작성한 포스팅
+                </MenuItem>
+                <MenuItem href="/article/list/favorite" onClick={closeMenu}>
+                  <FilledFavoriteIcon />
+                  즐겨찾기
                 </MenuItem>
                 <MenuItem href="/bookmark/list/me/all" onClick={closeMenu}>
                   <MarkedMapIcon />

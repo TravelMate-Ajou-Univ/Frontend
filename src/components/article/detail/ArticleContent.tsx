@@ -1,6 +1,7 @@
 import { ArticleDetailType, SeasonType } from "@/model/article";
 import NoContent from "./NoContent";
 import Dompurify from "dompurify";
+import React from "react";
 
 interface Props {
   article: ArticleDetailType;
@@ -8,7 +9,7 @@ interface Props {
   userId: number;
 }
 
-export default function ArticleContent({
+function ArticleContent({
   article: { spring, summer, fall, winter, authorId },
   season,
   userId
@@ -66,3 +67,5 @@ export default function ArticleContent({
       return <></>;
   }
 }
+
+export default React.memo(ArticleContent);

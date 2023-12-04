@@ -3,8 +3,10 @@
 import { ArticleDetailType, SeasonType } from "@/model/article";
 import {
   deleteArticle,
+  deleteFavorite,
   getArticle,
-  getArticleRequestList
+  getArticleRequestList,
+  postFavorite
 } from "@/service/axios/article";
 import { useEffect, useState } from "react";
 import ArticleContent from "./ArticleContent";
@@ -18,12 +20,15 @@ import Link from "next/link";
 import FilledButton from "@/components/ui/button/FilledButton";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
 import { BookmarkType } from "@/model/bookmark";
+import FilledFavoriteIcon from "@/components/ui/icons/favorite/FilledFavoriteIcon";
+import OutlinedFavoriteIcon from "@/components/ui/icons/favorite/OutlinedFavoriteIcon";
 
 interface Props {
   articleId: string;
 }
 
 export default function Article({ articleId }: Props) {
+  const [isFavorite, setIsFavorite] = useState(false);
   const [article, setArticle] = useState<ArticleDetailType | null>(null);
   const [bookmarks, setBookmarks] = useState<
     (BookmarkType & { period: SeasonType })[]
@@ -36,9 +41,10 @@ export default function Article({ articleId }: Props) {
 
   useEffect(() => {
     const getArticleApi = async () => {
-      const data = await getArticle(articleId);
+      const data = await getArticle(articleId, userId);
       if (!data) return;
       setArticle(data);
+      setIsFavorite(data.isFavorite);
       const bookmarkList: (BookmarkType & { period: SeasonType })[] =
         data.articleBookmarkMap
           .filter(bookmark => bookmark.period === season)
@@ -66,6 +72,17 @@ export default function Article({ articleId }: Props) {
     getArticleApi();
   }, [articleId, searchParams, userId, season]);
 
+  const toggleFavorite = async () => {
+    if (isFavorite) {
+      const res = await deleteFavorite(articleId);
+      if (!res) return;
+    } else {
+      const res = await postFavorite(articleId);
+      if (!res) return;
+    }
+    setIsFavorite(!isFavorite);
+  };
+
   const moveToEdit = () => {
     router.push(`/article/edit/${articleId}?season=${season.toLowerCase()}`);
   };
@@ -86,11 +103,7 @@ export default function Article({ articleId }: Props) {
     <article className="relative flex flex-col items-center w-full bg-white shadow-lg rounded-xl pb-10 mb-16">
       {bookmarks.length > 0 && (
         <div className="w-full h-[30rem] rounded-t-xl overflow-hidden">
-          <ArticleGoogleMap
-            modifyState={false}
-            bookmarks={bookmarks}
-            season={season}
-          />
+          <ArticleGoogleMap modifyState={false} bookmarks={bookmarks} />
         </div>
       )}
       <section className="w-full lg:px-12 md:px-10 sm:px-8 px-4 md:py-8 py-6">
@@ -106,10 +119,27 @@ export default function Article({ articleId }: Props) {
         </nav>
         {article && (
           <div className="w-full flex flex-col md:gap-4 gap-2">
-            <section className="flex items-end gap-2">
-              <h1 className="md:text-2xl text-xl font-bold flex-grow">
-                {article.title}
-              </h1>
+            <section className="flex items-start gap-2">
+              <div className="flex-grow">
+                <button
+                  className={`self-center divide-x border border-secondary rounded-md flex items-center px-1 mb-1 ${
+                    isFavorite ? "bg-summer" : "bg-white"
+                  }`}
+                  onClick={toggleFavorite}
+                >
+                  {isFavorite ? (
+                    <FilledFavoriteIcon className="px-1 py-0.5" />
+                  ) : (
+                    <OutlinedFavoriteIcon className="px-1 py-0.5" />
+                  )}
+                  <span className="px-1 py-0.5 text-sm text-secondary font-medium">
+                    즐겨찾기
+                  </span>
+                </button>
+                <h1 className="md:text-2xl text-xl font-bold ">
+                  {article.title}
+                </h1>
+              </div>
               <section className="flex flex-col items-end gap-1">
                 {article && <Author authorId={article.authorId} />}
                 {article && userId === article.authorId && (
