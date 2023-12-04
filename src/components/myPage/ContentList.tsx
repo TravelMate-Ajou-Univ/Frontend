@@ -17,30 +17,31 @@ export default function ContentList({ articles }: Props) {
           해당 게시글이 없습니다.
         </p>
       ) : (
-        <section>
+        <ul>
           <MultiCarousel>
             {articles.map((article, index) => (
-              <Link
-                key={index}
-                href={`/article/detail/${article.id}?season=${article.season}`}
-                className="flex flex-col justify-center items-center w-[10rem] h-[10rem] shadow-2xl"
-              >
-                <div className="h-[8rem] w-[8rem]">
-                  <Image
-                    src={article.thumbnail}
-                    alt="썸네일 사진"
-                    className="w-full h-full"
-                    width={100}
-                    height={100}
-                  />
-                </div>
-                <p className="text-center truncate w-[8rem] font-bold">
-                  {article.title}
-                </p>
-              </Link>
+              <li key={index}>
+                <Link
+                  href={`/article/detail/${article.id}?season=${article.season}`}
+                  className="flex flex-col justify-around items-center w-[12rem] h-[14rem] rounded-md overflow-hidden shadow-lg"
+                >
+                  <div className="h-full w-full overflow-hidden object-cover">
+                    <Image
+                      src={article.thumbnail}
+                      alt="썸네일 사진"
+                      className="w-full h-full"
+                      width={1000}
+                      height={1000}
+                    />
+                  </div>
+                  <p className="text-center truncate w-[12rem] my-2 font-bold">
+                    {article.title}
+                  </p>
+                </Link>
+              </li>
             ))}
           </MultiCarousel>
-        </section>
+        </ul>
       )}
     </div>
   );
