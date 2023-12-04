@@ -6,7 +6,6 @@ import { createBookmark } from "@/service/axios/bookmark";
 import { calculateCenter } from "@/service/googlemap/map";
 import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
-import Script from "next/script";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
 declare global {
@@ -279,10 +278,6 @@ export default function ArticleGoogleMap({
         </form>
       )}
       <div id="map" className=" w-full h-full"></div>
-      <Script
-        defer
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&libraries=places&callback=initMap`}
-      />
     </div>
   );
 }
