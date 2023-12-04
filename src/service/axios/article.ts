@@ -122,10 +122,11 @@ export const submitArticle = async (newArticle: ArticleType) => {
 };
 
 export const getArticle = async (
-  id: string
+  id: string,
+  userId?: number
 ): Promise<ArticleDetailType | false> => {
   try {
-    const { data } = await article.getArticle(id);
+    const { data } = await article.getArticle(id, userId);
     if (!data) return false;
 
     const articleData: ArticleDetailType = {
@@ -143,7 +144,8 @@ export const getArticle = async (
       summer: data.summer,
       fall: data.fall,
       winter: data.winter,
-      articleBookmarkMap: data.articleBookmarkMap
+      articleBookmarkMap: data.articleBookmarkMap,
+      isFavorite: data.isFavorite
     };
 
     return articleData;
@@ -339,5 +341,27 @@ export const getMyArticleByRequest = async (
   } catch (error) {
     console.error(error);
     return [];
+  }
+};
+
+export const postFavorite = async (id: string) => {
+  try {
+    const { status } = await article.postFavorite(id);
+    if (!status) return false;
+    return status;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const deleteFavorite = async (id: string) => {
+  try {
+    const { status } = await article.deleteFavorite(id);
+    if (!status) return false;
+    return status;
+  } catch (error) {
+    console.error(error);
+    return false;
   }
 };

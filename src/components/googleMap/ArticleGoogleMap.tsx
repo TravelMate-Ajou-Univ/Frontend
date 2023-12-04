@@ -19,7 +19,6 @@ type Props = {
   location?: string;
   setBookmarkIds?: React.Dispatch<React.SetStateAction<number[]>>;
   bookmarks?: (BookmarkType & { period: SeasonType })[];
-  season?: SeasonType;
   className?: string;
 };
 
@@ -28,7 +27,6 @@ export default function ArticleGoogleMap({
   location = "",
   setBookmarkIds,
   bookmarks,
-  season,
   className = ""
 }: Props) {
   const [map, setMap] = useState<google.maps.Map>();
@@ -97,7 +95,7 @@ export default function ArticleGoogleMap({
         }
       });
     }
-  }, [location, bookmarks, season]);
+  }, [location, bookmarks]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.google && window.google.maps) {

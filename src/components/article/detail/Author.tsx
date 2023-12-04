@@ -47,7 +47,7 @@ export default function Author({ authorId }: Props) {
         title="북마크 컬렉션 보기"
       >
         <div className="bg-gray-200 overflow-hidden rounded-full md:w-8 md:h-8 w-6 h-6">
-          <Image
+          {/* <Image
             className="p-1"
             src={
               author.profileImageId === ""
@@ -57,7 +57,7 @@ export default function Author({ authorId }: Props) {
                   author.profileImageId
             }
             alt="프로필 이미지"
-          />
+          /> */}
         </div>
         <span className="md:text-base text-sm">{author.userName}</span>
       </div>

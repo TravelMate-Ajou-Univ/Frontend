@@ -97,7 +97,8 @@ export const article = {
     ),
   createBookmark: (bookmark: PinType) => api.post("bookmark", bookmark),
   submitArticle: (article: ArticleType) => api.post("articles", article),
-  getArticle: (id: string) => api.get(`articles/${id}`),
+  getArticle: (id: string, userId?: number) =>
+    api.get(`articles/${id}?userId=${userId ? userId : 0}`),
   editArticle: (id: string, article: ArticleType) =>
     api.patch(`articles/${id}`, article),
   deleteArticle: (id: string) => api.delete(`articles/${id}`),
@@ -123,5 +124,7 @@ export const article = {
   acceptArticleRequest: (id: string, requestId: string) =>
     api.get(`articles/${id}/requests/accept/${requestId}`),
   declineArticleRequest: (id: string, requestId: string) =>
-    api.get(`articles/${id}/requests/decline/${requestId}`)
+    api.get(`articles/${id}/requests/decline/${requestId}`),
+  postFavorite: (id: string) => api.post(`articles/${id}/favorite`),
+  deleteFavorite: (id: string) => api.delete(`articles/${id}/favorite`)
 };
