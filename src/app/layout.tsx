@@ -7,8 +7,15 @@ import { ProviderContext } from "@/context/ProviderContext";
 import Background from "@/components/layout/Background";
 import Footer from "@/components/layout/Footer";
 import Main from "@/components/layout/Main";
+import Script from "next/script";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
+
+declare global {
+  interface Window {
+    initMap: () => void;
+  }
+}
 
 export const metadata: Metadata = {
   title: "Travel Mate",
@@ -23,6 +30,10 @@ export default function RootLayout({
   return (
     <html lang="en" className={openSans.className}>
       <head>
+        <Script
+          defer
+          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&libraries=places&callback=initMap`}
+        />
         <link
           href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
           rel="stylesheet"
