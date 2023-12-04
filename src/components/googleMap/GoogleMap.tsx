@@ -11,7 +11,13 @@ import {
 import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
 import Script from "next/script";
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import { useDispatch } from "react-redux";
 declare global {
   interface Window {
@@ -26,6 +32,7 @@ export default function GoogleMap({ modifyState }: Props) {
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
   const [places, setPlaces] = useState<google.maps.Marker[]>([]);
+  const infoRef = useRef<google.maps.InfoWindow>(null);
   const { center, bookmarks, pins } = useAppSelector(state => state.mapSlice);
   window.initMap = function () {
     const initmap = new google.maps.Map(
@@ -52,7 +59,11 @@ export default function GoogleMap({ modifyState }: Props) {
     if (typeof window !== "undefined" && window.google && window.google.maps) {
       window.initMap();
     }
-  }, [center, modifyState, pins]);
+  }, [center, modifyState]);
+
+  // useEffect(() => {
+  //   setMarker(map as google.maps.Map);
+  // }, [pins]);
 
   // page를 나갈 때 pins, bookmarks 초기화.
   useEffect(() => {
@@ -64,6 +75,9 @@ export default function GoogleMap({ modifyState }: Props) {
 
   // 북마크 컬렉션에 있는 북마크들 marker로 표시
   const setMarker = (initmap: google.maps.Map) => {
+    if (initmap === undefined) {
+      return;
+    }
     const service = new google.maps.places.PlacesService(
       initmap as google.maps.Map
     );

@@ -19,6 +19,8 @@ export default function MenuProfile() {
               : `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachment/${profileImageId}`
           }
           alt="profile"
+          width={150}
+          height={150}
           priority
         />
       </div>

@@ -26,7 +26,6 @@ export default function RequestPreview({ request }: Props) {
 
     getAuthor();
     const curTime = new Date(request.updatedAt).toLocaleString().split(" ");
-    console.log(curTime);
     setDate(curTime[0] + " " + curTime[1] + " " + curTime[2]);
     setTime(
       curTime[3] +

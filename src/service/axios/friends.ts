@@ -168,3 +168,24 @@ export const deleteFriend = async (pk: number) => {
   });
   return response;
 };
+
+export const getFriendListToInvite = async (
+  nickname: string,
+  memberIds: string
+) => {
+  try {
+    const response = await api({
+      method: "get",
+      url: `users/me/friends/non-members`,
+      params: {
+        nickname: "",
+        memberIds
+      }
+    });
+
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};

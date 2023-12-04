@@ -1,22 +1,38 @@
 import { ChatType, ChatWithVisibilityType } from "@/model/chat";
 import { CalculateAmPmTime } from "./time";
+import { FriendType } from "@/model/friend";
+
+type ChatProps = {
+  userId: number;
+  content: string;
+  createdAt: string;
+};
 
 export const checkVisibility = (
-  chatList: ChatType[]
+  chatList: ChatProps[],
+  members: FriendType[]
 ): ChatWithVisibilityType[] => {
-  let check_nickname: string = "";
+  // key & value
+  const dict = new Map<number, string>();
+
+  members.map(member => {
+    dict.set(member.id, member.nickname);
+  });
+
+  let check_userId: number = -1;
   let check_time: string = "";
   let newChatList: ChatWithVisibilityType[] = [];
   let newChat: ChatWithVisibilityType;
+
   for (let i = 0; i < chatList.length; i++) {
-    if (chatList[i].nickname !== check_nickname) {
-      check_nickname = chatList[i].nickname;
+    if (chatList[i].userId !== check_userId) {
+      check_userId = chatList[i].userId;
       check_time = chatList[i].createdAt;
       newChat = {
         userId: chatList[i].userId,
-        nickname: chatList[i].nickname,
+        nickname: dict.get(chatList[i].userId) as string,
         content: chatList[i].content,
-        createdAt: chatList[i].createdAt,
+        createdAt: CalculateAmPmTime(chatList[i].createdAt),
         userVisibility: true,
         timeVisibility: true
       };
@@ -25,18 +41,18 @@ export const checkVisibility = (
         check_time = chatList[i].createdAt;
         newChat = {
           userId: chatList[i].userId,
-          nickname: chatList[i].nickname,
+          nickname: dict.get(chatList[i].userId) as string,
           content: chatList[i].content,
-          createdAt: chatList[i].createdAt,
+          createdAt: CalculateAmPmTime(chatList[i].createdAt),
           userVisibility: false,
           timeVisibility: true
         };
       } else {
         newChat = {
           userId: chatList[i].userId,
-          nickname: chatList[i].nickname,
+          nickname: dict.get(chatList[i].userId) as string,
           content: chatList[i].content,
-          createdAt: chatList[i].createdAt,
+          createdAt: CalculateAmPmTime(chatList[i].createdAt),
           userVisibility: false,
           timeVisibility: false
         };
@@ -44,6 +60,7 @@ export const checkVisibility = (
     }
     newChatList = [...newChatList, newChat];
   }
+
   return newChatList;
 };
 

@@ -335,8 +335,6 @@ export const getMyArticleByRequest = async (
       };
       return article;
     });
-
-    console.log(articles);
     return articles;
   } catch (error) {
     console.error(error);

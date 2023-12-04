@@ -143,7 +143,6 @@ export default function Request({ articleId, requestId }: Props) {
   };
 
   const accept = async () => {
-    // TODO: 미리보기 페이지로 이동
     const confirm = window.confirm("수정 요청을 정말 승인하시겠습니까?");
     if (!confirm) return;
     const response = await acceptArticleRequest(articleId, requestId);

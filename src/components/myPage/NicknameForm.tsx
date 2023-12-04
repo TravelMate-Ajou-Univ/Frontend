@@ -13,6 +13,7 @@ import PenIcon from "../ui/icons/PenIcon";
 type Props = {
   nickname: string;
   setNickname: (name: string) => void;
+  setCheckDuplicate: (check: boolean) => void;
 };
 
 type BannerData = {
@@ -20,7 +21,11 @@ type BannerData = {
   status: "success" | "fail";
 };
 
-export default function NicknameForm({ nickname, setNickname }: Props) {
+export default function NicknameForm({
+  nickname,
+  setNickname,
+  setCheckDuplicate
+}: Props) {
   const [banner, setBanner] = useState<BannerData | null>();
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -37,6 +42,7 @@ export default function NicknameForm({ nickname, setNickname }: Props) {
         setBanner({ message: "사용가능한 닉네임입니다.", status: "success" });
       })
       .catch(err => {
+        setCheckDuplicate(true);
         setBanner({
           message: err.response.data.message as string,
           status: "fail"

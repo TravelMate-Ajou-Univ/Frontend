@@ -131,18 +131,17 @@ export const makeMarker = ({
     });
     google.maps.event.addListener(infoWindow, "domready", () => {
       const btn = document.getElementById("btn");
-      if (btn && subPinHandler && subBookmarkHandler) {
+
+      if (btn && subPinHandler) {
         btn.addEventListener("click", () => {
-          type === "pin"
-            ? subPinHandler(pin)
-            : subBookmarkHandler(pin as BookmarkType);
+          subPinHandler(pin as PinType);
+
           infoWindow.close();
           marker.setMap(null);
         });
-      }
-      if (btn && subPinHandler) {
+      } else if (btn && subBookmarkHandler) {
         btn.addEventListener("click", () => {
-          subPinHandler(pin);
+          subBookmarkHandler(pin as BookmarkType);
           infoWindow.close();
           marker.setMap(null);
         });

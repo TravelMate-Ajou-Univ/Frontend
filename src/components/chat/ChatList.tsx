@@ -28,14 +28,14 @@ export default function ChatList({ chatList }: Props) {
     const contentHeight = scrollableContainer.scrollHeight;
 
     if (scrollPosition + containerHeight >= contentHeight) {
-      console.log("get forward message");
+      // Todo forward message
     } else if (scrollPosition === 0) {
-      console.log("get backward message");
+      // Todo backward message
     }
   };
   useEffect(() => {
     scrollToBottom();
-  }, [chatList]);
+  }, [chatList, scrollToBottom]);
 
   return (
     <section className="w-full h-[33rem]">
