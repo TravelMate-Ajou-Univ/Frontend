@@ -76,23 +76,26 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       );
       setThumbnailPreview(article.thumbnail);
       setReceivedThumbnail(article.thumbnail);
-      const bookmarkList: (BookmarkType & { period: SeasonType })[] =
-        article.articleBookmarkMap
-          .filter(
-            bookmark => bookmark.period === (seasonMapper[season] as SeasonType)
-          )
-          .map(bookmark => ({
-            id: bookmark.bookmark.id,
-            period: bookmark.period as SeasonType,
-            placeId: bookmark.bookmark.location.placeId,
-            content: bookmark.bookmark.content,
-            latitude: Number(bookmark.bookmark.location.latitude),
-            longitude: Number(bookmark.bookmark.location.longitude)
-          }));
-      setReceivedBookmarks(bookmarkList);
-      const bookmarkIdList = bookmarkList.map(bookmark => bookmark.id);
-      setBookmarkIds(bookmarkIdList);
-      setReceivedBookmarkIds(bookmarkIdList);
+      if (article.articleBookmarkMap.length > 0) {
+        const bookmarkList: (BookmarkType & { period: SeasonType })[] =
+          article.articleBookmarkMap
+            .filter(
+              bookmark =>
+                bookmark.period === (seasonMapper[season] as SeasonType)
+            )
+            .map(bookmark => ({
+              id: bookmark.bookmark.id,
+              period: bookmark.period as SeasonType,
+              placeId: bookmark.bookmark.location.placeId,
+              content: bookmark.bookmark.content,
+              latitude: Number(bookmark.bookmark.location.latitude),
+              longitude: Number(bookmark.bookmark.location.longitude)
+            }));
+        setReceivedBookmarks(bookmarkList);
+        const bookmarkIdList = bookmarkList.map(bookmark => bookmark.id);
+        setBookmarkIds(bookmarkIdList);
+        setReceivedBookmarkIds(bookmarkIdList);
+      }
       switch (edittngSeason) {
         case "SPRING":
           setSeason("봄");
