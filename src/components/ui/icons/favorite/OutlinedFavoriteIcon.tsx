@@ -5,5 +5,5 @@ interface Props {
 }
 
 export default function OutlinedFavoriteIcon({ className = "" }: Props) {
-  return <IoFlagOutline className={className + " text-secondary"} />;
+  return <IoFlagOutline className={className + " text-secondary w-6 h-6"} />;
 }

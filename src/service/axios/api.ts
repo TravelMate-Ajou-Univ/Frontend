@@ -69,7 +69,9 @@ export const user = {
         limit,
         type: request
       }
-    })
+    }),
+  getFavoriteArticleList: (page: number, limit: number) =>
+    api.get(`users/me/favorite-articles?page=${page}&limit=${limit}`)
 };
 
 export const article = {

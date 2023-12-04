@@ -1,5 +1,6 @@
 import {
   ArticleDetailType,
+  ArticlePreviewType,
   ArticleRequestType,
   ArticleType,
   MyPageArticleType,
@@ -360,6 +361,35 @@ export const deleteFavorite = async (id: string) => {
     const { status } = await article.deleteFavorite(id);
     if (!status) return false;
     return status;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const getFavoriteArticleList = async (
+  page: number,
+  limit: number
+): Promise<ArticleType[] | false> => {
+  try {
+    const { data } = await user.getFavoriteArticleList(page, limit);
+    if (!data) return false;
+    const articles = data.articles.map((article: any) => {
+      const newArticle: ArticlePreviewType = {
+        id: article.id,
+        title: article.title,
+        thumbnail: article.thumbnail,
+        location: article.location,
+        authorId: article.authorId,
+        springVersionID: article.springVersionID,
+        summerVersionID: article.summerVersionID,
+        fallVersionID: article.fallVersionID,
+        winterVersionID: article.winterVersionID,
+        articleTagMap: article.articleTagMap
+      };
+      return newArticle;
+    });
+    return articles;
   } catch (error) {
     console.error(error);
     return false;

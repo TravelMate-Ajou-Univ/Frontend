@@ -128,9 +128,9 @@ export default function Article({ articleId }: Props) {
                   onClick={toggleFavorite}
                 >
                   {isFavorite ? (
-                    <FilledFavoriteIcon className="w-6 h-6 px-1 py-0.5" />
+                    <FilledFavoriteIcon className="px-1 py-0.5" />
                   ) : (
-                    <OutlinedFavoriteIcon className="w-6 h-6 px-1 py-0.5" />
+                    <OutlinedFavoriteIcon className="px-1 py-0.5" />
                   )}
                   <span className="px-1 py-0.5 text-sm text-secondary font-medium">
                     즐겨찾기
