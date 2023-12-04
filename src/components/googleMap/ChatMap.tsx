@@ -29,7 +29,7 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
   const [places, setPlaces] = useState<google.maps.Marker[]>([]);
-  const { center, bookmarks, pins } = useAppSelector(state => state.mapSlice);
+  const { center, bookmarks } = useAppSelector(state => state.mapSlice);
   window.initMap = function () {
     const initmap = new google.maps.Map(
       document.getElementById("map") as HTMLElement,
@@ -78,7 +78,6 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
   // page를 나갈 때 pins, bookmarks 초기화.
   useEffect(() => {
     return () => {
-      dispatch(initPins());
       dispatch(initBookmarks());
     };
   }, [dispatch]);
@@ -218,7 +217,7 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
                         placeId: place.place_id as string
                       }
                     ],
-                    bookmarkCollectionId: 1
+                    bookmarkCollectionId: collectionId
                   });
 
                   addWindow.close();

@@ -12,6 +12,7 @@ import { Socket } from "socket.io-client";
 type Props = {
   setOptionsState: (state: boolean) => void;
   socket: Socket;
+  bookmarkCollectionId: number;
 };
 
 type CollectionType = {
@@ -24,7 +25,11 @@ const initCollection: CollectionType = {
   id: 0
 };
 
-export default function BookmarkOptionBox({ setOptionsState, socket }: Props) {
+export default function BookmarkOptionBox({
+  setOptionsState,
+  socket,
+  bookmarkCollectionId
+}: Props) {
   const [collectionList, setCollectionList] = useState<CollectionType[]>([]);
   const [bookmarkList, setBookmarkList] = useState<BookmarkType[]>([]);
   const [selectedCollection, setSelectedCollection] =
@@ -91,7 +96,7 @@ export default function BookmarkOptionBox({ setOptionsState, socket }: Props) {
   const bringBookmarksHandler = () => {
     socket.emit("postBookmark", {
       locationsWithContent: bookmarkToAdd,
-      bookmarkCollectionId: 1
+      bookmarkCollectionId
     });
   };
 

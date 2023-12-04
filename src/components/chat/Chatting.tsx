@@ -116,14 +116,14 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           userVisibility: false
         };
       }
-      socket.on("exitChatRoom", data => {
-        const exitmember = data.leaveUserId;
-        const filterMember = roomMembers.filter(
-          member => member.id !== exitmember
-        );
-        setRoomMembers(filterMember);
-      });
       setChatList(chatList => [...chatList, newChat]);
+    });
+    socket.on("exitChatRoom", data => {
+      const exitmember = data.leaveUserId;
+      const filterMember = roomMembers.filter(
+        member => member.id !== exitmember
+      );
+      setRoomMembers(filterMember);
     });
     socket.on("disconnected", message => {});
   }, [socket]);
@@ -164,6 +164,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
               <BookmarkOptionBox
                 setOptionsState={setOptionsState}
                 socket={socket}
+                bookmarkCollectionId={collectionId}
               />
             </div>
           ) : null}
