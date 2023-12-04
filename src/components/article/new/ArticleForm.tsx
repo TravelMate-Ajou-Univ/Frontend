@@ -43,6 +43,7 @@ interface Props {
 
 export default function ArticleForm({ id, edittngSeason }: Props) {
   const [title, setTitle] = useState<string>("");
+  const [contentView, setContentView] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [season, setSeason] = useState<KoreanSeasonType>("봄");
@@ -160,13 +161,36 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
     if (!content) return alert("내용을 입력해주세요");
     if (!thumbnailFile) return alert("썸네일을 등록해주세요");
 
+    const regex = /<img.*?src="(.*?)"/g;
+    let match;
+    let newContent = content;
+
+    while ((match = regex.exec(content)) !== null) {
+      const base64Image = match[1];
+      if (!base64Image) return;
+
+      const response = await fetch(base64Image);
+      const blob = await response.blob();
+      const file = new File([blob], "image.jpg", { type: "image" });
+
+      try {
+        const imgId = await uploadImage(file, "article");
+        if (!imgId) return;
+        const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
+        const replacedContent = newContent.replace(base64Image, imgURL);
+        newContent = replacedContent;
+      } catch (error) {
+        alert("업로드에 실패했습니다.");
+      }
+    }
+
     const imgId = await uploadImage(thumbnailFile, "thumbnail");
     const thumbnail = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=thumbnail`;
     const article: ArticleType = {
       title,
       period: seasonMapper[season] as SeasonType,
       location,
-      content,
+      content: newContent,
       tagIds: keywords.map(keyword => keyword.id),
       thumbnail,
       bookmarkIds
