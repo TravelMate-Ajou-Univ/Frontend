@@ -130,3 +130,13 @@ export const article = {
   postFavorite: (id: string) => api.post(`articles/${id}/favorite`),
   deleteFavorite: (id: string) => api.delete(`articles/${id}/favorite`)
 };
+
+export const report = {
+  reportArticle: (articleId: number, reason: string) =>
+    api.post(`articles/${articleId}/report`, { reason }),
+  reportUser: (reportedUserId: number, reason: string) =>
+    api.post("/user-report-log", {
+      reason,
+      reportedUserId
+    })
+};

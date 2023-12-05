@@ -20,6 +20,9 @@ import { BookmarkType } from "@/model/bookmark";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
 import Tabs from "@mui/material/Tabs";
 import Tab from "@mui/material/Tab";
+import AlertIcon from "@/components/ui/icons/AlertIcon";
+import ReportModal from "@/components/ui/report/ReportModal";
+import { cancelReport, report } from "@/service/report";
 const { formatLines, diffLines } = require("unidiff");
 
 interface Props {
@@ -28,6 +31,8 @@ interface Props {
 }
 
 export default function Request({ articleId, requestId }: Props) {
+  const [reportModal, setReportModal] = useState<boolean>(false);
+  const [reportContent, setReportContent] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [originArticle, setOriginArticle] = useState<string>("");
   const [originBookmarks, setOriginBookmarks] = useState<
@@ -154,52 +159,77 @@ export default function Request({ articleId, requestId }: Props) {
   };
 
   return (
-    <article className="flex flex-col gap-3 w-full bg-white shadow-lg rounded-xl px-11 py-8 mb-16">
-      <section className="px-2">
-        <div className="flex flex-col">
-          <p className="text-xl font-bold">수정 요청</p>
-          <p className="text-sm text-gray-500">
-            {requestUser?.userName}님의 요청
-          </p>
+    <>
+      <article className="flex flex-col gap-3 w-full bg-white shadow-lg rounded-xl px-11 py-8 mb-16">
+        <section className="px-2">
+          <div className="flex flex-col">
+            <p className="text-xl font-bold">수정 요청</p>
+            <div className="flex items-center gap-2">
+              <p className="text-sm text-gray-500">
+                {requestUser?.userName}님의 요청
+              </p>
+              <button
+                className={`self-center divide-x border rounded-md flex items-center px-1 mb-1`}
+                onClick={() => setReportModal(true)}
+              >
+                <AlertIcon className="px-1 py-0.5" />
+                <span className="px-1 py-0.5 text-sm text-red-400">
+                  수정 요청자 신고
+                </span>
+              </button>
+            </div>
+          </div>
+        </section>
+        <hr />
+        <Tabs
+          value={value}
+          onChange={handleChange}
+          variant="fullWidth"
+          aria-label="disabled tabs example"
+        >
+          <Tab label="Origin" />
+          <Tab label="Request" />
+        </Tabs>
+
+        <div className={`w-full h-[30rem] rounded-xl overflow-hidden`}>
+          {value === 0 ? (
+            <ArticleGoogleMap
+              modifyState={false}
+              bookmarks={originBookmarks}
+              location={originBookmarks.length === 0 ? location : undefined}
+            />
+          ) : (
+            <ArticleGoogleMap
+              modifyState={false}
+              bookmarks={requestBookmarks}
+              location={requestBookmarks.length === 0 ? location : undefined}
+            />
+          )}
         </div>
-      </section>
-      <hr />
-      <Tabs
-        value={value}
-        onChange={handleChange}
-        variant="fullWidth"
-        aria-label="disabled tabs example"
-      >
-        <Tab label="Origin" />
-        <Tab label="Request" />
-      </Tabs>
 
-      <div className={`w-full h-[30rem] rounded-xl overflow-hidden`}>
-        {value === 0 ? (
-          <ArticleGoogleMap
-            modifyState={false}
-            bookmarks={originBookmarks}
-            location={originBookmarks.length === 0 ? location : undefined}
-          />
-        ) : (
-          <ArticleGoogleMap
-            modifyState={false}
-            bookmarks={requestBookmarks}
-            location={requestBookmarks.length === 0 ? location : undefined}
-          />
+        <Diff diff={diff} originArticle={originArticle} />
+        <hr />
+        {requestComment !== "" && requestUser && (
+          <Comment requestUser={requestUser} requestComment={requestComment} />
         )}
-      </div>
-
-      <Diff diff={diff} originArticle={originArticle} />
-      <hr />
-      {requestComment !== "" && requestUser && (
-        <Comment requestUser={requestUser} requestComment={requestComment} />
+        <hr />
+        <section className="self-end flex gap-2">
+          <OutlinedButton onClick={decline}>거절</OutlinedButton>
+          <FilledButton onClick={accept}>승인</FilledButton>
+        </section>
+      </article>
+      {reportModal && requestUser && (
+        <ReportModal
+          name={requestUser?.userName || ""}
+          setReportContent={setReportContent}
+          cancel={() => cancelReport(() => setReportModal(false))}
+          submit={() =>
+            report("user", requestUser.id, reportContent, () =>
+              setReportModal(false)
+            )
+          }
+        />
       )}
-      <hr />
-      <section className="self-end flex gap-2">
-        <OutlinedButton onClick={decline}>거절</OutlinedButton>
-        <FilledButton onClick={accept}>승인</FilledButton>
-      </section>
-    </article>
+    </>
   );
 }
