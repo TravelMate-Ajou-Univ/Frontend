@@ -41,12 +41,15 @@ export default function FriendsAddContainer({
   useEffect(() => {
     const getData = async () => {
       if (roomMembers && nickname) {
+        // 채팅방 내에서 채팅방 멤버들을 제외한 친구 목록
         const membersId = roomMembers.map(member => member.id);
         const membersIdStr = String(membersId);
         const res = await getFriendListToInvite(nickname, membersIdStr);
+
         setFriends(res);
         setTotal(res.length);
       } else {
+        // 채팅목록에서 채팅방을 만들기 위한 친구 목록
         const res = await getMyFriendsList(page, 5);
         setFriends(res.friends);
         setTotal(res.count);

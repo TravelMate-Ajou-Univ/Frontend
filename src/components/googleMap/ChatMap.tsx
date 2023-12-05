@@ -71,7 +71,11 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
       dispatch(addBookmarks(newBookmarks));
     });
     socket.on("deleteBookmark", data => {
-      // Todo : delete bookmark
+      const deletedBookmarkId = data.bookmarkIds[0];
+      const recentBookmarks = bookmarks.filter(
+        bookmark => bookmark.id !== deletedBookmarkId
+      );
+      dispatch(setBookmarks(recentBookmarks));
     });
   }, [socket, dispatch]);
 

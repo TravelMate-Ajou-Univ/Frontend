@@ -1,6 +1,7 @@
 import { ChatRoomType } from "@/model/chat";
 import { chatApi } from "./api";
 import { BookmarkType } from "@/model/bookmark";
+import { FriendType } from "@/model/friend";
 
 type ChatRoomProps = {
   name: string;
@@ -77,6 +78,11 @@ export const getChatRoomData = async (roomId: string) => {
       url: `chatroom/${roomId}`
     });
     const data = response.data;
+    const members: FriendType[] = data.members.map((member: any) => ({
+      id: member.id,
+      nickname: member.nickname,
+      profileImageId: member.profileImageId
+    }));
     const bookmarks: BookmarkType[] = data.bookmarks.map((bookmark: any) => ({
       latitude: Number(bookmark.location.latitude),
       longitude: Number(bookmark.location.longitude),
@@ -86,7 +92,7 @@ export const getChatRoomData = async (roomId: string) => {
     }));
 
     return {
-      members: data.members,
+      members,
       collectionId: data.collectionId,
       bookmarks
     };

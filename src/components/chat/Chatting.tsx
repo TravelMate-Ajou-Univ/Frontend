@@ -31,6 +31,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
   const [optionsState, setOptionsState] = useState<boolean>(false);
   const [roomMembers, setRoomMembers] = useState<FriendType[]>([]);
   const [collectionId, setCollectionId] = useState<number>(0);
+  const [memberChangedState, setMemberChangedState] = useState<boolean>(false);
 
   // 지도, chat기록 데이터 가져오기
   useEffect(() => {
@@ -68,6 +69,14 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
     getData();
   }, [dispatch, roomId]);
 
+  useEffect(() => {
+    // 맴버 최신화
+    const getData = async () => {
+      const data = await getChatRoomData(roomId);
+      setRoomMembers(data.members);
+    };
+    getData();
+  }, [memberChangedState]);
   useEffect(() => {
     socket.on("message", data => {
       // const newChatList = makeNewChat(data, chatList);
@@ -119,11 +128,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       setChatList(chatList => [...chatList, newChat]);
     });
     socket.on("exitChatRoom", data => {
-      const exitmember = data.leaveUserId;
-      const filterMember = roomMembers.filter(
-        member => member.id !== exitmember
-      );
-      setRoomMembers(filterMember);
+      setMemberChangedState(!memberChangedState);
     });
     socket.on("disconnected", message => {});
   }, [socket]);
@@ -179,6 +184,8 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           roomName={roomName}
           roomMembers={roomMembers}
           toggleMapState={toggleMapState}
+          memberChangedState={memberChangedState}
+          setMemberChangedState={setMemberChangedState}
         />
         <ChatList chatList={chatList} />
         <ChatForm sendMessage={sendMessage} />
