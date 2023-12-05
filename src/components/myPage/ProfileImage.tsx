@@ -4,6 +4,7 @@ import ProfileImageInput from "./ProfileImageInput";
 import { useAppSelector } from "@/hooks/redux";
 import { uploadImage } from "@/service/axios/article";
 import { useRef, useState } from "react";
+import { changProfileIdToProfileUrl } from "@/service/axios/profile";
 
 export default function ProfileImage() {
   const { profileImageId } = useAppSelector(state => state.userSlice);
@@ -31,7 +32,7 @@ export default function ProfileImage() {
           profileImageId === ""
             ? defaultProfileImg
             : imageRef.current === ""
-            ? `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${profileImageId}/?type=profile`
+            ? changProfileIdToProfileUrl(Number(profileImageId))
             : imageRef.current
         }
         className="bg-gray-100 rounded-full w-[7.5rem] h-[7.5rem]"

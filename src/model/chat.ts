@@ -1,7 +1,9 @@
+import { FriendType } from "./friend";
+
 export type ChatRoomType = {
   roomId: string;
   name: string;
-  memberIds: number[];
+  members: FriendType[];
   lastChat: string;
   lastChatTime: string;
   unReadChat: number;
