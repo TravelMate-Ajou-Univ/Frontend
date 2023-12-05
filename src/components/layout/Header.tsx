@@ -3,8 +3,6 @@
 import Link from "next/link";
 import Logo from "../ui/icons/Logo";
 import { useAppDispatch, useAppSelector } from "@/hooks/redux";
-import Image from "next/image";
-import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import { useEffect, useState } from "react";
 import Menu from "./menu/Menu";
 import { getCookie } from "cookies-next";
@@ -13,7 +11,7 @@ import { setUser } from "@/redux/features/userSlice";
 import MenuIcon from "../ui/icons/MenuIcon";
 
 export default function Header() {
-  const { userName, profileImageId } = useAppSelector(state => state.userSlice);
+  const { userName, level } = useAppSelector(state => state.userSlice);
   const [menu, setMenu] = useState(false);
   const dispatch = useAppDispatch();
 
@@ -46,9 +44,19 @@ export default function Header() {
       {userName === "" ? (
         <Link href="/auth">로그인/회원가입</Link>
       ) : (
-        <button onClick={openMenu}>
-          <MenuIcon />
-        </button>
+        <div className="flex items-center gap-3">
+          {level === "ADMIN" && (
+            <Link
+              className="text-sm text-gray-600 hover:text-gray-800"
+              href="/admin"
+            >
+              관리자 페이지
+            </Link>
+          )}
+          <button onClick={openMenu}>
+            <MenuIcon />
+          </button>
+        </div>
       )}
       {menu && <Menu closeMenu={closeMenu} />}
     </header>

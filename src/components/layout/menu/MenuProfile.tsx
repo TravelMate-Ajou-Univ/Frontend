@@ -1,6 +1,7 @@
 import { useAppSelector } from "@/hooks/redux";
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
+import { changProfileIdToProfileUrl } from "@/service/axios/profile";
 
 export default function MenuProfile() {
   const { userName, profileImageId } = useAppSelector(state => state.userSlice);
@@ -16,7 +17,7 @@ export default function MenuProfile() {
           src={
             profileImageId === ""
               ? defaultProfileImg
-              : `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${profileImageId}/?type=profile`
+              : changProfileIdToProfileUrl(Number(profileImageId))
           }
           alt="profile"
           width={150}

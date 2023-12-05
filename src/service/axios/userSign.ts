@@ -130,7 +130,8 @@ export const GetUserInfo = async () => {
     const userInfo = {
       id: data.id,
       userName: data.nickname,
-      profileImageId: data.profileImageId ?? ""
+      profileImageId: data.profileImageId ?? "",
+      level: data.level
     };
     return userInfo;
   } catch (error) {
