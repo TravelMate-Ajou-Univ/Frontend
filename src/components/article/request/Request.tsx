@@ -11,6 +11,7 @@ import {
 import { getUserInfoById } from "@/service/axios/userSign";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { parseDiff } from "react-diff-view";
+import Dompurify from "dompurify";
 import Diff from "./Diff";
 import OutlinedButton from "@/components/ui/button/OutlinedButton";
 import FilledButton from "@/components/ui/button/FilledButton";
@@ -31,6 +32,7 @@ interface Props {
 }
 
 export default function Request({ articleId, requestId }: Props) {
+  const [preview, setPreview] = useState<boolean>(false);
   const [reportModal, setReportModal] = useState<boolean>(false);
   const [reportContent, setReportContent] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -161,8 +163,8 @@ export default function Request({ articleId, requestId }: Props) {
   return (
     <>
       <article className="flex flex-col gap-3 w-full bg-white shadow-lg rounded-xl px-11 py-8 mb-16">
-        <section className="px-2">
-          <div className="flex flex-col">
+        <section className="px-2 flex justify-between items-start">
+          <div className="flex flex-col grow">
             <p className="text-xl font-bold">수정 요청</p>
             <div className="flex items-center gap-2">
               <p className="text-sm text-gray-500">
@@ -179,20 +181,27 @@ export default function Request({ articleId, requestId }: Props) {
               </button>
             </div>
           </div>
+          <button
+            className="font-semibold text-secondary border border-secondary px-2 rounded-md"
+            onClick={() => setPreview(prev => !prev)}
+          >
+            {preview ? "미리보기 해제" : "미리보기"}
+          </button>
         </section>
         <hr />
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          variant="fullWidth"
-          aria-label="disabled tabs example"
-        >
-          <Tab label="Origin" />
-          <Tab label="Request" />
-        </Tabs>
-
+        {!preview && (
+          <Tabs
+            value={value}
+            onChange={handleChange}
+            variant="fullWidth"
+            aria-label="disabled tabs example"
+          >
+            <Tab label="Origin" />
+            <Tab label="Request" />
+          </Tabs>
+        )}
         <div className={`w-full h-[30rem] rounded-xl overflow-hidden`}>
-          {value === 0 ? (
+          {value === 0 && !preview ? (
             <ArticleGoogleMap
               modifyState={false}
               bookmarks={originBookmarks}
@@ -206,8 +215,18 @@ export default function Request({ articleId, requestId }: Props) {
             />
           )}
         </div>
-
-        <Diff diff={diff} originArticle={originArticle} />
+        {preview ? (
+          <div
+            dangerouslySetInnerHTML={{
+              __html: Dompurify.sanitize(requestArticle)
+            }}
+          />
+        ) : (
+          <>
+            <hr />
+            <Diff diff={diff} originArticle={originArticle} />
+          </>
+        )}
         <hr />
         {requestComment !== "" && requestUser && (
           <Comment requestUser={requestUser} requestComment={requestComment} />

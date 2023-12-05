@@ -1,11 +1,12 @@
 import Dompurify from "dompurify";
+import React from "react";
 
 interface Props {
   diff?: any;
   originArticle: string;
 }
 
-export default function Diff({ diff, originArticle }: Props) {
+function Diff({ diff, originArticle }: Props) {
   return (
     <section>
       {diff &&
@@ -53,3 +54,5 @@ export default function Diff({ diff, originArticle }: Props) {
     </section>
   );
 }
+
+export default React.memo(Diff);

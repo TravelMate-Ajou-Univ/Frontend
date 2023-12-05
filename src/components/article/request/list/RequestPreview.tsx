@@ -42,7 +42,11 @@ export default function RequestPreview({ request }: Props) {
       href={`/article/request/${request.articleId}/${request.id}`}
     >
       <section className="flex items-center gap-2">
-        <div className="bg-gray-200 overflow-hidden rounded-full w-10 h-10 p-1">
+        <div
+          className={`bg-gray-200 overflow-hidden rounded-full w-10 h-10 ${
+            user.profileImageId === "" ? "p-1" : ""
+          }`}
+        >
           <Image
             src={
               user.profileImageId === ""
@@ -50,6 +54,8 @@ export default function RequestPreview({ request }: Props) {
                 : changProfileIdToProfileUrl(Number(user.profileImageId))
             }
             alt="프로필 이미지"
+            width={40}
+            height={40}
           />
         </div>
         <p className="flex-grow">{user.userName}</p>
