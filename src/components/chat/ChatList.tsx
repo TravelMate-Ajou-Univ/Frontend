@@ -1,12 +1,13 @@
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
-import { ChatType, ChatWithVisibilityType } from "@/model/chat";
+import { ViewChatFormType } from "@/model/chat";
 import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useRef } from "react";
+import { changProfileIdToProfileUrl } from "@/service/axios/profile";
 import { CalculateAmPmTime } from "@/service/time";
 
 type Props = {
-  chatList: ChatWithVisibilityType[];
+  chatList: ViewChatFormType[];
 };
 export default function ChatList({ chatList }: Props) {
   const { userName } = useAppSelector(state => state.userSlice);
@@ -44,17 +45,19 @@ export default function ChatList({ chatList }: Props) {
         className="flex flex-col border-2 rounded-md bg-white h-full relative overflow-y-auto "
         onScroll={infiniteScrollHandler}
       >
-        {chatList.map((chat: ChatWithVisibilityType, index: number) =>
+        {chatList.map((chat: ViewChatFormType, index: number) =>
           chat.userId === 0 ? (
             <li key={index} className="justify-center flex items-center">
-              <p className="border-2 rounded-md m-1 p-2 w-[15rem] text-sm text-white font-thin break-words bg-gray-400">
+              <p className="border-2 rounded-md m-1 p-2 w-[15rem] text-sm text-center text-white font-thin break-words bg-gray-400">
                 {chat.content}
               </p>
             </li>
           ) : chat.nickname === userName ? (
             <li key={index} className="justify-end flex items-end">
               {chat.timeVisibility ? (
-                <p className="self-end text-xs mb-2">{chat.createdAt}</p>
+                <p className="self-end text-xs mb-2">
+                  {CalculateAmPmTime(chat.createdAt)}
+                </p>
               ) : null}
               <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[12rem] break-words bg-yellow-300">
                 {chat.content}
@@ -65,8 +68,12 @@ export default function ChatList({ chatList }: Props) {
               <div className="flex items-center w-[2.5rem]">
                 {chat.userVisibility ? (
                   <Image
-                    src={defaultProfileImg}
-                    className="bg-gray-100 rounded-full m-1"
+                    src={
+                      chat.profileImageId === null
+                        ? defaultProfileImg
+                        : changProfileIdToProfileUrl(chat.profileImageId)
+                    }
+                    className="bg-gray-100 rounded-full m-1 w-[2rem] h-[2rem]"
                     width={30}
                     height={30}
                     alt="my Image"
@@ -82,7 +89,9 @@ export default function ChatList({ chatList }: Props) {
                     {chat.content}
                   </p>
                   {chat.timeVisibility ? (
-                    <p className="self-end text-xs mb-2">{chat.createdAt}</p>
+                    <p className="self-end text-xs mb-2">
+                      {CalculateAmPmTime(chat.createdAt)}
+                    </p>
                   ) : null}
                 </div>
               </div>

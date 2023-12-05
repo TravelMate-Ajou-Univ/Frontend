@@ -44,7 +44,8 @@ export const CheckChatTime = (
   const targetDate = new Date(targetTime);
   const timeDifference = targetDate.getTime() - prevDate.getTime();
   const minutesDifference = Math.floor(timeDifference / (1000 * 60));
-  if (minutesDifference <= 1) {
+
+  if (minutesDifference < 1) {
     return false;
   } else {
     return true;

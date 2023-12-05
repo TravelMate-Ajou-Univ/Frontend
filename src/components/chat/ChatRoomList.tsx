@@ -49,6 +49,9 @@ export default function ChatRoomList() {
                     </p>
                   ) : null}
                   <p className="text-xl">{chatroom.name}</p>
+                  <p className="font-bold text-gray-300">
+                    {chatroom.members.length}
+                  </p>
                 </div>
                 <p className="text-xs font-thin">
                   {CalculateDelayTime(chatroom.lastChatTime)}
