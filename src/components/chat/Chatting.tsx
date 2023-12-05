@@ -29,6 +29,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
   const [mapState, setMapState] = useState(false);
   const [chatList, setChatList] = useState<ViewChatFormType[]>([]);
   const chatListRef = useRef<ViewChatFormType[]>([]);
+  const [firstChatIndex, setFirstChatIndex] = useState<number>(-1);
   const [optionsState, setOptionsState] = useState<boolean>(false);
   const [roomMembers, setRoomMembers] = useState<FriendType[]>([]);
   const [collectionId, setCollectionId] = useState<number>(0);
@@ -44,11 +45,17 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       setCollectionId(data.collectionId);
       dispatch(setBookmarks(data.bookmarks));
 
-      const newChatList: ViewChatFormType[] = checkVisibility(
+      const result = checkVisibility(
         chatdata.chats,
         chatdata.firstChat,
         data.members
       );
+      const newChatList: ViewChatFormType[] = result.newChatList;
+
+      setFirstChatIndex(() => {
+        return result.firstChatIndex;
+      });
+
       chatListRef.current = newChatList;
       setChatList(chatListRef.current);
 
@@ -150,7 +157,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           memberChangedState={memberChangedState}
           setMemberChangedState={setMemberChangedState}
         />
-        <ChatList chatList={chatList} />
+        <ChatList chatList={chatList} firstChatIndex={firstChatIndex} />
         <ChatForm sendMessage={sendMessage} socket={socket} />
       </div>
     </section>

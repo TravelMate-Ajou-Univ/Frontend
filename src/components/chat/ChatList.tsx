@@ -2,14 +2,15 @@ import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import { ViewChatFormType } from "@/model/chat";
 import { useAppSelector } from "@/hooks/redux";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { changeImageIdToImageUrl } from "@/service/axios/profile";
 import { calculateAmPmTime } from "@/service/time";
 
 type Props = {
   chatList: ViewChatFormType[];
+  firstChatIndex: number;
 };
-export default function ChatList({ chatList }: Props) {
+export default function ChatList({ chatList, firstChatIndex }: Props) {
   const { userName } = useAppSelector(state => state.userSlice);
   const scrollableContainerRef = useRef<HTMLUListElement>(null);
   const scrollableContainer = scrollableContainerRef.current;
@@ -20,30 +21,35 @@ export default function ChatList({ chatList }: Props) {
     }
   };
 
-  const infiniteScrollHandler = () => {
-    if (scrollableContainer == undefined) {
-      return;
-    }
-    const scrollPosition = scrollableContainer.scrollTop;
-    const containerHeight = scrollableContainer.clientHeight;
-    const contentHeight = scrollableContainer.scrollHeight;
+  const focusOnChatItem = (index: number) => {
+    if (scrollableContainer) {
+      const chatItems = scrollableContainer.querySelectorAll("li");
+      const targetChatItem = chatItems[index];
 
-    if (scrollPosition + containerHeight >= contentHeight) {
-      // Todo forward message
-    } else if (scrollPosition === 0) {
-      // Todo backward message
+      if (targetChatItem) {
+        // 특정 아이템으로 스크롤 이동
+        targetChatItem.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
     }
   };
+
   useEffect(() => {
+    // chatList의 변화에 따라 scrollToBottom 실행
     scrollToBottom();
   }, [chatList, scrollToBottom]);
+
+  useEffect(() => {
+    // 처음에 firstChatIndex로 포커싱
+    if (firstChatIndex !== -1) {
+      focusOnChatItem(firstChatIndex);
+    }
+  }, [firstChatIndex, focusOnChatItem]);
 
   return (
     <section className="w-full h-[33rem]">
       <ul
         ref={scrollableContainerRef}
         className="flex flex-col border-2 rounded-md bg-white h-full relative overflow-y-auto "
-        onScroll={infiniteScrollHandler}
       >
         {chatList.map((chat: ViewChatFormType, index: number) =>
           chat.userId === 0 ? (

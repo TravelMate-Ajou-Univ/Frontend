@@ -10,14 +10,20 @@ type ChatProps = {
   createdAt: string;
 };
 
+type resultChatList = {
+  newChatList: ViewChatFormType[];
+  firstChatIndex: number;
+};
+
 export const checkVisibility = (
   chatList: ChatProps[],
   firstChat: ChatProps | null,
   members: FriendType[]
-): ViewChatFormType[] => {
+): resultChatList => {
   // key & value
   const nicknameDict = new Map<number, string>();
   const profileDict = new Map<number, number | null>();
+  let firstChatIndex: number = -1;
 
   members.map(member => {
     nicknameDict.set(member.id, member.nickname);
@@ -60,6 +66,7 @@ export const checkVisibility = (
         userVisibility: false,
         timeVisibility: false
       };
+      firstChatIndex = newChatList.length;
       newChatList = [...newChatList, unReadChat];
     }
 
@@ -115,7 +122,10 @@ export const checkVisibility = (
     newChatList = [...newChatList, newChat];
   }
 
-  return newChatList;
+  return {
+    newChatList,
+    firstChatIndex
+  };
 };
 
 export const makeNewChat = (
