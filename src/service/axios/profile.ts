@@ -43,5 +43,5 @@ export const changeProfileImg = async (profileImageId: number) => {
 };
 
 export const changProfileIdToProfileUrl = (profileImageId: number): string => {
-  return `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${profileImageId}/?type=profile`;
+  return `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${profileImageId}?type=profile`;
 };

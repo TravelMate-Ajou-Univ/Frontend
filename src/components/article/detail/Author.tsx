@@ -56,6 +56,8 @@ export default function Author({ authorId }: Props) {
                 : changProfileIdToProfileUrl(Number(author.profileImageId))
             }
             alt="프로필 이미지"
+            width={40}
+            height={40}
           />
         </div>
         <span className="md:text-base text-sm">{author.userName}</span>
