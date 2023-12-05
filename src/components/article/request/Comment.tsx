@@ -15,7 +15,11 @@ export default function Comment({ requestUser, requestComment }: Props) {
       <div className="bg-white px-3 py-4 border">
         {requestUser && (
           <div className="flex items-center gap-2">
-            <div className="bg-gray-200 overflow-hidden rounded-full w-10 h-10 p-1">
+            <div
+              className={`bg-gray-200 overflow-hidden rounded-full w-10 h-10 ${
+                requestUser.profileImageId === "" ? "p-1" : ""
+              }`}
+            >
               <Image
                 src={
                   requestUser.profileImageId === ""
@@ -25,6 +29,8 @@ export default function Comment({ requestUser, requestComment }: Props) {
                       )
                 }
                 alt="프로필 이미지"
+                width={100}
+                height={100}
               />
             </div>
             <p>{requestUser?.userName}</p>
