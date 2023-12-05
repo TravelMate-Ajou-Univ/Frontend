@@ -1,19 +1,10 @@
 import { checkDuplicateName } from "@/service/axios/profile";
-import {
-  ChangeEvent,
-  FormEvent,
-  LegacyRef,
-  MutableRefObject,
-  useEffect,
-  useRef,
-  useState
-} from "react";
+import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import PenIcon from "../ui/icons/PenIcon";
 
 type Props = {
   nickname: string;
   setNickname: (name: string) => void;
-  setCheckDuplicate: (check: boolean) => void;
 };
 
 type BannerData = {
@@ -21,15 +12,12 @@ type BannerData = {
   status: "success" | "fail";
 };
 
-export default function NicknameForm({
-  nickname,
-  setNickname,
-  setCheckDuplicate
-}: Props) {
+export default function NicknameForm({ nickname, setNickname }: Props) {
   const [banner, setBanner] = useState<BannerData | null>();
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
+    // nickname input창에 focus
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -42,7 +30,6 @@ export default function NicknameForm({
         setBanner({ message: "사용가능한 닉네임입니다.", status: "success" });
       })
       .catch(err => {
-        setCheckDuplicate(true);
         setBanner({
           message: err.response.data.message as string,
           status: "fail"
