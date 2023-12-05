@@ -1,10 +1,11 @@
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
-import ProfileImageInput from "./ProfileImageInput";
+import ImageInput from "./ProfileImageInput";
 import { useAppSelector } from "@/hooks/redux";
 import { uploadImage } from "@/service/axios/article";
 import { useRef, useState } from "react";
-import { changProfileIdToProfileUrl } from "@/service/axios/profile";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
+import CameraIcon from "../ui/icons/CameraIcon";
 
 export default function ProfileImage() {
   const { profileImageId } = useAppSelector(state => state.userSlice);
@@ -32,7 +33,7 @@ export default function ProfileImage() {
           profileImageId === ""
             ? defaultProfileImg
             : imageRef.current === ""
-            ? changProfileIdToProfileUrl(Number(profileImageId))
+            ? changeImageIdToImageUrl(Number(profileImageId), "profile")
             : imageRef.current
         }
         className="bg-gray-100 rounded-full w-[7.5rem] h-[7.5rem]"
@@ -42,10 +43,12 @@ export default function ProfileImage() {
         priority
       />
 
-      <ProfileImageInput
+      <ImageInput
         className="absolute bottom-0 right-0 text-gray-400 hover:scale-110 hover:cursor-pointer"
         handleImage={handleProfile}
-      />
+      >
+        <CameraIcon />
+      </ImageInput>
     </div>
   );
 }

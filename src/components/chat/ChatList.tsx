@@ -3,7 +3,7 @@ import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import { ViewChatFormType } from "@/model/chat";
 import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useRef } from "react";
-import { changProfileIdToProfileUrl } from "@/service/axios/profile";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 import { CalculateAmPmTime } from "@/service/time";
 
 type Props = {
@@ -60,7 +60,16 @@ export default function ChatList({ chatList }: Props) {
                 </p>
               ) : null}
               <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[12rem] break-words bg-yellow-300">
-                {chat.content}
+                {chat.type === "text" ? (
+                  chat.content
+                ) : (
+                  <Image
+                    src={chat.content}
+                    height={200}
+                    width={200}
+                    alt="chatting image"
+                  />
+                )}
               </p>
             </li>
           ) : (
@@ -71,7 +80,10 @@ export default function ChatList({ chatList }: Props) {
                     src={
                       chat.profileImageId === null
                         ? defaultProfileImg
-                        : changProfileIdToProfileUrl(chat.profileImageId)
+                        : changeImageIdToImageUrl(
+                            chat.profileImageId,
+                            "profile"
+                          )
                     }
                     className="bg-gray-100 rounded-full m-1 w-[2rem] h-[2rem]"
                     width={30}
@@ -86,7 +98,16 @@ export default function ChatList({ chatList }: Props) {
                 ) : null}
                 <div className="flex">
                   <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[12rem] break-words bg-gray-200">
-                    {chat.content}
+                    {chat.type === "text" ? (
+                      chat.content
+                    ) : (
+                      <Image
+                        src={chat.content}
+                        height={200}
+                        width={200}
+                        alt="chatting image"
+                      />
+                    )}
                   </p>
                   {chat.timeVisibility ? (
                     <p className="self-end text-xs mb-2">

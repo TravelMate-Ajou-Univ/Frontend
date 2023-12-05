@@ -1,20 +1,19 @@
 import React, { ChangeEvent } from "react";
-import CameraIcon from "../ui/icons/CameraIcon";
 
 type Props = {
   handleImage: (e: ChangeEvent<HTMLInputElement>) => void;
   className?: string;
+  children: React.ReactNode;
 };
 
-export default function ProfileImageInput({
+export default function ImageInput({
   handleImage,
-  className = ""
+  className = "",
+  children
 }: Props) {
   return (
     <section className={className}>
-      <label htmlFor="profile">
-        <CameraIcon />
-      </label>
+      <label htmlFor="profile">{children}</label>
       <input
         id="profile"
         type="file"

@@ -5,6 +5,7 @@ export type ChatRoomType = {
   name: string;
   members: FriendType[];
   lastChat: string;
+  lastChatType: string;
   lastChatTime: string;
   unReadChat: number;
 };

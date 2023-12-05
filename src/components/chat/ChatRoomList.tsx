@@ -58,7 +58,11 @@ export default function ChatRoomList() {
                 </p>
               </div>
               <div className="flex justify-between gap-4">
-                <p className="py-2">{chatroom.lastChat}</p>
+                <p className="py-2">
+                  {chatroom.lastChatType === "text"
+                    ? chatroom.lastChat
+                    : "이미지"}
+                </p>
                 {chatroom.unReadChat === 0 ? null : (
                   <p className="w-6 h-6 rounded-full bg-red-400 text-white text-sm text-center flex items-center justify-center">
                     {chatroom.unReadChat}

@@ -8,7 +8,7 @@ import { FriendType } from "@/model/friend";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
-import { changProfileIdToProfileUrl } from "@/service/axios/profile";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 type Props = {
   socket: Socket;
@@ -79,7 +79,10 @@ export default function ChatRoomHeader({
                       src={
                         member.profileImageId === null
                           ? defaultProfileImg
-                          : changProfileIdToProfileUrl(member.profileImageId)
+                          : changeImageIdToImageUrl(
+                              member.profileImageId,
+                              "profile"
+                            )
                       }
                       className="bg-gray-200 rounded-full w-[3.5rem] h-[3.5rem]"
                       width={40}

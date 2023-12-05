@@ -84,6 +84,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
     };
     getData();
   }, [memberChangedState, roomId]);
+
   useEffect(() => {
     socket.on("message", data => {
       chatListRef.current = makeNewChat(data, chatListRef.current);
@@ -150,7 +151,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           setMemberChangedState={setMemberChangedState}
         />
         <ChatList chatList={chatList} />
-        <ChatForm sendMessage={sendMessage} />
+        <ChatForm sendMessage={sendMessage} socket={socket} />
       </div>
     </section>
   );

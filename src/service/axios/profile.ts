@@ -1,3 +1,4 @@
+import { ImageType } from "@/model/image";
 import { api } from "./api";
 
 export const checkDuplicateName = async (nickname: string) => {
@@ -42,6 +43,9 @@ export const changeProfileImg = async (profileImageId: number) => {
   return response;
 };
 
-export const changProfileIdToProfileUrl = (profileImageId: number): string => {
-  return `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${profileImageId}/?type=profile`;
+export const changeImageIdToImageUrl = (
+  profileImageId: number,
+  type: ImageType
+): string => {
+  return `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${profileImageId}/?type=${type}`;
 };
