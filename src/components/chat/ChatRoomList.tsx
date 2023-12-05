@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { getMyChatRooms } from "@/service/axios/chatroom";
 import { setChatRoom } from "@/redux/features/chatRoomSlice";
-import { CalculateDelayTime } from "@/service/time";
+import { calculateDelayTime } from "@/service/time";
 import ChatRoomImage from "./ChatRoomImage";
 
 export default function ChatRoomList() {
@@ -49,13 +49,20 @@ export default function ChatRoomList() {
                     </p>
                   ) : null}
                   <p className="text-xl">{chatroom.name}</p>
+                  <p className="font-bold text-gray-300">
+                    {chatroom.members.length}
+                  </p>
                 </div>
                 <p className="text-xs font-thin">
-                  {CalculateDelayTime(chatroom.lastChatTime)}
+                  {calculateDelayTime(chatroom.lastChatTime)}
                 </p>
               </div>
               <div className="flex justify-between gap-4">
-                <p className="py-2">{chatroom.lastChat}</p>
+                <p className="py-2">
+                  {chatroom.lastChatType === "text"
+                    ? chatroom.lastChat
+                    : "이미지"}
+                </p>
                 {chatroom.unReadChat === 0 ? null : (
                   <p className="w-6 h-6 rounded-full bg-red-400 text-white text-sm text-center flex items-center justify-center">
                     {chatroom.unReadChat}

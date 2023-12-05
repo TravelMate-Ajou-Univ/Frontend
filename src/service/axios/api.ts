@@ -79,8 +79,8 @@ export const article = {
     api.get(`articles/count?period=${season}`),
   getS3Url: (type: ImageType) => api.get(`s3/presigned-post?type=${type}`),
   uploadImgToS3: (s3url: string, data: File) => axios.put(s3url, data),
-  confirmUpload: (id: string) =>
-    api.get(`s3/upload-success/?type=article&id=${id}`),
+  confirmUpload: (id: string, type: ImageType) =>
+    api.get(`s3/upload-success/?type=${type}&id=${id}`),
   getKeywords: (word: string) => api.get(`tags/search/${word}`),
   postKeyword: (name: string) => api.post("tags", { name }),
   getArticleList: (

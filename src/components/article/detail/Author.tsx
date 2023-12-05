@@ -8,7 +8,7 @@ import DefaultProfile from "/public/image/defaultProfileImg.png";
 import Image from "next/image";
 import Link from "next/link";
 import useOutSideRef from "@/hooks/useClickOutside";
-import { changProfileIdToProfileUrl } from "@/service/axios/profile";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 interface Props {
   authorId: number;
@@ -56,7 +56,10 @@ export default function Author({ authorId }: Props) {
             src={
               author.profileImageId === ""
                 ? DefaultProfile
-                : changProfileIdToProfileUrl(Number(author.profileImageId))
+                : changeImageIdToImageUrl(
+                    Number(author.profileImageId),
+                    "profile"
+                  )
             }
             alt="프로필 이미지"
             width={40}

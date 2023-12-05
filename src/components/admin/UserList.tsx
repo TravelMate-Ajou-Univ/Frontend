@@ -6,7 +6,6 @@ import DefaultProfile from "/public/image/defaultProfileImg.png";
 import { Pagination } from "@mui/material";
 import { User } from "@/model/user";
 import { getUsers } from "@/service/axios/admin";
-import { changProfileIdToProfileUrl } from "@/service/axios/profile";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import ProfileImg from "./ProfileImg";
 

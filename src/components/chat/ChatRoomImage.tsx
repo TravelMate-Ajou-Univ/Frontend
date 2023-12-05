@@ -2,7 +2,7 @@ import { ChatRoomType } from "@/model/chat";
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import React from "react";
-import { changProfileIdToProfileUrl } from "@/service/axios/profile";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 type Props = {
   chatRoom: ChatRoomType;
@@ -16,7 +16,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
           src={
             chatRoom.members[0].profileImageId === null
               ? defaultProfileImg
-              : changProfileIdToProfileUrl(chatRoom.members[0].profileImageId)
+              : changeImageIdToImageUrl(
+                  chatRoom.members[0].profileImageId,
+                  "profile"
+                )
           }
           className="bg-gray-100 rounded-full w-[6rem] h-[6rem]"
           width={150}
@@ -30,7 +33,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
             src={
               chatRoom.members[0].profileImageId === null
                 ? defaultProfileImg
-                : changProfileIdToProfileUrl(chatRoom.members[0].profileImageId)
+                : changeImageIdToImageUrl(
+                    chatRoom.members[0].profileImageId,
+                    "profile"
+                  )
             }
             className="bg-gray-100 rounded-full w-[4.5rem] h-[4.5rem] absolute right-[0.5rem] top-[1rem]"
             width={150}
@@ -42,7 +48,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
             src={
               chatRoom.members[1].profileImageId === null
                 ? defaultProfileImg
-                : changProfileIdToProfileUrl(chatRoom.members[1].profileImageId)
+                : changeImageIdToImageUrl(
+                    chatRoom.members[1].profileImageId,
+                    "profile"
+                  )
             }
             className="bg-gray-100 rounded-full w-[4.5rem] h-[4.5rem] absolute left-[0.25rem] top-[1rem]"
             width={150}
@@ -57,7 +66,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
             src={
               chatRoom.members[0].profileImageId === null
                 ? defaultProfileImg
-                : changProfileIdToProfileUrl(chatRoom.members[0].profileImageId)
+                : changeImageIdToImageUrl(
+                    chatRoom.members[0].profileImageId,
+                    "profile"
+                  )
             }
             className="bg-gray-100 rounded-full w-[4rem] h-[4rem] absolute right-[0.5rem] top-[2.5rem]"
             width={150}
@@ -69,7 +81,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
             src={
               chatRoom.members[1].profileImageId === null
                 ? defaultProfileImg
-                : changProfileIdToProfileUrl(chatRoom.members[1].profileImageId)
+                : changeImageIdToImageUrl(
+                    chatRoom.members[1].profileImageId,
+                    "profile"
+                  )
             }
             className="bg-gray-100 rounded-full w-[4rem] h-[4rem] absolute left-[0.5rem] top-[2.5rem]"
             width={150}
@@ -81,7 +96,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
             src={
               chatRoom.members[2].profileImageId === null
                 ? defaultProfileImg
-                : changProfileIdToProfileUrl(chatRoom.members[2].profileImageId)
+                : changeImageIdToImageUrl(
+                    chatRoom.members[2].profileImageId,
+                    "profile"
+                  )
             }
             className="bg-gray-100 rounded-full w-[4rem] h-[4rem] absolute left-[2.25rem]"
             width={150}
@@ -96,7 +114,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
             src={
               chatRoom.members[0].profileImageId === null
                 ? defaultProfileImg
-                : changProfileIdToProfileUrl(chatRoom.members[0].profileImageId)
+                : changeImageIdToImageUrl(
+                    chatRoom.members[0].profileImageId,
+                    "profile"
+                  )
             }
             className="bg-gray-100 rounded-full w-[3rem] h-[3rem] absolute right-[1.25rem] top-[3.5rem]"
             width={150}
@@ -108,7 +129,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
             src={
               chatRoom.members[1].profileImageId === null
                 ? defaultProfileImg
-                : changProfileIdToProfileUrl(chatRoom.members[1].profileImageId)
+                : changeImageIdToImageUrl(
+                    chatRoom.members[1].profileImageId,
+                    "profile"
+                  )
             }
             className="bg-gray-100 rounded-full w-[3rem] h-[3rem] absolute left-[1.25rem] top-[3.5rem]"
             width={150}
@@ -120,7 +144,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
             src={
               chatRoom.members[2].profileImageId === null
                 ? defaultProfileImg
-                : changProfileIdToProfileUrl(chatRoom.members[2].profileImageId)
+                : changeImageIdToImageUrl(
+                    chatRoom.members[2].profileImageId,
+                    "profile"
+                  )
             }
             className="bg-gray-100 rounded-full w-[3rem] h-[3rem] absolute right-[1.25rem] top-[0.5rem]"
             width={150}
@@ -132,7 +159,10 @@ export default function ChatRoomImage({ chatRoom }: Props) {
             src={
               chatRoom.members[3].profileImageId === null
                 ? defaultProfileImg
-                : changProfileIdToProfileUrl(chatRoom.members[3].profileImageId)
+                : changeImageIdToImageUrl(
+                    chatRoom.members[3].profileImageId,
+                    "profile"
+                  )
             }
             className="bg-gray-100 rounded-full w-[3rem] h-[3rem] absolute left-[1.25rem] top-[0.5rem]"
             width={150}

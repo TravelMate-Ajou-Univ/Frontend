@@ -31,7 +31,6 @@ export default function ChatRoomModal({ toggleModalState }: Props) {
     const memberIds = members.map(member => member.id);
 
     const res: ChatRoomType = await makeChatRoom({ name: title, memberIds });
-    // res.members.length !== 0 ? dispatch(addChatRoom(res)) : console.log("fail");
     const me: FriendType = {
       id,
       nickname: userName,
@@ -42,6 +41,7 @@ export default function ChatRoomModal({ toggleModalState }: Props) {
       name: res.name,
       members: [...res.members, me],
       lastChat: res.lastChat,
+      lastChatType: res.lastChatType,
       lastChatTime: res.lastChatTime,
       unReadChat: res.unReadChat
     };

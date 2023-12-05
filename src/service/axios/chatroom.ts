@@ -22,6 +22,7 @@ export const getMyChatRooms = async (): Promise<ChatRoomType[]> => {
         name: data.chatRoom.name,
         members: data.members,
         lastChat: data.lastChat.content,
+        lastChatType: data.lastChat.type,
         lastChatTime: data.lastChat.createdAt,
         unReadChat: data.unReadCount
       };
@@ -54,6 +55,7 @@ export const makeChatRoom = async ({
       name: data.chatRoom.name,
       members: data.members,
       lastChat: data.lastChat.content,
+      lastChatType: data.lastChat.type,
       lastChatTime: data.lastChat.createdAt,
       unReadChat: 0
     };
@@ -65,6 +67,7 @@ export const makeChatRoom = async ({
       name: "",
       members: [],
       lastChat: "",
+      lastChatType: "",
       lastChatTime: "",
       unReadChat: 0
     };

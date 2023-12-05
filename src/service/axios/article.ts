@@ -26,7 +26,7 @@ export const uploadImage = async (file: File, type: ImageType) => {
     const { url, id } = s3data;
     const res = await article.uploadImgToS3(url, file);
     if (res.status === 200) {
-      const { data } = await article.confirmUpload(id);
+      const { data } = await article.confirmUpload(id, type);
       return data.id;
     }
   } catch (error) {
