@@ -140,3 +140,15 @@ export const report = {
       reportedUserId
     })
 };
+
+export const admin = {
+  isAdmin: () => api.get("admin"),
+  getUsers: (page: number, limit: number) =>
+    api.get(`admin/users?page=${page}&limit=${limit}`),
+  getArticleReports: (page: number, limit: number) =>
+    api.get(`admin/article-report-logs?page=${page}&limit=${limit}`),
+  getUserReports: (page: number, limit: number) =>
+    api.get(`admin/user-report-logs?page=${page}&limit=${limit}`),
+  banUser: (userId: number, reason: string) =>
+    api.post(`admin/ban/user/${userId}`, { reason })
+};

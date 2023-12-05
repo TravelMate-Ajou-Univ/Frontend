@@ -41,7 +41,7 @@ export default function Article({ articleId }: Props) {
   const [requestCount, setRequestCount] = useState<number>(0);
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { id: userId } = useAppSelector(state => state.userSlice);
+  const { id: userId, level } = useAppSelector(state => state.userSlice);
   const season = searchParams.get("season")?.toUpperCase() as SeasonType;
 
   useEffect(() => {
@@ -100,7 +100,8 @@ export default function Article({ articleId }: Props) {
     if (!res) alert("삭제에 실패했습니다.");
     else {
       alert("삭제되었습니다.");
-      router.push("/article/list/me");
+      if (level === "ADMIN") router.push("/admin");
+      else router.push("/article/list/me");
     }
   };
 
@@ -191,7 +192,7 @@ export default function Article({ articleId }: Props) {
           )}
         </section>
         <section className="flex flex-row gap-2 mt-8">
-          {userId === article?.authorId && (
+          {(userId === article?.authorId || level === "ADMIN") && (
             <FilledButton onClick={deleteThisArticle}>게시글 삭제</FilledButton>
           )}
           <OutlinedButton className="self-center" onClick={moveToEdit}>
