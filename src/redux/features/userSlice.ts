@@ -4,7 +4,8 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 export const initialUser: User = {
   id: 0,
   userName: "",
-  profileImageId: ""
+  profileImageId: "",
+  level: "USER"
 };
 
 const userSlice = createSlice({
