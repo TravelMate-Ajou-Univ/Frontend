@@ -1,7 +1,7 @@
 import { User } from "@/model/user";
 import Image from "next/image";
 import DefaultProfile from "/public/image/defaultProfileImg.png";
-import { changProfileIdToProfileUrl } from "@/service/axios/profile";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 interface Props {
   requestUser: User;
@@ -24,8 +24,9 @@ export default function Comment({ requestUser, requestComment }: Props) {
                 src={
                   requestUser.profileImageId === ""
                     ? DefaultProfile
-                    : changProfileIdToProfileUrl(
-                        Number(requestUser.profileImageId)
+                    : changeImageIdToImageUrl(
+                        Number(requestUser.profileImageId),
+                        "profile"
                       )
                 }
                 alt="프로필 이미지"

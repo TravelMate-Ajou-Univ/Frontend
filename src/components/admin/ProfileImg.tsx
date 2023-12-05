@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { changProfileIdToProfileUrl } from "@/service/axios/profile";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 import DefaultProfile from "/public/image/defaultProfileImg.png";
 
 interface Props {
@@ -16,7 +16,7 @@ export default function ProfileImg({ profileImageId }: Props) {
       <Image
         src={
           profileImageId
-            ? changProfileIdToProfileUrl(parseInt(profileImageId))
+            ? changeImageIdToImageUrl(parseInt(profileImageId), "profile")
             : DefaultProfile
         }
         alt="프로필 이미지"

@@ -6,7 +6,7 @@ import { useEffect, useState } from "react";
 import DefaultProfile from "/public/image/defaultProfileImg.png";
 import { initialUser } from "@/redux/features/userSlice";
 import Link from "next/link";
-import { changProfileIdToProfileUrl } from "@/service/axios/profile";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 interface Props {
   request: ArticleRequestType;
@@ -51,7 +51,10 @@ export default function RequestPreview({ request }: Props) {
             src={
               user.profileImageId === ""
                 ? DefaultProfile
-                : changProfileIdToProfileUrl(Number(user.profileImageId))
+                : changeImageIdToImageUrl(
+                    Number(user.profileImageId),
+                    "profile"
+                  )
             }
             alt="프로필 이미지"
             width={40}

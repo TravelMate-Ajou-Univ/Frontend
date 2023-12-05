@@ -36,14 +36,14 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
   useEffect(() => {
     // chatList의 변화에 따라 scrollToBottom 실행
     scrollToBottom();
-  }, [chatList, scrollToBottom]);
+  }, [chatList]);
 
   useEffect(() => {
     // 처음에 firstChatIndex로 포커싱
     if (firstChatIndex !== -1) {
       focusOnChatItem(firstChatIndex);
     }
-  }, [firstChatIndex, focusOnChatItem]);
+  }, [firstChatIndex]);
 
   return (
     <section className="w-full h-[33rem]">
