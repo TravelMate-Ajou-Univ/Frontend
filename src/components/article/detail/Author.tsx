@@ -8,6 +8,7 @@ import DefaultProfile from "/public/image/defaultProfileImg.png";
 import Image from "next/image";
 import Link from "next/link";
 import useOutSideRef from "@/hooks/useClickOutside";
+import { changProfileIdToProfileUrl } from "@/service/axios/profile";
 
 interface Props {
   authorId: number;
@@ -47,17 +48,15 @@ export default function Author({ authorId }: Props) {
         title="북마크 컬렉션 보기"
       >
         <div className="bg-gray-200 overflow-hidden rounded-full md:w-8 md:h-8 w-6 h-6">
-          {/* <Image
+          <Image
             className="p-1"
             src={
               author.profileImageId === ""
                 ? DefaultProfile
-                : process.env.NEXT_PUBLIC_SERVER_BASE_URL +
-                  "attachments/" +
-                  author.profileImageId
+                : changProfileIdToProfileUrl(Number(author.profileImageId))
             }
             alt="프로필 이미지"
-          /> */}
+          />
         </div>
         <span className="md:text-base text-sm">{author.userName}</span>
       </div>
