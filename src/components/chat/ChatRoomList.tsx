@@ -4,13 +4,12 @@ import { useAppSelector } from "@/hooks/redux";
 import { ChatRoomType } from "@/model/chat";
 import Image from "next/image";
 import { useDispatch } from "react-redux";
-import defaultProfileImg from "/public/image/defaultProfileImg.png";
-import groupProfileImg from "/public/image/groupProfileImg.png";
 import Link from "next/link";
 import { useEffect } from "react";
 import { getMyChatRooms } from "@/service/axios/chatroom";
 import { setChatRoom } from "@/redux/features/chatRoomSlice";
 import { CalculateDelayTime } from "@/service/time";
+import ChatRoomImage from "./ChatRoomImage";
 
 export default function ChatRoomList() {
   const dispatch = useDispatch();
@@ -19,7 +18,6 @@ export default function ChatRoomList() {
   useEffect(() => {
     const getData = async () => {
       const data = await getMyChatRooms();
-
       dispatch(setChatRoom(data));
     };
     getData();
@@ -39,30 +37,19 @@ export default function ChatRoomList() {
             }}
             className="flex items-center border-b-2 h-[8rem] px-4 py-2"
           >
-            <div className="w-[10rem]">
-              {chatroom.memberIds.length === 2 ? (
-                <Image
-                  src={defaultProfileImg}
-                  className="bg-gray-100 rounded-full"
-                  width={75}
-                  height={75}
-                  alt="개인 채팅"
-                  priority
-                />
-              ) : (
-                <Image
-                  src={groupProfileImg}
-                  className="bg-gray-100 rounded-full"
-                  width={75}
-                  height={75}
-                  alt="단체 채팅"
-                  priority
-                />
-              )}
+            <div className="w-[10rem] h-full">
+              <ChatRoomImage chatRoom={chatroom} />
             </div>
             <div className="w-full h-full">
               <div className="flex justify-between">
-                <p className="text-xl">{chatroom.name}</p>
+                <div className="flex items-center gap-2">
+                  {chatroom.members.length === 1 ? (
+                    <p className="w-[1.5rem] h-[1.5rem] flex justify-center items-center rounded-full text-white font-bold bg-gray-500">
+                      나
+                    </p>
+                  ) : null}
+                  <p className="text-xl">{chatroom.name}</p>
+                </div>
                 <p className="text-xs font-thin">
                   {CalculateDelayTime(chatroom.lastChatTime)}
                 </p>

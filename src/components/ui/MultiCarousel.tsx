@@ -4,7 +4,7 @@ import "react-multi-carousel/lib/styles.css";
 const responsive = {
   desktop: {
     breakpoint: { max: 3000, min: 1024 },
-    items: 5
+    items: 4
   },
   mobile: {
     breakpoint: { max: 464, min: 0 },
@@ -18,7 +18,10 @@ type Props = {
 
 export default function MultiCarousel({ children }: Props) {
   return (
-    <Carousel containerClass="w-full flex gap-2" responsive={responsive}>
+    <Carousel
+      containerClass="w-full flex gap-2 p-[1rem]"
+      responsive={responsive}
+    >
       {children}
     </Carousel>
   );

@@ -1,6 +1,7 @@
 import { ChatRoomType } from "@/model/chat";
 import { chatApi } from "./api";
 import { BookmarkType } from "@/model/bookmark";
+import { FriendType } from "@/model/friend";
 
 type ChatRoomProps = {
   name: string;
@@ -15,11 +16,11 @@ export const getMyChatRooms = async (): Promise<ChatRoomType[]> => {
     });
     const datas = response.data;
 
-    const chatrooms = datas.map((data: any) => {
-      const chatroom = {
+    const chatrooms: ChatRoomType[] = datas.map((data: any) => {
+      const chatroom: ChatRoomType = {
         roomId: data.chatRoom._id,
         name: data.chatRoom.name,
-        memberIds: data.chatRoom.memberIds,
+        members: data.members,
         lastChat: data.lastChat.content,
         lastChatTime: data.lastChat.createdAt,
         unReadChat: data.unReadCount
@@ -51,7 +52,7 @@ export const makeChatRoom = async ({
     const newChatRoom: ChatRoomType = {
       roomId: data.chatRoom._id,
       name: data.chatRoom.name,
-      memberIds: data.chatRoom.memberIds,
+      members: data.members,
       lastChat: data.lastChat.content,
       lastChatTime: data.lastChat.createdAt,
       unReadChat: 0
@@ -62,7 +63,7 @@ export const makeChatRoom = async ({
     return {
       roomId: "",
       name: "",
-      memberIds: [],
+      members: [],
       lastChat: "",
       lastChatTime: "",
       unReadChat: 0
@@ -77,6 +78,11 @@ export const getChatRoomData = async (roomId: string) => {
       url: `chatroom/${roomId}`
     });
     const data = response.data;
+    const members: FriendType[] = data.members.map((member: any) => ({
+      id: member.id,
+      nickname: member.nickname,
+      profileImageId: member.profileImageId
+    }));
     const bookmarks: BookmarkType[] = data.bookmarks.map((bookmark: any) => ({
       latitude: Number(bookmark.location.latitude),
       longitude: Number(bookmark.location.longitude),
@@ -86,7 +92,7 @@ export const getChatRoomData = async (roomId: string) => {
     }));
 
     return {
-      members: data.members,
+      members,
       collectionId: data.collectionId,
       bookmarks
     };

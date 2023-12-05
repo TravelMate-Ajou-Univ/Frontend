@@ -6,12 +6,16 @@ import { ChatRoomType } from "@/model/chat";
 import { useDispatch } from "react-redux";
 import { addChatRoom } from "@/redux/features/chatRoomSlice";
 import FriendsAddContainer from "./FriendsAddContainer";
+import { useAppSelector } from "@/hooks/redux";
 
 type Props = {
   toggleModalState: () => void;
 };
 
 export default function ChatRoomModal({ toggleModalState }: Props) {
+  const { id, userName, profileImageId } = useAppSelector(
+    state => state.userSlice
+  );
   const dispatch = useDispatch();
   const [members, setMembers] = useState<FriendType[]>([]);
   const [title, setTitle] = useState("");
@@ -27,8 +31,21 @@ export default function ChatRoomModal({ toggleModalState }: Props) {
     const memberIds = members.map(member => member.id);
 
     const res: ChatRoomType = await makeChatRoom({ name: title, memberIds });
-    res.memberIds.length !== 0 ? dispatch(addChatRoom(res)) : null;
-
+    // res.members.length !== 0 ? dispatch(addChatRoom(res)) : console.log("fail");
+    const me: FriendType = {
+      id,
+      nickname: userName,
+      profileImageId: Number(profileImageId)
+    };
+    const newChatRoom: ChatRoomType = {
+      roomId: res.roomId,
+      name: res.name,
+      members: [...res.members, me],
+      lastChat: res.lastChat,
+      lastChatTime: res.lastChatTime,
+      unReadChat: res.unReadChat
+    };
+    dispatch(addChatRoom(newChatRoom));
     toggleModalState();
   };
 
