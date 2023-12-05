@@ -4,7 +4,7 @@ import { ViewChatFormType } from "@/model/chat";
 import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useRef } from "react";
 import { changeImageIdToImageUrl } from "@/service/axios/profile";
-import { CalculateAmPmTime } from "@/service/time";
+import { calculateAmPmTime } from "@/service/time";
 
 type Props = {
   chatList: ViewChatFormType[];
@@ -56,7 +56,7 @@ export default function ChatList({ chatList }: Props) {
             <li key={index} className="justify-end flex items-end">
               {chat.timeVisibility ? (
                 <p className="self-end text-xs mb-2">
-                  {CalculateAmPmTime(chat.createdAt)}
+                  {calculateAmPmTime(chat.createdAt)}
                 </p>
               ) : null}
               <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[12rem] break-words bg-yellow-300">
@@ -111,7 +111,7 @@ export default function ChatList({ chatList }: Props) {
                   </p>
                   {chat.timeVisibility ? (
                     <p className="self-end text-xs mb-2">
-                      {CalculateAmPmTime(chat.createdAt)}
+                      {calculateAmPmTime(chat.createdAt)}
                     </p>
                   ) : null}
                 </div>

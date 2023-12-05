@@ -10,7 +10,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { ReceiveChatFormType, ViewChatFormType } from "@/model/chat";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import BookmarkOptionBox from "./BookmarkOptionBox";
-import { CalculateAmPmTime } from "@/service/time";
+import { calculateAmPmTime } from "@/service/time";
 import { checkVisibility, makeNewChat } from "@/service/chat";
 import ChatMap from "../googleMap/ChatMap";
 import { getChatList, getChatRoomData } from "@/service/axios/chatroom";

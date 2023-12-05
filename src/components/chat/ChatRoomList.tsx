@@ -8,7 +8,7 @@ import Link from "next/link";
 import { useEffect } from "react";
 import { getMyChatRooms } from "@/service/axios/chatroom";
 import { setChatRoom } from "@/redux/features/chatRoomSlice";
-import { CalculateDelayTime } from "@/service/time";
+import { calculateDelayTime } from "@/service/time";
 import ChatRoomImage from "./ChatRoomImage";
 
 export default function ChatRoomList() {
@@ -54,7 +54,7 @@ export default function ChatRoomList() {
                   </p>
                 </div>
                 <p className="text-xs font-thin">
-                  {CalculateDelayTime(chatroom.lastChatTime)}
+                  {calculateDelayTime(chatroom.lastChatTime)}
                 </p>
               </div>
               <div className="flex justify-between gap-4">

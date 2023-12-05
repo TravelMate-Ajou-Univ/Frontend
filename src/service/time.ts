@@ -1,4 +1,4 @@
-export const CalculateDelayTime = (time: string): string => {
+export const calculateDelayTime = (time: string): string => {
   const currentDate = new Date();
   const prevDate = new Date(time);
   const timeDifference = currentDate.getTime() - prevDate.getTime();
@@ -24,7 +24,7 @@ export const CalculateDelayTime = (time: string): string => {
   }
 };
 
-export const CalculateAmPmTime = (time: string): string => {
+export const calculateAmPmTime = (time: string): string => {
   const date: Date = new Date(time);
   const currentHour: number = date.getHours();
   const currentMinute: number = date.getMinutes();
@@ -36,7 +36,7 @@ export const CalculateAmPmTime = (time: string): string => {
   }
 };
 
-export const CheckChatTime = (
+export const checkChatTime = (
   prevTime: string,
   targetTime: string
 ): boolean => {
@@ -50,4 +50,33 @@ export const CheckChatTime = (
   } else {
     return true;
   }
+};
+
+export const checkChatDay = (prevTime: string, targetTime: string): boolean => {
+  const prevDate = new Date(prevTime);
+  const targetDate = new Date(targetTime);
+
+  const prevMonth = prevDate.getMonth();
+  const prevDay = prevDate.getDate();
+
+  const targetMonth = targetDate.getMonth();
+  const targetDay = targetDate.getDate();
+
+  const monthEqual = prevMonth === targetMonth;
+  const dayEqual = prevDay === targetDay;
+
+  if (monthEqual && dayEqual) {
+    return false;
+  } else {
+    return true;
+  }
+};
+
+export const getCurrentDay = (curTime: string): string => {
+  const currentDate = new Date(curTime);
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth() + 1; // getMonth()는 0부터 시작하므로 1을 더합니다.
+  const day = currentDate.getDate();
+
+  return `${year}년 ${month}월 ${day}일`;
 };

@@ -1,5 +1,5 @@
 import { ReceiveChatFormType, ViewChatFormType } from "@/model/chat";
-import { CalculateAmPmTime, CheckChatTime } from "./time";
+import { checkChatDay, checkChatTime, getCurrentDay } from "./time";
 import { FriendType } from "@/model/friend";
 
 type ChatProps = {
@@ -28,6 +28,26 @@ export const checkVisibility = (
   let newChat: ViewChatFormType;
 
   for (let i = 0; i < chatList.length; i++) {
+    // 날짜가 지났으면 system message 추가
+    if (
+      newChatList.length === 0 ||
+      checkChatDay(
+        newChatList[newChatList.length - 1].createdAt,
+        chatList[i].createdAt
+      )
+    ) {
+      const systemChat: ViewChatFormType = {
+        userId: 0,
+        nickname: "",
+        content: getCurrentDay(chatList[i].createdAt),
+        type: "text",
+        createdAt: "",
+        profileImageId: 0,
+        userVisibility: false,
+        timeVisibility: false
+      };
+      newChatList = [...newChatList, systemChat];
+    }
     // 읽지않은 채팅의 시작이라면 system message 삽입.
     if (firstChat !== null && firstChat._id === chatList[i]._id) {
       const unReadChat: ViewChatFormType = {
@@ -63,7 +83,7 @@ export const checkVisibility = (
       // 처음 채팅이 아니고, 한 사용자가 계속 쓴 채팅 중
       // 시간 차이가 난다.
       if (
-        CheckChatTime(
+        checkChatTime(
           newChatList[newChatList.length - 1].createdAt,
           chatList[i].createdAt
         )
@@ -103,8 +123,25 @@ export const makeNewChat = (
   chatList: ViewChatFormType[]
 ): ViewChatFormType[] => {
   let newChat: ViewChatFormType;
+  // 날짜가 지났으면 system message 추가
   if (
-    chatList.length === 0 ||
+    chatList.length === 1 ||
+    checkChatDay(chatList[chatList.length - 1].createdAt, data.createdAt)
+  ) {
+    const systemChat: ViewChatFormType = {
+      userId: 0,
+      nickname: "",
+      content: getCurrentDay(data.createdAt),
+      type: "text",
+      createdAt: "",
+      profileImageId: 0,
+      userVisibility: false,
+      timeVisibility: false
+    };
+    chatList = [...chatList, systemChat];
+  }
+  if (
+    chatList.length === 2 ||
     chatList[chatList.length - 1].userId !== data.userId
   ) {
     newChat = {
@@ -121,7 +158,7 @@ export const makeNewChat = (
     // 처음 채팅이 아니고, 한 사용자가 계속 쓴 채팅 중
     // 시간 차이가 난다.
     if (
-      CheckChatTime(chatList[chatList.length - 1].createdAt, data.createdAt)
+      checkChatTime(chatList[chatList.length - 1].createdAt, data.createdAt)
     ) {
       newChat = {
         userId: data.userId,
