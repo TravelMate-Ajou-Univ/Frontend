@@ -13,7 +13,6 @@ interface Props {
 
 export default function RequestPreview({ request }: Props) {
   const [user, setUser] = useState<User>(initialUser);
-  // const [time, setTime] = useState<string>("");
   const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
 

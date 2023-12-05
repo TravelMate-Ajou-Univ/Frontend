@@ -23,7 +23,12 @@ export const SigninUsingKakao = async (kakaoAccessToken: string) => {
       throw new Error("다시 로그인 해주세요.");
 
     return true;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response.status === 400) {
+      alert(
+        "정지된 사용자입니다. 아래 이메일로 문의해주세요.\njunhakjh@ajou.ac.kr"
+      );
+    }
     console.log(error);
     return false;
   }
@@ -38,7 +43,12 @@ export const SigninUsingGoogle = async (googleAccessToken: string) => {
       throw new Error("다시 로그인 해주세요.");
 
     return true;
-  } catch (error) {
+  } catch (error: any) {
+    if (error.response.status === 400) {
+      alert(
+        "정지된 사용자입니다. 아래 이메일로 문의해주세요.\njunhakjh@ajou.ac.kr"
+      );
+    }
     console.log(error);
     return false;
   }

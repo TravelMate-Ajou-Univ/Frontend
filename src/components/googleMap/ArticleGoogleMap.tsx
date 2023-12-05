@@ -6,7 +6,6 @@ import { createBookmark } from "@/service/axios/bookmark";
 import { calculateCenter } from "@/service/googlemap/map";
 import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
-import Script from "next/script";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
 declare global {
@@ -20,7 +19,6 @@ type Props = {
   location?: string;
   setBookmarkIds?: React.Dispatch<React.SetStateAction<number[]>>;
   bookmarks?: (BookmarkType & { period: SeasonType })[];
-  season?: SeasonType;
   className?: string;
 };
 
@@ -29,7 +27,6 @@ export default function ArticleGoogleMap({
   location = "",
   setBookmarkIds,
   bookmarks,
-  season,
   className = ""
 }: Props) {
   const [map, setMap] = useState<google.maps.Map>();
@@ -98,7 +95,7 @@ export default function ArticleGoogleMap({
         }
       });
     }
-  }, [location, bookmarks, season]);
+  }, [location, bookmarks]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.google && window.google.maps) {
@@ -279,10 +276,6 @@ export default function ArticleGoogleMap({
         </form>
       )}
       <div id="map" className=" w-full h-full"></div>
-      <Script
-        defer
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&libraries=places&callback=initMap`}
-      />
     </div>
   );
 }

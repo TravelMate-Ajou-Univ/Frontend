@@ -61,6 +61,7 @@ export type ArticleDetailType = ArticlePreviewType & {
   fall: SeasonContentType;
   winter: SeasonContentType;
   articleBookmarkMap: any[];
+  isFavorite: boolean;
 };
 
 export type ArticleRequestType = {
