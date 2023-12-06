@@ -42,10 +42,17 @@ export const checkChatTime = (
 ): boolean => {
   const prevDate = new Date(prevTime);
   const targetDate = new Date(targetTime);
-  const timeDifference = targetDate.getTime() - prevDate.getTime();
-  const minutesDifference = Math.floor(timeDifference / (1000 * 60));
 
-  if (minutesDifference < 1) {
+  const prevMinute = prevDate.getMinutes();
+  const targetMinute = targetDate.getMinutes();
+
+  const prevHour = prevDate.getHours();
+  const targethour = targetDate.getHours();
+
+  const minuteEqual = prevMinute === targetMinute;
+  const hourEqual = prevHour === targethour;
+
+  if (minuteEqual && hourEqual) {
     return false;
   } else {
     return true;
@@ -55,6 +62,8 @@ export const checkChatTime = (
 export const checkChatDay = (prevTime: string, targetTime: string): boolean => {
   const prevDate = new Date(prevTime);
   const targetDate = new Date(targetTime);
+  console.log("preData : ", prevDate);
+  console.log("targetDate : ", targetDate);
 
   const prevMonth = prevDate.getMonth();
   const prevDay = prevDate.getDate();
@@ -64,6 +73,9 @@ export const checkChatDay = (prevTime: string, targetTime: string): boolean => {
 
   const monthEqual = prevMonth === targetMonth;
   const dayEqual = prevDay === targetDay;
+
+  console.log("day : ", dayEqual);
+  console.log("month : ", monthEqual);
 
   if (monthEqual && dayEqual) {
     return false;
