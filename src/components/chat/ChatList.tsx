@@ -5,6 +5,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useRef, useState } from "react";
 import { changeImageIdToImageUrl } from "@/service/axios/profile";
 import { calculateAmPmTime } from "@/service/time";
+import ImageModal from "./ImageModal";
 
 type Props = {
   chatList: ViewChatFormType[];
@@ -12,6 +13,9 @@ type Props = {
 };
 export default function ChatList({ chatList, firstChatIndex }: Props) {
   const { userName } = useAppSelector(state => state.userSlice);
+
+  const [zoomState, setZoomState] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>("");
   const scrollableContainerRef = useRef<HTMLUListElement>(null);
   const scrollableContainer = scrollableContainerRef.current;
 
@@ -33,6 +37,11 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
     }
   };
 
+  const imageZoomInHandler = (imgUrl: string) => {
+    setZoomState(true);
+    setImageUrl(imgUrl);
+  };
+
   useEffect(() => {
     // chatList의 변화에 따라 scrollToBottom 실행
     scrollToBottom();
@@ -47,6 +56,9 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
 
   return (
     <section className="w-full h-[33rem]">
+      {zoomState ? (
+        <ImageModal imageUrl={imageUrl} cancleHandler={setZoomState} />
+      ) : null}
       <ul
         ref={scrollableContainerRef}
         className="flex flex-col border-2 rounded-md bg-white h-full relative overflow-y-auto "
@@ -74,6 +86,7 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
                     height={200}
                     width={200}
                     alt="chatting image"
+                    onClick={() => imageZoomInHandler(chat.content)}
                   />
                 )}
               </p>
@@ -112,6 +125,7 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
                         height={200}
                         width={200}
                         alt="chatting image"
+                        onClick={() => imageZoomInHandler(chat.content)}
                       />
                     )}
                   </p>
