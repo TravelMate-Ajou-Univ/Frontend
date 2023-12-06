@@ -5,9 +5,8 @@ export type KeywordType = {
 
 export type KoreanSeasonType = "봄" | "여름" | "가을" | "겨울";
 export type SeasonType = "SPRING" | "SUMMER" | "FALL" | "WINTER";
-export type SeasonLowerCaseType = "spring" | "summer" | "fall" | "winter";
 
-export type SeasonContentType = {
+type SeasonContentType = {
   content: string;
 };
 
