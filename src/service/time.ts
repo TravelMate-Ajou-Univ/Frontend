@@ -9,7 +9,9 @@ export const calculateDelayTime = (time: string): string => {
   const monthsDifference = Math.floor(weeksDifference / 4);
   const yearsDifference = Math.floor(monthsDifference / 4);
 
-  if (minutesDifference < 60) {
+  if (minutesDifference === 0) {
+    return "방금 전";
+  } else if (minutesDifference < 60) {
     return `${minutesDifference} 분 전`;
   } else if (hoursDifference < 24) {
     return `${hoursDifference} 시간 전`;

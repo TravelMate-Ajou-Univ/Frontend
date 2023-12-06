@@ -1,8 +1,6 @@
 "use client";
 
 import { useAppSelector } from "@/hooks/redux";
-import { ChatRoomType } from "@/model/chat";
-import Image from "next/image";
 import { useDispatch } from "react-redux";
 import Link from "next/link";
 import { useEffect } from "react";
@@ -58,7 +56,7 @@ export default function ChatRoomList() {
                 </p>
               </div>
               <div className="flex justify-between gap-4">
-                <p className="py-2">
+                <p className="py-2 max-w-[37rem] truncate">
                   {chatroom.lastChatType === "text"
                     ? chatroom.lastChat
                     : "이미지"}
