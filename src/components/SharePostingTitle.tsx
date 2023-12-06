@@ -3,7 +3,7 @@ import travelIcon from "/public/image/travelIcon.png";
 
 export default function SharePostingTitle() {
   return (
-    <h1 className="flex flex-row gap-3 md:my-4 my-2">
+    <h1 className="flex flex-row gap-3 md:my-4 my-2 md:mx-0 mx-3">
       <Image
         className="md:w-12 w-10"
         src={travelIcon}

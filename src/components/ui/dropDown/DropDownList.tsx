@@ -21,7 +21,9 @@ function DropDownList({
       className={
         `absolute left-0 w-full border rounded-md bg-white z-50 
       ${isSearchWord ? "top-0" : "top-10"}` +
-        (size == "small" ? " max-h-[7rem] h-fit overflow-y-auto" : "")
+        (size == "small"
+          ? " max-h-[7rem] h-fit overflow-y-auto md:top-10 top-8"
+          : "")
       }
     >
       {list.length === 0 ? (

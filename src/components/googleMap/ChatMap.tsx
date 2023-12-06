@@ -11,7 +11,13 @@ import {
 import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
 import Script from "next/script";
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import { useDispatch } from "react-redux";
 import { Socket } from "socket.io-client";
 declare global {
@@ -30,6 +36,7 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
   const [search, setSearch] = useState("");
   const [places, setPlaces] = useState<google.maps.Marker[]>([]);
   const { center, bookmarks } = useAppSelector(state => state.mapSlice);
+  const activeMarkerInfoRef = useRef<google.maps.InfoWindow>();
   window.initMap = function () {
     const initmap = new google.maps.Map(
       document.getElementById("map") as HTMLElement,
@@ -97,10 +104,15 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
         initmap,
         service,
         modifyState,
-        map: map as google.maps.Map,
+        activeMarkerHandler,
         subBookmarkHandler
       });
     });
+  };
+  const activeMarkerHandler = (currentMarker: google.maps.InfoWindow): void => {
+    // active marker 변경
+    activeMarkerInfoRef.current?.close();
+    activeMarkerInfoRef.current = currentMarker;
   };
 
   const subBookmarkHandler = (bookmark: BookmarkType) => {

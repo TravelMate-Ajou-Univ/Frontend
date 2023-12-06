@@ -13,10 +13,10 @@ export default function HomeTitle() {
         height={70}
       />
       <div className="flex flex-col items-center">
-        <h1 className="lg:text-4xl md:text-3xl text-2xl font-bold">
+        <h1 className="lg:text-4xl md:text-3xl sm:text-2xl text-xl font-bold">
           <span className="text-secondary">트래블메이트</span>와 함께 떠나요!
         </h1>
-        <h2 className="lg:text-xl md:text-lg text-base">
+        <h2 className="lg:text-xl md:text-lg sm:text-base text-sm">
           트래블메이트와 함께한 분들의 추천 코스!
         </h2>
       </div>

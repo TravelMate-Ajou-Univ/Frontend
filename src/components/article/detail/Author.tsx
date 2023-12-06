@@ -10,6 +10,7 @@ import Link from "next/link";
 import useOutSideRef from "@/hooks/useClickOutside";
 import { changeImageIdToImageUrl } from "@/service/axios/profile";
 import { useAppSelector } from "@/hooks/redux";
+import { BookmarkCollectionType } from "@/model/bookmark";
 
 interface Props {
   authorId: number;

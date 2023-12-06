@@ -61,6 +61,7 @@ export default function BookmarkOptionBox({
 
   useEffect(() => {
     const getBookmarks = async (id: number) => {
+      if (id === 0) return;
       const data: BookmarkType[] = await getAllBookmarks(id);
       setBookmarkList(data);
     };
@@ -101,7 +102,7 @@ export default function BookmarkOptionBox({
   };
 
   return (
-    <div className="z-20 w-[10rem] border-2 rounded-md bg-white flex flex-col justify-center items-center gap-2 p-2">
+    <div className="w-max border-2 rounded-md bg-white flex flex-col justify-center items-center gap-2 p-2">
       <DropDown
         selected={selectedCollection.name}
         list={collectionList.map(data => data.name)}

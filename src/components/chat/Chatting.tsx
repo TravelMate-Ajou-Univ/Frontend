@@ -116,50 +116,50 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
   };
 
   return (
-    <section className="w-full mx-auto flex mt-4">
-      {mapState ? (
-        <div className="w-[41rem] h-[40rem] m-2 border-2 rounded-md my-auto relative">
+    <section className="w-full md:h-[41rem] h-[35rem] flex md:flex-row flex-col items-center md:mt-8 mt-4">
+      {mapState && (
+        <div className="md:w-[40rem] w-[90%] md:h-full h-[35rem] mx-2 border-2 rounded-md md:static absolute z-40">
           <ChatMap
             modifyState={true}
             socket={socket}
             collectionId={collectionId}
           />
-          <OutlinedButton
-            onClick={() => {
-              setOptionsState(!optionsState);
-            }}
-            className="absolute left-[14rem] top-[0.5rem] z-20 text-sm"
-            size="small"
-          >
-            북마크 가져오기
-          </OutlinedButton>
-          {optionsState ? (
-            <div className="absolute left-[21rem] top-[0.5rem] z-20">
-              <BookmarkOptionBox
-                setOptionsState={setOptionsState}
-                socket={socket}
-                bookmarkCollectionId={collectionId}
-              />
-            </div>
-          ) : null}
+          <div className="relative w-fit lg:translate-x-56 translate-x-2 lg:-translate-y-[40rem] md:-translate-y-[38rem] -translate-y-[32rem]">
+            <OutlinedButton
+              onClick={() => {
+                setOptionsState(!optionsState);
+              }}
+              className="text-sm"
+              size="small"
+            >
+              북마크 가져오기
+            </OutlinedButton>
+            {optionsState && (
+              <div className="absolute top-7 left-0 z-50 shadow-md">
+                <BookmarkOptionBox
+                  setOptionsState={setOptionsState}
+                  socket={socket}
+                  bookmarkCollectionId={collectionId}
+                />
+              </div>
+            )}
+          </div>
         </div>
-      ) : null}
-      <div className="w-[52rem] mx-auto">
-        <div className="w-[40rem] mt-2 p-2 border-2 rounded-md">
-          <ChatRoomHeader
-            socket={socket}
-            userId={id}
-            roomId={roomId}
-            nickname={userName}
-            roomName={roomName}
-            roomMembers={roomMembers}
-            toggleMapState={toggleMapState}
-            memberChangedState={memberChangedState}
-            setMemberChangedState={setMemberChangedState}
-          />
-          <ChatList chatList={chatList} firstChatIndex={firstChatIndex} />
-          <ChatForm sendMessage={sendMessage} socket={socket} />
-        </div>
+      )}
+      <div className="md:w-[40rem] h-full mx-auto p-2 border-2 rounded-md bg-white flex flex-col gap-2">
+        <ChatRoomHeader
+          socket={socket}
+          userId={id}
+          roomId={roomId}
+          nickname={userName}
+          roomName={roomName}
+          roomMembers={roomMembers}
+          toggleMapState={toggleMapState}
+          memberChangedState={memberChangedState}
+          setMemberChangedState={setMemberChangedState}
+        />
+        <ChatList chatList={chatList} firstChatIndex={firstChatIndex} />
+        <ChatForm sendMessage={sendMessage} socket={socket} />
       </div>
     </section>
   );

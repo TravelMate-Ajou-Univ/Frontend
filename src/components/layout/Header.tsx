@@ -37,7 +37,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full h-16 bg-white flex px-10 justify-between items-center z-50 shadow-md">
+    <header className="fixed top-0 left-0 w-full md:h-16 h-[3.2rem] bg-white flex md:px-10 px-6 justify-between items-center z-50 shadow-md">
       <Link href="/">
         <Logo />
       </Link>
