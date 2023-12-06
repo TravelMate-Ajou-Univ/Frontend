@@ -20,7 +20,8 @@ interface Props {
   closeMenu: () => void;
 }
 
-const MENU_CLASSIFICATION_CLASS = "flex flex-col gap-3";
+const MENU_CLASSIFICATION_CLASS =
+  "flex flex-col sm:gap-3 gap-2 sm:text-base text-sm";
 
 export default function Menu({ closeMenu }: Props) {
   const ref = useClickOutside(closeMenu);
@@ -91,7 +92,7 @@ export default function Menu({ closeMenu }: Props) {
           </ul>
         </nav>
         <button
-          className="self-end flex gap-1 text-secondary hover:text-secondaryHover transition-colors ease-in-out"
+          className="self-end flex gap-1 sm:text-base text-sm text-secondary hover:text-secondaryHover transition-colors ease-in-out"
           onClick={logout}
         >
           <SignOutIcon /> 로그아웃

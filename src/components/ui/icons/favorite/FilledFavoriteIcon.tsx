@@ -5,5 +5,7 @@ interface Props {
 }
 
 export default function FilledFavoriteIcon({ className = "" }: Props) {
-  return <IoFlag className={className + " text-secondary w-6 h-6"} />;
+  return (
+    <IoFlag className={className + " text-secondary md:w-6 w-4 md:h-6 h-4"} />
+  );
 }
