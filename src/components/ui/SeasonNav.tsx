@@ -16,10 +16,11 @@ const ICON_CLASS = "md:w-7 md:h-7 w-5 h-5";
 
 export default function SeasonNav({ season, onClick }: Props) {
   return (
-    <ul className="flex justify-around items-center lg:gap-4 md:gap-3 gap-2 bg-white">
+    <ul className="flex justify-around items-center lg:gap-4 md:gap-3 gap-2">
       <li
         className={
-          LIST_CLASS + (season === "SPRING" ? " border-spring bg-spring" : "")
+          LIST_CLASS +
+          (season === "SPRING" ? " border-spring bg-spring" : " bg-white")
         }
         onClick={() => onClick("SPRING")}
       >
@@ -34,7 +35,8 @@ export default function SeasonNav({ season, onClick }: Props) {
       </li>
       <li
         className={
-          LIST_CLASS + (season === "SUMMER" ? " border-summer bg-summer" : "")
+          LIST_CLASS +
+          (season === "SUMMER" ? " border-summer bg-summer" : " bg-white")
         }
         onClick={() => onClick("SUMMER")}
       >
@@ -49,7 +51,8 @@ export default function SeasonNav({ season, onClick }: Props) {
       </li>
       <li
         className={
-          LIST_CLASS + (season === "FALL" ? " border-fall bg-fall" : "")
+          LIST_CLASS +
+          (season === "FALL" ? " border-fall bg-fall" : " bg-white")
         }
         onClick={() => onClick("FALL")}
       >
@@ -64,7 +67,8 @@ export default function SeasonNav({ season, onClick }: Props) {
       </li>
       <li
         className={
-          LIST_CLASS + (season === "WINTER" ? " border-winter bg-winter" : "")
+          LIST_CLASS +
+          (season === "WINTER" ? " border-winter bg-winter" : " bg-white")
         }
         onClick={() => onClick("WINTER")}
       >
