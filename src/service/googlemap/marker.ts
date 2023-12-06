@@ -77,6 +77,7 @@ type MarkerProps = {
   service: google.maps.places.PlacesService;
   modifyState: boolean;
   map: google.maps.Map;
+  activeMarkerHandler: (currentMarker: google.maps.InfoWindow) => void;
   subPinHandler?: (pin: PinType) => void;
   subBookmarkHandler?: (bookmark: BookmarkType) => void;
 };
@@ -87,6 +88,7 @@ export const makeMarker = ({
   service,
   modifyState,
   map,
+  activeMarkerHandler,
   subPinHandler,
   subBookmarkHandler
 }: MarkerProps) => {
@@ -125,6 +127,8 @@ export const makeMarker = ({
         lng: pin.longitude
       }
     });
+
+    activeMarkerHandler(infoWindow);
     infoWindow.open({
       anchor: marker,
       map

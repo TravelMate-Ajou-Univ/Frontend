@@ -54,7 +54,7 @@ export default function MyBookmarkPage({ params }: Props) {
           <CollectionAddButton />
         </div>
         <div className=" border-4 rounded-md h-[37rem]">
-          <ul className="h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-4">
+          <ul className="h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-4 overflow-y-scroll">
             {bookmarkCollections.map((bookmarkCollection, index) =>
               index === 12 ? null : (
                 <li key={index} className="h-full w-full">

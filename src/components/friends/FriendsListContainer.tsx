@@ -4,7 +4,6 @@ import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import { Pagination } from "@mui/material";
 import { deleteFriend } from "@/service/axios/friends";
 import Link from "next/link";
-import BookmarkCollectionIcon from "../ui/icons/BookmarkCollectionIcon";
 import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 type Props = {
