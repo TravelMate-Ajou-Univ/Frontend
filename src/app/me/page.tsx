@@ -4,7 +4,7 @@ import React from "react";
 
 export default function MyPage() {
   return (
-    <div className="w-mainSection mx-auto">
+    <div className="lg:w-mainSection md:w-mainSectionMd sm:w-mainSectionSm w-full mx-auto">
       <Profile />
       <ActivitySection />
     </div>

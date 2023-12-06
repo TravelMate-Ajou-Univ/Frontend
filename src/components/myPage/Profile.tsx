@@ -36,11 +36,11 @@ export default function Profile() {
   return (
     <div className="w-full flex justify-around items-center py-4 border-b-2">
       <ProfileImage />
-      <div className="flex flex-col gap-4 w-[20rem] text-center">
+      <div className="flex flex-col gap-4 text-center lg:w-[20rem] md:w-[16rem] sm:w-[12rem]">
         {modifyState ? (
           <NicknameForm nickname={nickname} setNickname={setNickname} />
         ) : (
-          <p className="text-3xl font-bold ">
+          <p className="font-bold lg:text-3xl sm:text-2xl text-xl">
             {nicknamePreview === "" ? userName : nicknamePreview}
           </p>
         )}
