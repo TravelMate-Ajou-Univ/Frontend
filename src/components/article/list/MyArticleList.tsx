@@ -33,7 +33,7 @@ export default function MyArticleList({ isFavorite = false }: Props) {
   }, [userId, isFavorite]);
 
   return list.length === 0 ? (
-    <section className="w-full flex flex-col justify-center items-center h-96 text-gray-500 text-2xl gap-4">
+    <section className="w-full flex flex-col justify-center items-center h-96 text-gray-500 gap-4 lg:text-2xl md:text-xl sm:text-base text-sm">
       <p>아직 {isFavorite ? "즐겨찾기를 등록한" : "작성된"} 포스팅이 없어요!</p>
       <p>
         {isFavorite
@@ -42,7 +42,7 @@ export default function MyArticleList({ isFavorite = false }: Props) {
         😁
       </p>
       <Link href={isFavorite ? "/article/list" : "/article/new"}>
-        <OutlinedButton className="text-xl">
+        <OutlinedButton className="lg:text-xl md:text-base text-sm">
           {isFavorite ? "포스팅 목록" : "포스팅 작성하러 가기"}
         </OutlinedButton>
       </Link>
