@@ -315,7 +315,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       <ul className="text-sm">
         {keywords.map((keyword, index) => (
           <li
-            className="inline-block md:mr-4 mr-2 cursor-pointer"
+            className="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
             key={keyword.id}
             onClick={() => removeKeyword(index)}
           >
