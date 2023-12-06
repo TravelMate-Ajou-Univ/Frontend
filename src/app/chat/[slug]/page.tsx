@@ -37,7 +37,9 @@ export default function ChatPage() {
         socket.emit("leaveRoom", {
           roomId: roomId
         });
-        socket.disconnect();
+        socket.on("leaveRoom", () => {
+          socket.disconnect();
+        });
       };
     } catch (err) {
       // Todo : refresh JWT
