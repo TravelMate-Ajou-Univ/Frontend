@@ -126,34 +126,40 @@ export default function Article({ articleId }: Props) {
           </nav>
           {article && (
             <div className="w-full flex flex-col md:gap-4 gap-2">
-              <section className="flex items-start gap-2">
+              <div className="flex gap-2">
+                <button
+                  className={`self-center divide-x border border-secondary rounded-md flex items-center px-1 mb-1 ${
+                    isFavorite ? "bg-summer" : "bg-white"
+                  }`}
+                  onClick={toggleFavorite}
+                >
+                  {isFavorite ? (
+                    <FilledFavoriteIcon className="px-1 py-0.5" />
+                  ) : (
+                    <OutlinedFavoriteIcon className="px-1 py-0.5" />
+                  )}
+                  <span className="md:px-1 px-0.5 py-0.5 md:text-sm text-xs text-secondary font-medium">
+                    즐겨찾기
+                  </span>
+                </button>
+                <button
+                  className={`self-center divide-x border rounded-md flex items-center px-1 mb-1`}
+                  onClick={() => setReportModal(true)}
+                >
+                  <AlertIcon className="px-1 py-0.5" />
+                  <span className="md:px-1 px-0.5 py-0.5 md:text-sm text-xs text-red-400">
+                    게시글 신고
+                  </span>
+                </button>
+              </div>
+              <section
+                className={`flex gap-2 ${
+                  article && userId === article.authorId
+                    ? "items-start"
+                    : "items-center"
+                }`}
+              >
                 <div className="flex-grow">
-                  <div className="flex gap-2">
-                    <button
-                      className={`self-center divide-x border border-secondary rounded-md flex items-center px-1 mb-1 ${
-                        isFavorite ? "bg-summer" : "bg-white"
-                      }`}
-                      onClick={toggleFavorite}
-                    >
-                      {isFavorite ? (
-                        <FilledFavoriteIcon className="px-1 py-0.5" />
-                      ) : (
-                        <OutlinedFavoriteIcon className="px-1 py-0.5" />
-                      )}
-                      <span className="px-1 py-0.5 text-sm text-secondary font-medium">
-                        즐겨찾기
-                      </span>
-                    </button>
-                    <button
-                      className={`self-center divide-x border rounded-md flex items-center px-1 mb-1`}
-                      onClick={() => setReportModal(true)}
-                    >
-                      <AlertIcon className="px-1 py-0.5" />
-                      <span className="px-1 py-0.5 text-sm text-red-400">
-                        게시글 신고
-                      </span>
-                    </button>
-                  </div>
                   <h1 className="md:text-2xl text-xl font-bold ">
                     {article.title}
                   </h1>
