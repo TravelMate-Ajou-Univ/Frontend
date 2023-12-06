@@ -5,6 +5,7 @@ import { Pagination } from "@mui/material";
 import { deleteFriend } from "@/service/axios/friends";
 import Link from "next/link";
 import BookmarkCollectionIcon from "../ui/icons/BookmarkCollectionIcon";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 type Props = {
   friends: FriendWithPkType[];
@@ -33,18 +34,21 @@ export default function FriendsListContainer({
       {friends.map((friend, index) => (
         <li
           key={index}
-          className="relative flex flex-row items-center p-4 m-4 border-b-2"
+          className="relative flex items-center p-4 m-4 border-b-2"
         >
           <Image
-            src={defaultProfileImg}
-            // src={`${profileImageId}`}
-            className="bg-gray-200 rounded-full mx-10"
+            src={
+              friend.profileImageId === null
+                ? defaultProfileImg
+                : changeImageIdToImageUrl(friend.profileImageId, "profile")
+            }
+            className="bg-gray-200 rounded-full w-[5rem] h-[5rem] ml-10"
             width={70}
             height={70}
             alt={`${friend.nickname}의 사진`}
             priority
           />
-          <p className="text-xl mx-20">{friend.nickname}</p>
+          <p className="text-xl mx-10">{friend.nickname}</p>
           <Link
             href={{
               pathname: `/bookmark/list/${friend.id}`,
@@ -54,13 +58,11 @@ export default function FriendsListContainer({
             }}
             className="absolute top-10 right-2"
           >
-            <p className="text-sm p-2 rounded-md transition-all duration-500 ease-in-out hover:bg-secondary">
-              북마크 보기
-            </p>
+            <p className="font-semibold">북마크 보기</p>
           </Link>
           <button
             onClick={() => onClick(friend.pk)}
-            className="text-sm absolute top-2 right-2 text-red-500"
+            className="font-semibold absolute top-2 right-2 text-red-500"
           >
             삭제
           </button>
