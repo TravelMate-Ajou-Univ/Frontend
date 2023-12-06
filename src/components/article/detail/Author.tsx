@@ -9,6 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 import useOutSideRef from "@/hooks/useClickOutside";
 import { changeImageIdToImageUrl } from "@/service/axios/profile";
+import { BookmarkCollectionType } from "@/model/bookmark";
 
 interface Props {
   authorId: number;
@@ -21,7 +22,7 @@ export default function Author({ authorId }: Props) {
     profileImageId: ""
   });
   const [bookmarkCollections, setBookmarkCollections] = useState<
-    { id: number; title: string }[]
+    BookmarkCollectionType[]
   >([]);
   const [isBookmarkCollectionsOpen, setIsBookmarkCollectionsOpen] =
     useState<boolean>(false);
@@ -86,7 +87,7 @@ export default function Author({ authorId }: Props) {
                   className="py-1 w-full hover:bg-gray-100"
                   key={bookmarkCollection.id}
                 >
-                  <Link href={`/bookmark/${bookmarkCollection.id}`}>
+                  <Link href={`/bookmark/${bookmarkCollection.title}`}>
                     <p>{bookmarkCollection.title}</p>
                   </Link>
                 </li>

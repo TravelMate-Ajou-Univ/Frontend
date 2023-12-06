@@ -9,6 +9,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import { changeImageIdToImageUrl } from "@/service/axios/profile";
+import FilledButton from "../ui/button/FilledButton";
 
 type Props = {
   socket: Socket;
@@ -42,7 +43,7 @@ export default function ChatRoomHeader({
     router.push("/chat/list");
     setMemberChangedState(!memberChangedState);
   };
-  const cancleHandler = () => {
+  const cancelHandler = () => {
     setAddModalState(false);
     setMembers([]);
   };
@@ -56,40 +57,42 @@ export default function ChatRoomHeader({
     setSettingState(false);
   };
   return (
-    <div className="flex justify-between items-center p-2">
+    <div className="flex justify-between items-center px-2 md:py-2">
       <div onClick={toggleMapState} className="hover:scale-110">
-        <MarkedMapIcon />
+        <MarkedMapIcon isChatting />
       </div>
-      <p className="text-2xl font-bold">{roomName}</p>
+      <p className="md:text-2xl text-lg font-bold">{roomName}</p>
       <div className="relative">
         <div onClick={() => setSettingState(!settingState)}>
           <SettingIcon />
         </div>
-        {settingState ? (
-          <div className="absolute left-[3rem] -top-[0.5rem] w-[13rem] gap-2 border-2 rounded-md p-2">
-            <div>
-              <p>채팅방 멤버들</p>
-              <ul className="flex gap-4 overflow-x-scroll">
+        {settingState && (
+          <div className="bg-white absolute right-0 top-7 w-[15rem] gap-2 border-2 rounded-md px-4 py-3 z-30 shadow-lg">
+            <div className="mb-2">
+              <p className="font-semibold mb-1.5">채팅방 멤버</p>
+              <ul className="flex gap-4 overflow-x-auto">
                 {roomMembers.map((member, index) => (
                   <li
                     key={index}
                     className="flex flex-col items-center w-[4rem]"
                   >
-                    <Image
-                      src={
-                        member.profileImageId === null
-                          ? defaultProfileImg
-                          : changeImageIdToImageUrl(
-                              member.profileImageId,
-                              "profile"
-                            )
-                      }
-                      className="bg-gray-200 rounded-full w-[3.5rem] h-[3.5rem]"
-                      width={40}
-                      height={40}
-                      alt={`${member.nickname}의 사진`}
-                      priority
-                    />
+                    <div className="w-12 h-12">
+                      <Image
+                        src={
+                          member.profileImageId === null
+                            ? defaultProfileImg
+                            : changeImageIdToImageUrl(
+                                member.profileImageId,
+                                "profile"
+                              )
+                        }
+                        className="bg-gray-200 rounded-full min-w-full min-h-full"
+                        width={40}
+                        height={40}
+                        alt={`${member.nickname}의 사진`}
+                        priority
+                      />
+                    </div>
                     <p className="w-[4rem] truncate hover:text-clip text-sm">
                       {member.nickname}
                     </p>
@@ -98,7 +101,7 @@ export default function ChatRoomHeader({
               </ul>
             </div>
             {addModalState ? (
-              <div>
+              <div className="bg-white">
                 <FriendsAddContainer
                   members={members}
                   setMembers={setMembers}
@@ -106,14 +109,14 @@ export default function ChatRoomHeader({
                   nickname={nickname}
                 />
                 <div className="flex justify-between mx-2">
-                  <OutlinedButton onClick={cancleHandler}>취소</OutlinedButton>
-                  <OutlinedButton onClick={addMemberHandler}>
+                  <OutlinedButton onClick={cancelHandler}>취소</OutlinedButton>
+                  <FilledButton onClick={addMemberHandler}>
                     추가하기
-                  </OutlinedButton>
+                  </FilledButton>
                 </div>
               </div>
             ) : (
-              <div className=" flex flex-col items-center gap-2">
+              <div className="flex flex-col items-center gap-2">
                 <OutlinedButton
                   size="small"
                   onClick={() => setAddModalState(true)}
@@ -126,7 +129,7 @@ export default function ChatRoomHeader({
               </div>
             )}
           </div>
-        ) : null}
+        )}
       </div>
     </div>
   );

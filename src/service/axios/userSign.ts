@@ -157,7 +157,7 @@ export const getUserInfoById = async (id: number): Promise<User | false> => {
 
 export const getBookmarkCollectionsById = async (
   id: number
-): Promise<{ id: number; title: string }[] | false> => {
+): Promise<BookmarkCollectionType[] | false> => {
   try {
     const { data } = await user.getBookmarkCollectionsById(id);
     if (data.bookmarkCollections.length === 0) return false;
@@ -165,7 +165,8 @@ export const getBookmarkCollectionsById = async (
       (bookmarkCollection: BookmarkCollectionType) => {
         return {
           id: bookmarkCollection.id,
-          title: bookmarkCollection.title
+          title: bookmarkCollection.title,
+          visibility: bookmarkCollection.visibility
         };
       }
     );
