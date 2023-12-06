@@ -9,19 +9,21 @@ import Image from "next/image";
 import Link from "next/link";
 import useOutSideRef from "@/hooks/useClickOutside";
 import { changeImageIdToImageUrl } from "@/service/axios/profile";
+import { useAppSelector } from "@/hooks/redux";
 
 interface Props {
   authorId: number;
 }
 
 export default function Author({ authorId }: Props) {
+  const { id } = useAppSelector(state => state.userSlice);
   const [author, setAuthor] = useState<User>({
     id: -1,
     userName: "",
     profileImageId: ""
   });
   const [bookmarkCollections, setBookmarkCollections] = useState<
-    { id: number; title: string }[]
+    { id: number; title: string; visibility: string }[]
   >([]);
   const [isBookmarkCollectionsOpen, setIsBookmarkCollectionsOpen] =
     useState<boolean>(false);
@@ -86,7 +88,17 @@ export default function Author({ authorId }: Props) {
                   className="py-1 w-full hover:bg-gray-100"
                   key={bookmarkCollection.id}
                 >
-                  <Link href={`/bookmark/${bookmarkCollection.id}`}>
+                  <Link
+                    href={{
+                      pathname: "/bookmark/detail",
+                      query: {
+                        userId: id,
+                        title: bookmarkCollection.title,
+                        visibility: bookmarkCollection.visibility,
+                        id: bookmarkCollection.id
+                      }
+                    }}
+                  >
                     <p>{bookmarkCollection.title}</p>
                   </Link>
                 </li>
