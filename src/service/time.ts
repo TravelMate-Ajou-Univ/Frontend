@@ -42,10 +42,17 @@ export const checkChatTime = (
 ): boolean => {
   const prevDate = new Date(prevTime);
   const targetDate = new Date(targetTime);
-  const timeDifference = targetDate.getTime() - prevDate.getTime();
-  const minutesDifference = Math.floor(timeDifference / (1000 * 60));
 
-  if (minutesDifference < 1) {
+  const prevMinute = prevDate.getMinutes();
+  const targetMinute = targetDate.getMinutes();
+
+  const prevHour = prevDate.getHours();
+  const targethour = targetDate.getHours();
+
+  const minuteEqual = prevMinute === targetMinute;
+  const hourEqual = prevHour === targethour;
+
+  if (minuteEqual && hourEqual) {
     return false;
   } else {
     return true;

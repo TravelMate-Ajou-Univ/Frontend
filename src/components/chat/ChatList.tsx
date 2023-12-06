@@ -5,6 +5,7 @@ import { useAppSelector } from "@/hooks/redux";
 import { useEffect, useRef, useState } from "react";
 import { changeImageIdToImageUrl } from "@/service/axios/profile";
 import { calculateAmPmTime } from "@/service/time";
+import ImageModal from "./ImageModal";
 
 type Props = {
   chatList: ViewChatFormType[];
@@ -12,6 +13,9 @@ type Props = {
 };
 export default function ChatList({ chatList, firstChatIndex }: Props) {
   const { userName } = useAppSelector(state => state.userSlice);
+
+  const [zoomState, setZoomState] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<string>("");
   const scrollableContainerRef = useRef<HTMLUListElement>(null);
   const scrollableContainer = scrollableContainerRef.current;
 
@@ -33,6 +37,11 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
     }
   };
 
+  const imageZoomInHandler = (imgUrl: string) => {
+    setZoomState(true);
+    setImageUrl(imgUrl);
+  };
+
   useEffect(() => {
     // chatList의 변화에 따라 scrollToBottom 실행
     scrollToBottom();
@@ -47,6 +56,9 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
 
   return (
     <section className="w-full h-[33rem]">
+      {zoomState ? (
+        <ImageModal imageUrl={imageUrl} cancleHandler={setZoomState} />
+      ) : null}
       <ul
         ref={scrollableContainerRef}
         className="flex flex-col border-2 rounded-md bg-white h-full relative overflow-y-auto "
@@ -54,7 +66,7 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
         {chatList.map((chat: ViewChatFormType, index: number) =>
           chat.userId === 0 ? (
             <li key={index} className="justify-center flex items-center">
-              <p className="border-2 rounded-md m-1 p-2 w-[15rem] text-sm text-center text-white font-thin break-words bg-gray-400">
+              <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[17rem] text-xs text-center text-white font-thin break-words bg-gray-400">
                 {chat.content}
               </p>
             </li>
@@ -65,7 +77,7 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
                   {calculateAmPmTime(chat.createdAt)}
                 </p>
               ) : null}
-              <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[12rem] break-words bg-yellow-300">
+              <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[22rem] max-h-[25rem] overflow-y-scroll break-words bg-yellow-300">
                 {chat.type === "text" ? (
                   chat.content
                 ) : (
@@ -74,6 +86,7 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
                     height={200}
                     width={200}
                     alt="chatting image"
+                    onClick={() => imageZoomInHandler(chat.content)}
                   />
                 )}
               </p>
@@ -103,7 +116,7 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
                   <p className="text-sm ml-1">{chat.nickname}</p>
                 ) : null}
                 <div className="flex">
-                  <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[12rem] break-words bg-gray-200">
+                  <p className="border-2 rounded-md m-1 p-2 w-fit max-w-[22rem] max-h-[25rem] overflow-y-scroll break-words bg-gray-200">
                     {chat.type === "text" ? (
                       chat.content
                     ) : (
@@ -112,6 +125,7 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
                         height={200}
                         width={200}
                         alt="chatting image"
+                        onClick={() => imageZoomInHandler(chat.content)}
                       />
                     )}
                   </p>
