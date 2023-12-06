@@ -76,7 +76,7 @@ type MarkerProps = {
   initmap: google.maps.Map;
   service: google.maps.places.PlacesService;
   modifyState: boolean;
-  map: google.maps.Map;
+  activeMarkerHandler: (currentMarker: google.maps.InfoWindow) => void;
   subPinHandler?: (pin: PinType) => void;
   subBookmarkHandler?: (bookmark: BookmarkType) => void;
 };
@@ -86,7 +86,7 @@ export const makeMarker = ({
   initmap,
   service,
   modifyState,
-  map,
+  activeMarkerHandler,
   subPinHandler,
   subBookmarkHandler
 }: MarkerProps) => {
@@ -125,9 +125,12 @@ export const makeMarker = ({
         lng: pin.longitude
       }
     });
+
+    activeMarkerHandler(infoWindow);
+    initmap.panTo(marker.getPosition() as google.maps.LatLng);
     infoWindow.open({
       anchor: marker,
-      map
+      map: initmap
     });
     google.maps.event.addListener(infoWindow, "domready", () => {
       const btn = document.getElementById("btn");

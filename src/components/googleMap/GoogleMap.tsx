@@ -32,7 +32,7 @@ export default function GoogleMap({ modifyState }: Props) {
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
   const [places, setPlaces] = useState<google.maps.Marker[]>([]);
-  const infoRef = useRef<google.maps.InfoWindow>(null);
+  const activeMarkerInfoRef = useRef<google.maps.InfoWindow>();
   const { center, bookmarks, pins } = useAppSelector(state => state.mapSlice);
   window.initMap = function () {
     const initmap = new google.maps.Map(
@@ -73,6 +73,11 @@ export default function GoogleMap({ modifyState }: Props) {
     };
   }, [dispatch]);
 
+  const activeMarkerHandler = (currentMarker: google.maps.InfoWindow): void => {
+    // active marker 변경
+    activeMarkerInfoRef.current?.close();
+    activeMarkerInfoRef.current = currentMarker;
+  };
   // 북마크 컬렉션에 있는 북마크들 marker로 표시
   const setMarker = (initmap: google.maps.Map) => {
     if (initmap === undefined) {
@@ -87,8 +92,7 @@ export default function GoogleMap({ modifyState }: Props) {
         initmap,
         service,
         modifyState,
-        map: map as google.maps.Map,
-        subPinHandler,
+        activeMarkerHandler,
         subBookmarkHandler
       });
     });
@@ -99,9 +103,8 @@ export default function GoogleMap({ modifyState }: Props) {
         initmap,
         service,
         modifyState,
-        map: map as google.maps.Map,
-        subPinHandler,
-        subBookmarkHandler
+        activeMarkerHandler,
+        subPinHandler
       });
     });
   };
@@ -169,6 +172,10 @@ export default function GoogleMap({ modifyState }: Props) {
           content: contentString,
           position: place.geometry?.location
         });
+
+        activeMarkerHandler(infoWindow);
+        map?.panTo(marker.getPosition() as google.maps.LatLng);
+
         infoWindow.open({
           anchor: marker,
           map
@@ -179,8 +186,7 @@ export default function GoogleMap({ modifyState }: Props) {
           const btn = document.getElementById("btn");
           if (btn) {
             btn.addEventListener("click", () => {
-              infoWindow.close();
-
+              activeMarkerHandler(infoWindow);
               let addContentString = makeContentString({
                 photoUrl: result?.photos?.[0].getUrl(),
                 name: result.name,
@@ -199,6 +205,7 @@ export default function GoogleMap({ modifyState }: Props) {
                 content: addContentString,
                 position: place.geometry?.location
               });
+
               addWindow.open({
                 anchor: marker,
                 map
@@ -221,7 +228,15 @@ export default function GoogleMap({ modifyState }: Props) {
 
                   dispatch(addPins(newPin));
                   addWindow.close();
-                  marker.setMap(null);
+                  makeMarker({
+                    pin: newPin,
+                    initmap: map as google.maps.Map,
+                    service,
+                    modifyState,
+                    activeMarkerHandler,
+                    subPinHandler,
+                    subBookmarkHandler
+                  });
                 });
               });
             });

@@ -4,19 +4,23 @@ import Link from "next/link";
 import PublicIcon from "./ui/icons/PublicIcon";
 import FriendsOnlyIcon from "./ui/icons/FriendsOnlyIcon";
 import PrivateIcon from "./ui/icons/PrivateIcon";
+import { useAppSelector } from "@/hooks/redux";
 
 type Props = {
   bookmarkCollection: BookmarkCollectionType;
+  authorId: number;
 };
 
-export default function Collection({ bookmarkCollection }: Props) {
+export default function Collection({ bookmarkCollection, authorId }: Props) {
+  const { id } = useAppSelector(state => state.userSlice);
   return (
     <section className="w-full h-full mb-4">
       <div className="flex flex-col justify-center items-center">
         <Link
           href={{
-            pathname: `/bookmark/${bookmarkCollection.title}`,
+            pathname: `/bookmark/detail`,
             query: {
+              userId: authorId,
               title: bookmarkCollection.title,
               visibility: bookmarkCollection.visibility,
               id: bookmarkCollection.id

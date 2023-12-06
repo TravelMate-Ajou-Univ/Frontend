@@ -6,7 +6,13 @@ import { createBookmark } from "@/service/axios/bookmark";
 import { calculateCenter } from "@/service/googlemap/map";
 import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 
 declare global {
   interface Window {
@@ -38,6 +44,7 @@ export default function ArticleGoogleMap({
     longitude: 0
   });
   const [zoom, setZoom] = useState(14);
+  const activeMarkerInfoRef = useRef<google.maps.InfoWindow>();
 
   window.initMap = function () {
     const initmap = new google.maps.Map(
@@ -114,10 +121,16 @@ export default function ArticleGoogleMap({
         initmap,
         service,
         modifyState,
-        map: map as google.maps.Map,
+        activeMarkerHandler,
         subPinHandler
       });
     });
+  };
+
+  const activeMarkerHandler = (currentMarker: google.maps.InfoWindow): void => {
+    // active marker 변경
+    activeMarkerInfoRef.current?.close();
+    activeMarkerInfoRef.current = currentMarker;
   };
 
   const subPinHandler = (pin: PinType) => {

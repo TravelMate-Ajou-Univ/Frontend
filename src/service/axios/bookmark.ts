@@ -50,10 +50,6 @@ export const getMyCollectionListWithoutPagination = async () => {
       url: "users/me/total-bookmark-collections"
     });
     return response;
-    // return {
-    //   bookmarkCollections: response.data.bookmarkCollections,
-    //   count: response.data.count
-    // };
   } catch (error) {
     console.log(error);
     return false;
