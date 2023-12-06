@@ -42,7 +42,7 @@ export default function FriendsListContainer({
                 ? defaultProfileImg
                 : changeImageIdToImageUrl(friend.profileImageId, "profile")
             }
-            className="bg-gray-200 rounded-full md:w-[5rem] w-12 md:h-[5rem] h-12 md:ml-10 ml-2"
+            className="bg-gray-200 rounded-full md:w-[5rem] w-12 md:h-[5rem] h-12 md:ml-6 ml-2"
             width={70}
             height={70}
             alt={`${friend.nickname}의 사진`}
