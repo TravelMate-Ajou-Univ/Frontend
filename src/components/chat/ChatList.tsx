@@ -77,7 +77,7 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
                   {calculateAmPmTime(chat.createdAt)}
                 </p>
               )}
-              <p className="border-2 rounded-md m-1 px-2 md:py-2 py-1 w-fit md:max-w-[22rem] max-w-[13rem] max-h-[25rem] md:text-base text-sm overflow-y-auto break-words bg-yellow-300">
+              <p className="border-2 rounded-md m-1 px-2 md:py-2 py-1 w-fit md:max-w-[22rem] max-w-[13rem] md:text-base text-sm break-words bg-yellow-300">
                 {chat.type === "text" ? (
                   chat.content
                 ) : (
@@ -116,7 +116,7 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
                   <p className="text-sm ml-1">{chat.nickname}</p>
                 )}
                 <div className="flex">
-                  <p className="border-2 rounded-md m-1 px-2 md:py-2 py-1 w-fit md:max-w-[22rem] max-w-[13rem] max-h-[25rem] md:text-base text-sm overflow-y-scroll break-words bg-gray-200">
+                  <p className="border-2 rounded-md m-1 px-2 md:py-2 py-1 w-fit md:max-w-[22rem] max-w-[13rem] md:text-base text-sm break-words bg-gray-200">
                     {chat.type === "text" ? (
                       chat.content
                     ) : (
