@@ -13,14 +13,12 @@ export default function ChatRoomListHeader() {
 
   return (
     <div className="flex justify-between items-center p-4 border-b-2">
-      <p className="text-[2rem]">채팅 목록</p>
+      <h1 className="font-semibold md:text-3xl text-2xl">채팅 목록</h1>
       <div className="relative">
         <OutlinedButton onClick={() => toggleModalState()}>
           채팅방 만들기
         </OutlinedButton>
-        {modalState ? (
-          <ChatRoomModal toggleModalState={toggleModalState} />
-        ) : null}
+        {modalState && <ChatRoomModal toggleModalState={toggleModalState} />}
       </div>
     </div>
   );

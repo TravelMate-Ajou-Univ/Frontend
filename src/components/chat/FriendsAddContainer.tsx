@@ -72,7 +72,7 @@ export default function FriendsAddContainer({
               alt={`${friend.nickname}의 사진`}
               priority
             />
-            <p className="flex-grow text-sm truncate hover:text-clip">
+            <p className="flex-grow max-w-[7rem] text-sm truncate hover:text-clip">
               {friend.nickname}
             </p>
             <OutlinedButton onClick={() => addMember(friend)} size="small">
@@ -99,7 +99,7 @@ export default function FriendsAddContainer({
               alt={`${member.nickname}의 사진`}
               priority
             />
-            <p className="flex-grow text-sm truncate hover:text-clip">
+            <p className="flex-grow max-w-[7rem] text-sm truncate hover:text-clip">
               {member.nickname}
             </p>
             <OutlinedButton onClick={() => subMember(member)} size="small">
