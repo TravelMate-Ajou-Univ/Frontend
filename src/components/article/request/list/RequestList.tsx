@@ -34,16 +34,16 @@ export default function RequestList({ articleId }: Props) {
       <hr />
       <PageTitle>
         수정 요청
-        <span className="ml-2 mb-0.5 text-xl text-red-500">
+        <span className="ml-2 mb-0.5 md:text-xl text-lg text-red-500">
           {requestList.length}
         </span>
       </PageTitle>
-      <p className="text-gray-600">
+      <p className="text-gray-600 md:text-base text-sm">
         {'"'}
         {title}
         {'"'}에 대한 수정 요청 목록입니다.
       </p>
-      <ul className="mt-6 flex flex-col gap-10">
+      <ul className="xl:mt-6 md:mt-4 mt-2 flex flex-col xl:gap-10 md:gap-7 gap-3">
         {requestList.map(request => (
           <li key={request.id}>
             <RequestPreview request={request} />

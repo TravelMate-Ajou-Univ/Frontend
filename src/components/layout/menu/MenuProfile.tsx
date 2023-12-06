@@ -25,7 +25,7 @@ export default function MenuProfile() {
           priority
         />
       </div>
-      <span className="text-lg font-semibold">{userName}</span>
+      <span className="text-lg font-semibold text-center">{userName}</span>
     </div>
   );
 }

@@ -18,8 +18,12 @@ export default function ReportModal({
   return (
     <ModalPortal>
       <div className="fixed left-0 top-0 h-full w-full z-50 bg-neutral-900/40">
-        <section className="flex flex-col gap-10 absolute bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[33rem] h-[40rem] shadow-xl px-12 py-16 rounded-xl border-[2.5px] border-secondary">
-          <h1 className="text-center text-2xl font-bold">{name}에 대한 신고</h1>
+        <section className="flex flex-col gap-10 absolute bg-white left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 sm:w-[33rem] w-[23rem] h-[40rem] shadow-xl px-12 py-16 rounded-xl border-[2.5px] border-secondary">
+          <h1 className="text-center text-2xl font-bold break-words">
+            {'"'}
+            {name}
+            {'"'} 신고
+          </h1>
           <form
             className="flex-grow flex flex-col"
             onSubmit={e => e.preventDefault()}
