@@ -55,13 +55,13 @@ export default function ChatList({ chatList, firstChatIndex }: Props) {
   }, [firstChatIndex]);
 
   return (
-    <section className="w-full md:h-[33rem] h-[29rem]">
+    <section className="w-full flex-grow md:max-h-[33rem] max-h-[29rem] border-2 ">
       {zoomState ? (
         <ImageModal imageUrl={imageUrl} cancleHandler={setZoomState} />
       ) : null}
       <ul
         ref={scrollableContainerRef}
-        className="flex flex-col border-2 rounded-md bg-white h-full relative overflow-y-auto "
+        className="flex flex-col rounded-md bg-white h-full relative overflow-y-auto "
       >
         {chatList.map((chat: ViewChatFormType, index: number) =>
           chat.userId === 0 ? (
