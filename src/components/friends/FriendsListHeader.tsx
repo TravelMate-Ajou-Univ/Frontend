@@ -34,14 +34,17 @@ export default function FriendsListHeader({ total, setTotal }: Props) {
   }, [handleClickOutside]);
 
   return (
-    <div ref={modalRef} className="flex justify-between items-center p-4">
-      <p className="text-[2rem]">친구 {total}</p>
-      <div className="flex gap-4">
+    <div
+      ref={modalRef}
+      className="flex justify-between items-center md:p-4 p-2"
+    >
+      <p className="font-semibold md:text-3xl text-2xl">친구 {total}</p>
+      <div className="flex gap-2">
         <div className="relative">
           <OutlinedButton onClick={() => toggleModalState("received")}>
-            내가 받은 요청
+            받은 요청
           </OutlinedButton>
-          {lookUpState === "received" ? (
+          {lookUpState === "received" && (
             <FriendsListModal
               total={total}
               setTotal={setTotal}
@@ -49,11 +52,11 @@ export default function FriendsListHeader({ total, setTotal }: Props) {
               mode="received"
               buttonContent="승인"
             />
-          ) : null}
+          )}
         </div>
         <div className="relative">
           <OutlinedButton onClick={() => toggleModalState("sent")}>
-            내가 보낸 요청
+            보낸 요청
           </OutlinedButton>
           {lookUpState === "sent" ? (
             <FriendsListModal

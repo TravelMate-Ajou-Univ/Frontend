@@ -62,8 +62,8 @@ export default function FriendsListModal({
     getFriends();
   }, [page, mode]);
   return (
-    <div className="flex flex-col gap-2 justify-center items-center w-[15rem] absolute right-0 bg-white z-10 border-2 rounded-md p-2 mt-4">
-      <p className="font-bold ">
+    <div className="flex flex-col gap-2 justify-center items-center md:w-[15rem] w-44 absolute right-0 bg-white z-10 border-2 rounded-md p-2 mt-4">
+      <p className="font-bold md:text-base text-sm">
         총 {mode === "sent" ? "보낸" : "받은"} 요청 : {frinedList.count}
       </p>
       <ul className="flex flex-col items-center gap-2 w-full">
@@ -74,7 +74,6 @@ export default function FriendsListModal({
           >
             <Image
               src={defaultProfileImg}
-              // src={`${profileImageId}`}
               className="bg-gray-200 rounded-full"
               width={30}
               height={30}
