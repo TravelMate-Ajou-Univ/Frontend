@@ -39,33 +39,41 @@ export default function BookmarkButton({
       return;
     }
     await modifyCollection(id, title, visibility, pins, deleteBookmarks);
+
     toggleHandler();
-    router.push(
-      `/bookmark/${title}?title=${title}&visibility=${visibility}&id=${id}`
-    );
   };
   return (
-    <div className="flex self-end font-bold gap-3">
-      <button
-        onClick={deleteHandler}
-        className="border-2 px-3 py-2 rounded-lg hover:text-red-400"
-      >
-        삭제
-      </button>
+    <div className="self-end">
       {modifyState ? (
-        <button
-          onClick={modifyHandler}
-          className="border-2 px-3 py-2 rounded-lg hover:text-red-400"
-        >
-          완료
-        </button>
+        <div className="flex self-end font-bold gap-3">
+          <button
+            onClick={toggleHandler}
+            className="border-2 px-3 py-2 rounded-lg hover:text-red-400"
+          >
+            취소
+          </button>
+          <button
+            onClick={modifyHandler}
+            className="border-2 px-3 py-2 rounded-lg hover:text-red-400"
+          >
+            완료
+          </button>
+        </div>
       ) : (
-        <button
-          onClick={toggleHandler}
-          className="border-2 px-3 py-2 rounded-lg hover:text-red-400"
-        >
-          수정
-        </button>
+        <div className="flex self-end font-bold gap-3">
+          <button
+            onClick={deleteHandler}
+            className="border-2 px-3 py-2 rounded-lg hover:text-red-400"
+          >
+            삭제
+          </button>
+          <button
+            onClick={toggleHandler}
+            className="border-2 px-3 py-2 rounded-lg hover:text-red-400"
+          >
+            수정
+          </button>
+        </div>
       )}
     </div>
   );

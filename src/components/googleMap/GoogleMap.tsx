@@ -92,9 +92,7 @@ export default function GoogleMap({ modifyState }: Props) {
         initmap,
         service,
         modifyState,
-        map: map as google.maps.Map,
         activeMarkerHandler,
-        subPinHandler,
         subBookmarkHandler
       });
     });
@@ -105,10 +103,8 @@ export default function GoogleMap({ modifyState }: Props) {
         initmap,
         service,
         modifyState,
-        map: map as google.maps.Map,
         activeMarkerHandler,
-        subPinHandler,
-        subBookmarkHandler
+        subPinHandler
       });
     });
   };
@@ -178,6 +174,7 @@ export default function GoogleMap({ modifyState }: Props) {
         });
 
         activeMarkerHandler(infoWindow);
+        map?.panTo(marker.getPosition() as google.maps.LatLng);
 
         infoWindow.open({
           anchor: marker,
@@ -189,8 +186,7 @@ export default function GoogleMap({ modifyState }: Props) {
           const btn = document.getElementById("btn");
           if (btn) {
             btn.addEventListener("click", () => {
-              infoWindow.close();
-
+              activeMarkerHandler(infoWindow);
               let addContentString = makeContentString({
                 photoUrl: result?.photos?.[0].getUrl(),
                 name: result.name,
@@ -209,8 +205,6 @@ export default function GoogleMap({ modifyState }: Props) {
                 content: addContentString,
                 position: place.geometry?.location
               });
-
-              activeMarkerHandler(addWindow);
 
               addWindow.open({
                 anchor: marker,
@@ -234,7 +228,15 @@ export default function GoogleMap({ modifyState }: Props) {
 
                   dispatch(addPins(newPin));
                   addWindow.close();
-                  marker.setMap(null);
+                  makeMarker({
+                    pin: newPin,
+                    initmap: map as google.maps.Map,
+                    service,
+                    modifyState,
+                    activeMarkerHandler,
+                    subPinHandler,
+                    subBookmarkHandler
+                  });
                 });
               });
             });
