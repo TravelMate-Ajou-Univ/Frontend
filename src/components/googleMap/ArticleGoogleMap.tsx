@@ -199,6 +199,8 @@ export default function ArticleGoogleMap({
           content: contentString,
           position: place.geometry?.location
         });
+
+        activeMarkerHandler(infoWindow);
         infoWindow.open({
           anchor: marker,
           map
@@ -209,8 +211,6 @@ export default function ArticleGoogleMap({
           const btn = document.getElementById("btn");
           if (btn) {
             btn.addEventListener("click", () => {
-              infoWindow.close();
-
               let addContentString = makeContentString({
                 photoUrl: result?.photos?.[0].getUrl(),
                 name: result.name,
@@ -229,6 +229,7 @@ export default function ArticleGoogleMap({
                 content: addContentString,
                 position: place.geometry?.location
               });
+              activeMarkerHandler(addWindow);
               addWindow.open({
                 anchor: marker,
                 map
