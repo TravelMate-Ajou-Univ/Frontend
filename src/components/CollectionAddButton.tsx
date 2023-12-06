@@ -10,7 +10,7 @@ export default function CollectionAddButton() {
   return (
     <div className="self-end relative">
       <button className="w-fit border-2 rounded-md p-2" onClick={toggleButton}>
-        <p>북마크 컬렉션 추가</p>
+        <p className="lg:text-lg md:text-base text-sm">북마크 컬렉션 추가</p>
       </button>
       {modalBtn ? <CollectionModal toggleButton={toggleButton} /> : null}
     </div>

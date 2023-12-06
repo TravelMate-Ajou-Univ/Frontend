@@ -27,7 +27,7 @@ export default function ProfileImage() {
   };
 
   return (
-    <div className="relative ">
+    <div className="relative">
       <Image
         src={
           profileImageId === ""
@@ -36,7 +36,7 @@ export default function ProfileImage() {
             ? changeImageIdToImageUrl(Number(profileImageId), "profile")
             : imageRef.current
         }
-        className="bg-gray-100 rounded-full w-[7.5rem] h-[7.5rem]"
+        className="bg-gray-100 rounded-full lg:w-[7.5rem] lg:h-[7.5rem] md:w-[7rem] md:h-[7rem] w-[6rem] h-[6rem]"
         width={150}
         height={150}
         alt="프로필 사진"

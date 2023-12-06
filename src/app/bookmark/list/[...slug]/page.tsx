@@ -39,11 +39,11 @@ export default function UserBookmarkPage({ params }: Props) {
   };
   return (
     <section className="flex flex-col items-center w-full p-4 relative pb-[4rem]">
-      <div className="flex flex-col gap-4 w-[60%] mx-auto">
-        <h1 className="font-bold text-2xl text-center my-4">
+      <div className="flex flex-col gap-4 lg:w-mainSection md:w-mainSectionMd sm:w-mainSectionSm w-full mx-auto">
+        <h1 className="font-bold  text-center my-4 lg:text-2xl text-xl">
           {nickname}의 북마크 컬렉션
         </h1>
-        <div className=" border-4 rounded-md w-full h-[37rem]">
+        <div className=" border-4 rounded-md lg:h-[37rem] h-[20rem]">
           <ul className="h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-4 overflow-y-scroll">
             {bookmarkCollections.map((bookmarkCollection, index) =>
               index === 12 ? null : (

@@ -55,11 +55,11 @@ export default function NicknameForm({ nickname, setNickname }: Props) {
           type="text"
           value={nickname}
           onChange={onChange}
-          className="text-3xl font-bold text-center bg-inherit w-full pr-6"
+          className="font-bold text-center bg-inherit pr-6 lg:w-[10rem] w-[7rem] lg:text-3xl sm:text-2xl text-xl"
         />
         <PenIcon />
       </div>
-      <div className="absolute top-10 left-[5rem] w-[10rem] text-sm">
+      <div className="absolute top-[100%] left-1/2 -translate-x-1/2 w-[10rem] lg:text-sm text-xs">
         {banner ? (
           banner.status === "success" ? (
             <p className="text-green-400 w-fit">{banner.message}</p>

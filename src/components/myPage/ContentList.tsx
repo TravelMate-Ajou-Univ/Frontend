@@ -17,31 +17,28 @@ export default function ContentList({ articles }: Props) {
           해당 게시글이 없습니다.
         </p>
       ) : (
-        <ul>
-          <MultiCarousel>
-            {articles.map((article, index) => (
-              <li key={index}>
-                <Link
-                  href={`/article/detail/${article.id}?season=${article.season}`}
-                  className="flex flex-col justify-around items-center w-[12rem] h-[14rem] rounded-md overflow-hidden shadow-lg"
-                >
-                  <div className="h-full w-full overflow-hidden object-cover">
-                    <Image
-                      src={article.thumbnail}
-                      alt="썸네일 사진"
-                      className="w-full h-full"
-                      width={1000}
-                      height={1000}
-                    />
-                  </div>
-                  <p className="text-center truncate w-[12rem] my-2 font-bold">
-                    {article.title}
-                  </p>
-                </Link>
-              </li>
-            ))}
-          </MultiCarousel>
-        </ul>
+        <MultiCarousel>
+          {articles.map((article, index) => (
+            <Link
+              key={index}
+              href={`/article/detail/${article.id}?season=${article.season}`}
+              className="flex flex-col justify-around items-center rounded-md overflow-hidden shadow-lg lg:w-[12rem] lg:h-[15rem] md:w-[9rem] md:h-[12rem] w-[7.5rem] h-[10rem]"
+            >
+              <div className="h-full w-full overflow-hidden object-cover">
+                <Image
+                  src={article.thumbnail}
+                  alt="썸네일 사진"
+                  className="w-full h-full"
+                  width={1000}
+                  height={1000}
+                />
+              </div>
+              <p className="text-center truncate w-[12rem] my-2 font-bold lg:text-md md:text-sm text-xs">
+                {article.title}
+              </p>
+            </Link>
+          ))}
+        </MultiCarousel>
       )}
     </div>
   );

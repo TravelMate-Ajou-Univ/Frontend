@@ -32,15 +32,15 @@ export default function ActivitySection() {
 
   return (
     <div>
-      <p className="font-bold text-3xl my-[2rem] border-b-2 w-fit p-2">
+      <p className="font-bold my-[2rem] border-b-2 w-fit p-2 lg:text-3xl md:text-2xl text-xl">
         내가 기여한 게시글
       </p>
       <ContentList articles={acceptedArticle} />
-      <p className="font-bold text-3xl my-[2rem] border-b-2 w-fit p-2">
+      <p className="font-bold my-[2rem] border-b-2 w-fit p-2 lg:text-3xl sm:text-2xl text-xl">
         수정요청한 게시글
       </p>
       <ContentList articles={penddingArticle} />
-      <p className="font-bold text-3xl my-[2rem] border-b-2 w-fit p-2">
+      <p className="font-bold my-[2rem] border-b-2 w-fit p-2 lg:text-3xl sm:text-2xl text-xl">
         반려된 게시글
       </p>
       <ContentList articles={declinedArticle} />

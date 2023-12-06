@@ -37,6 +37,7 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
   const [places, setPlaces] = useState<google.maps.Marker[]>([]);
   const { center, bookmarks } = useAppSelector(state => state.mapSlice);
   const activeMarkerInfoRef = useRef<google.maps.InfoWindow>();
+
   window.initMap = function () {
     const initmap = new google.maps.Map(
       document.getElementById("map") as HTMLElement,
@@ -79,6 +80,7 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
     });
     socket.on("deleteBookmark", data => {
       const deletedBookmarkId = data.bookmarkIds[0];
+
       const recentBookmarks = bookmarks.filter(
         bookmark => bookmark.id !== deletedBookmarkId
       );
@@ -165,7 +167,7 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
         }
 
         // click한 marker를 맵 중앙에 오고, 정보창 띄우기
-        map.setCenter(marker.getPosition() as google.maps.LatLng);
+        map.panTo(marker.getPosition() as google.maps.LatLng);
         const contentString = makeContentString({
           photoUrl: result?.photos?.[0].getUrl(),
           name: result.name,
@@ -179,6 +181,8 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
           content: contentString,
           position: place.geometry?.location
         });
+
+        activeMarkerHandler(infoWindow);
         infoWindow.open({
           anchor: marker,
           map
@@ -189,8 +193,6 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
           const btn = document.getElementById("btn");
           if (btn) {
             btn.addEventListener("click", () => {
-              infoWindow.close();
-
               let addContentString = makeContentString({
                 photoUrl: result?.photos?.[0].getUrl(),
                 name: result.name,
@@ -209,6 +211,8 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
                 content: addContentString,
                 position: place.geometry?.location
               });
+
+              activeMarkerHandler(addWindow);
               addWindow.open({
                 anchor: marker,
                 map
