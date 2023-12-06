@@ -186,6 +186,8 @@ export default function ArticleGoogleMap({
           return;
         }
 
+        // click한 marker를 맵 중앙에 오고, 정보창 띄우기
+        map?.panTo(marker.getPosition() as google.maps.LatLng);
         const contentString = makeContentString({
           photoUrl: result?.photos?.[0].getUrl(),
           name: result.name,
