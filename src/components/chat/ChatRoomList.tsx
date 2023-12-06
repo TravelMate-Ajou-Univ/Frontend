@@ -33,21 +33,21 @@ export default function ChatRoomList() {
                 roomName: chatroom.name
               }
             }}
-            className="flex items-center border-b-2 h-[8rem] px-4 py-2"
+            className="flex items-center border-b-2 md:h-32 h-24 px-4 py-2"
           >
-            <div className="w-[10rem] h-full">
+            <div className="md:w-40 w-24 h-full">
               <ChatRoomImage chatRoom={chatroom} />
             </div>
             <div className="w-full h-full">
               <div className="flex justify-between">
                 <div className="flex items-center gap-2">
-                  {chatroom.members.length === 1 ? (
-                    <p className="w-[1.5rem] h-[1.5rem] flex justify-center items-center rounded-full text-white font-bold bg-gray-500">
+                  {chatroom.members.length === 1 && (
+                    <p className="md:w-6 w-5 md:h-6 h-5 md:text-base text-sm flex justify-center items-center rounded-full text-white font-bold bg-gray-500">
                       나
                     </p>
-                  ) : null}
-                  <p className="text-xl">{chatroom.name}</p>
-                  <p className="font-bold text-gray-300">
+                  )}
+                  <p className="md:text-xl text-lg">{chatroom.name}</p>
+                  <p className="font-bold text-gray-300 md:text-base text-sm">
                     {chatroom.members.length}
                   </p>
                 </div>
@@ -56,13 +56,13 @@ export default function ChatRoomList() {
                 </p>
               </div>
               <div className="flex justify-between gap-4">
-                <p className="py-2 max-w-[37rem] truncate">
+                <p className="md:text-base text-sm py-2 lg:max-w-[37rem] md:max-w-[30rem] sm:max-w-[28rem] max-w-[15rem] truncate">
                   {chatroom.lastChatType === "text"
                     ? chatroom.lastChat
                     : "이미지"}
                 </p>
                 {chatroom.unReadChat === 0 ? null : (
-                  <p className="w-6 h-6 rounded-full bg-red-400 text-white text-sm text-center flex items-center justify-center">
+                  <p className="md:w-6 w-5 md:h-6 h-5 rounded-full bg-red-400 text-white md:text-sm text-xs text-center flex items-center justify-center">
                     {chatroom.unReadChat}
                   </p>
                 )}

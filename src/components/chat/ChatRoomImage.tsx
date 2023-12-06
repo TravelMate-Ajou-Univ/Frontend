@@ -21,7 +21,7 @@ export default function ChatRoomImage({ chatRoom }: Props) {
                   "profile"
                 )
           }
-          className="bg-gray-100 rounded-full w-[6rem] h-[6rem]"
+          className="bg-gray-100 rounded-full md:w-24 w-16 md:h-24 h-16"
           width={150}
           height={150}
           alt="프로필 사진"
@@ -38,7 +38,7 @@ export default function ChatRoomImage({ chatRoom }: Props) {
                     "profile"
                   )
             }
-            className="bg-gray-100 rounded-full w-[4.5rem] h-[4.5rem] absolute right-[0.5rem] top-[1rem]"
+            className="bg-gray-100 rounded-full md:w-[4.5rem] w-12 md:h-[4.5rem] h-12 absolute right-[0.5rem] top-[1rem]"
             width={150}
             height={150}
             alt="프로필 사진"
@@ -53,7 +53,7 @@ export default function ChatRoomImage({ chatRoom }: Props) {
                     "profile"
                   )
             }
-            className="bg-gray-100 rounded-full w-[4.5rem] h-[4.5rem] absolute left-[0.25rem] top-[1rem]"
+            className="bg-gray-100 rounded-full md:w-[4.5rem] w-12 md:h-[4.5rem] h-12 absolute left-[0.25rem] top-[1rem]"
             width={150}
             height={150}
             alt="프로필 사진"
@@ -71,7 +71,7 @@ export default function ChatRoomImage({ chatRoom }: Props) {
                     "profile"
                   )
             }
-            className="bg-gray-100 rounded-full w-[4rem] h-[4rem] absolute right-[0.5rem] top-[2.5rem]"
+            className="bg-gray-100 rounded-full md:w-[4rem] w-11 md:h-[4rem] h-11 absolute right-[0.5rem] md:top-[2.5rem] top-[2rem]"
             width={150}
             height={150}
             alt="프로필 사진"
@@ -86,7 +86,7 @@ export default function ChatRoomImage({ chatRoom }: Props) {
                     "profile"
                   )
             }
-            className="bg-gray-100 rounded-full w-[4rem] h-[4rem] absolute left-[0.5rem] top-[2.5rem]"
+            className="bg-gray-100 rounded-full md:w-[4rem] w-11 md:h-[4rem] h-11 absolute left-[0.5rem] md:top-[2.5rem] top-[2rem]"
             width={150}
             height={150}
             alt="프로필 사진"
@@ -101,7 +101,7 @@ export default function ChatRoomImage({ chatRoom }: Props) {
                     "profile"
                   )
             }
-            className="bg-gray-100 rounded-full w-[4rem] h-[4rem] absolute left-[2.25rem]"
+            className="bg-gray-100 rounded-full md:w-[4rem] w-11 md:h-[4rem] h-11 absolute md:left-[2.25rem] left-[1rem] top-[0.5rem]"
             width={150}
             height={150}
             alt="프로필 사진"

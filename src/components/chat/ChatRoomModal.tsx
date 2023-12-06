@@ -51,12 +51,11 @@ export default function ChatRoomModal({ toggleModalState }: Props) {
 
   return (
     <div className="flex flex-col gap-2 w-[15rem] absolute right-0 bg-white z-10 border-2 rounded-md p-2 mt-4">
-      <p>채팅방 이름</p>
-      <textarea
-        cols={2}
+      <p className="font-semibold">채팅방 이름</p>
+      <input
         onChange={onChangeText}
-        className="border-2 rounded-md"
-      ></textarea>
+        className="border-2 rounded-md px-2 py-1 text-sm"
+      />
       <FriendsAddContainer members={members} setMembers={setMembers} />
       <div className="flex justify-between mx-2">
         <OutlinedButton onClick={toggleModalState}>취소</OutlinedButton>

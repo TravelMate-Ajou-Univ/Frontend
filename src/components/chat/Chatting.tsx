@@ -146,7 +146,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           </div>
         </div>
       )}
-      <div className="md:w-[40rem] h-full mx-auto p-2 border-2 rounded-md bg-white flex flex-col gap-2">
+      <div className="md:w-[40rem] h-full mx-auto p-2 border-2 rounded-md bg-white flex flex-col justify-between gap-2">
         <ChatRoomHeader
           socket={socket}
           userId={id}
