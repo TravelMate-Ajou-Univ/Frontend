@@ -8,9 +8,10 @@ import { useAppSelector } from "@/hooks/redux";
 
 type Props = {
   bookmarkCollection: BookmarkCollectionType;
+  authorId: number;
 };
 
-export default function Collection({ bookmarkCollection }: Props) {
+export default function Collection({ bookmarkCollection, authorId }: Props) {
   const { id } = useAppSelector(state => state.userSlice);
   return (
     <section className="w-full h-full mb-4">
@@ -19,7 +20,7 @@ export default function Collection({ bookmarkCollection }: Props) {
           href={{
             pathname: `/bookmark/detail`,
             query: {
-              userId: id,
+              userId: authorId,
               title: bookmarkCollection.title,
               visibility: bookmarkCollection.visibility,
               id: bookmarkCollection.id

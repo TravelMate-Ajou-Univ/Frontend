@@ -20,6 +20,7 @@ type Props = {
 };
 export default function MyBookmarkPage({ params }: Props) {
   const dispatch = useDispatch();
+  const { id } = useAppSelector(state => state.userSlice);
   const { bookmarkCollections, count } = useAppSelector(
     state => state.bookmarkCollectionListSlice
   );
@@ -58,7 +59,10 @@ export default function MyBookmarkPage({ params }: Props) {
             {bookmarkCollections.map((bookmarkCollection, index) =>
               index === 12 ? null : (
                 <li key={index} className="h-full w-full">
-                  <Collection bookmarkCollection={bookmarkCollection} />
+                  <Collection
+                    bookmarkCollection={bookmarkCollection}
+                    authorId={id}
+                  />
                 </li>
               )
             )}

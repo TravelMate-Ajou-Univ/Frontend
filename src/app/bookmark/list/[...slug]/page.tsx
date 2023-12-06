@@ -48,7 +48,10 @@ export default function UserBookmarkPage({ params }: Props) {
             {bookmarkCollections.map((bookmarkCollection, index) =>
               index === 12 ? null : (
                 <li key={index} className="h-full w-full">
-                  <Collection bookmarkCollection={bookmarkCollection} />
+                  <Collection
+                    bookmarkCollection={bookmarkCollection}
+                    authorId={params.slug}
+                  />
                 </li>
               )
             )}

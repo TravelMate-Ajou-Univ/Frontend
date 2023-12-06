@@ -16,7 +16,6 @@ interface Props {
 }
 
 export default function Author({ authorId }: Props) {
-  const { id } = useAppSelector(state => state.userSlice);
   const [author, setAuthor] = useState<User>({
     id: -1,
     userName: "",
@@ -92,7 +91,7 @@ export default function Author({ authorId }: Props) {
                     href={{
                       pathname: "/bookmark/detail",
                       query: {
-                        userId: id,
+                        userId: authorId,
                         title: bookmarkCollection.title,
                         visibility: bookmarkCollection.visibility,
                         id: bookmarkCollection.id
