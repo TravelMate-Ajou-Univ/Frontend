@@ -60,23 +60,19 @@ export default function FriendsAddContainer({
 
   return (
     <div>
-      <p>친구 목록</p>
-      <ul className="flex flex-col items-center gap-2">
+      <p className="font-semibold mb-1.5">친구 목록</p>
+      <ul className="flex flex-col items-center gap-2 mb-3">
         {friends.map((friend, index) => (
-          <li
-            key={index}
-            className="self-start w-full flex justify-around items-center"
-          >
+          <li key={index} className="self-start w-full flex items-center gap-3">
             <Image
               src={defaultProfileImg}
-              // src={`${profileImageId}`}
               className="bg-gray-200 rounded-full"
               width={40}
               height={40}
               alt={`${friend.nickname}의 사진`}
               priority
             />
-            <p className="text-sm w-[5rem] text-center truncate hover:text-clip">
+            <p className="flex-grow text-sm truncate hover:text-clip">
               {friend.nickname}
             </p>
             <OutlinedButton onClick={() => addMember(friend)} size="small">
@@ -91,23 +87,19 @@ export default function FriendsAddContainer({
           className="bottom-[1rem] "
         />
       </ul>
-      <p>채팅방 멤버</p>
-      <ul className="flex flex-col items-center gap-2">
+      <p className="font-semibold mb-1.5">추가될 멤버</p>
+      <ul className="flex flex-col items-center gap-2 mb-3">
         {members.map((member, index) => (
-          <li
-            key={index}
-            className="self-start w-full flex justify-around items-center"
-          >
+          <li key={index} className="self-start w-full flex items-center gap-3">
             <Image
               src={defaultProfileImg}
-              // src={`${profileImageId}`}
               className="bg-gray-200 rounded-full"
               width={40}
               height={40}
               alt={`${member.nickname}의 사진`}
               priority
             />
-            <p className="text-sm text-center w-[5rem] truncate hover:text-clip">
+            <p className="flex-grow text-sm truncate hover:text-clip">
               {member.nickname}
             </p>
             <OutlinedButton onClick={() => subMember(member)} size="small">

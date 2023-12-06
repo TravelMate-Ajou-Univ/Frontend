@@ -67,7 +67,7 @@ export default function ChatForm({ sendMessage, socket }: Props) {
           </ImageInput>
           <input
             type="text"
-            className="border rounded-md flex-grow p-2 "
+            className="border rounded-md flex-grow px-2 md:py-2 py-1 md:text-base text-sm"
             placeholder="Message.."
             value={message}
             onChange={e => setMessage(e.target.value)}

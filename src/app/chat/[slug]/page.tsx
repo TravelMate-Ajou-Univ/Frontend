@@ -25,8 +25,6 @@ export default function ChatPage() {
     try {
       if (!socket.connected) {
         socket.on("connect", () => {
-          // 클라이언트가 방에 참여할 때마다 connect 이벤트가 발생하므로,
-          // 서버에 최초 한 번만 참여 메시지를 보내도록 수정
           socket.emit("enterChatRoom", {
             roomId: roomId
           });
