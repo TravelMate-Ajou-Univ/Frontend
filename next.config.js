@@ -4,13 +4,13 @@ const nextConfig = {
     appDir: true
   },
   images: {
-    domains: ["api-travelmate.siteattachments"],
+    domains: ["api-travelmate.site"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "api-travelmate.site",
         port: "",
-        pathname: "/attachments/**"
+        pathname: "/attachment/**"
       }
     ]
   }

@@ -3,15 +3,25 @@ import Image from "next/image";
 import { Pagination } from "@mui/material";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
 import { FriendType } from "@/model/friend";
-import { getMyFriendsList } from "@/service/axios/friends";
+import {
+  getFriendListToInvite,
+  getMyFriendsList
+} from "@/service/axios/friends";
 import OutlinedButton from "../ui/button/OutlinedButton";
 
 type Props = {
   members: FriendType[];
   setMembers: (friends: FriendType[]) => void;
+  roomMembers?: FriendType[];
+  nickname?: string;
 };
 
-export default function FriendsAddContainer({ members, setMembers }: Props) {
+export default function FriendsAddContainer({
+  members,
+  setMembers,
+  roomMembers,
+  nickname
+}: Props) {
   const [friends, setFriends] = useState<FriendType[]>([]);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
@@ -30,12 +40,23 @@ export default function FriendsAddContainer({ members, setMembers }: Props) {
 
   useEffect(() => {
     const getData = async () => {
-      const res = await getMyFriendsList(page, 5);
-      setFriends(res.friends);
-      setTotal(res.count);
+      if (roomMembers && nickname) {
+        // 채팅방 내에서 채팅방 멤버들을 제외한 친구 목록
+        const membersId = roomMembers.map(member => member.id);
+        const membersIdStr = String(membersId);
+        const res = await getFriendListToInvite(nickname, membersIdStr);
+
+        setFriends(res);
+        setTotal(res.length);
+      } else {
+        // 채팅목록에서 채팅방을 만들기 위한 친구 목록
+        const res = await getMyFriendsList(page, 5);
+        setFriends(res.friends);
+        setTotal(res.count);
+      }
     };
     getData();
-  }, [page]);
+  }, [page, nickname, roomMembers]);
 
   return (
     <div>
@@ -55,14 +76,10 @@ export default function FriendsAddContainer({ members, setMembers }: Props) {
               alt={`${friend.nickname}의 사진`}
               priority
             />
-            <p className="text-sm text-center truncate hover:text-clip">
+            <p className="text-sm w-[5rem] text-center truncate hover:text-clip">
               {friend.nickname}
             </p>
-            <OutlinedButton
-              onClick={() => addMember(friend)}
-              className=" w-[3rem] "
-              size="small"
-            >
+            <OutlinedButton onClick={() => addMember(friend)} size="small">
               추가
             </OutlinedButton>
           </li>
@@ -90,7 +107,7 @@ export default function FriendsAddContainer({ members, setMembers }: Props) {
               alt={`${member.nickname}의 사진`}
               priority
             />
-            <p className="text-sm text-center truncate hover:text-clip">
+            <p className="text-sm text-center w-[5rem] truncate hover:text-clip">
               {member.nickname}
             </p>
             <OutlinedButton onClick={() => subMember(member)} size="small">

@@ -21,7 +21,7 @@ export default function FriendsListContainer({
 }: Props) {
   const onClick = async (id: number) => {
     const response = await deleteFriend(id);
-    if (response.statusText === "OK") {
+    if (response.status === 200) {
       alert(response.data);
       setTotal(total - 1);
     } else {

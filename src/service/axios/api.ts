@@ -55,14 +55,32 @@ export const user = {
   getBookmarkCollectionsById: (id: number) =>
     api.get(`users/${id}/bookmark-collections`),
   getMyArticleList: (limit: number) =>
-    api.get(`users/me/articles?limit=${limit}`)
+    api.get(`users/me/articles?limit=${limit}`),
+  getMyArticleByRequest: (
+    page: number,
+    limit: number,
+    request: "pending" | "accepted" | "declined"
+  ) =>
+    api({
+      method: "get",
+      url: "/users/me/article/requests",
+      params: {
+        page,
+        limit,
+        type: request
+      }
+    }),
+  getFavoriteArticleList: (page: number, limit: number) =>
+    api.get(`users/me/favorite-articles?page=${page}&limit=${limit}`)
 };
 
 export const article = {
+  articleCount: (season: SeasonType) =>
+    api.get(`articles/count?period=${season}`),
   getS3Url: (type: ImageType) => api.get(`s3/presigned-post?type=${type}`),
   uploadImgToS3: (s3url: string, data: File) => axios.put(s3url, data),
-  confirmUpload: (id: string) =>
-    api.get(`s3/upload-success/?type=article&id=${id}`),
+  confirmUpload: (id: string, type: ImageType) =>
+    api.get(`s3/upload-success/?type=${type}&id=${id}`),
   getKeywords: (word: string) => api.get(`tags/search/${word}`),
   postKeyword: (name: string) => api.post("tags", { name }),
   getArticleList: (
@@ -81,7 +99,8 @@ export const article = {
     ),
   createBookmark: (bookmark: PinType) => api.post("bookmark", bookmark),
   submitArticle: (article: ArticleType) => api.post("articles", article),
-  getArticle: (id: string) => api.get(`articles/${id}`),
+  getArticle: (id: string, userId?: number) =>
+    api.get(`articles/${id}?userId=${userId ? userId : 0}`),
   editArticle: (id: string, article: ArticleType) =>
     api.patch(`articles/${id}`, article),
   deleteArticle: (id: string) => api.delete(`articles/${id}`),
@@ -89,19 +108,47 @@ export const article = {
     id: string,
     content: string,
     period: SeasonType,
-    comment: string
+    comment: string,
+    bookmarksToRemove: number[],
+    bookmarksToAdd: number[]
   ) =>
-    api.post(`articles/${id}/reqeusts`, {
+    api.post(`articles/${id}/requests`, {
       content,
       period,
-      comment
+      comment,
+      bookmarksToRemove,
+      bookmarksToAdd
     }),
   getArticleRequestList: (id: string, season: SeasonType | "ALL") =>
-    api.get(`articles/${id}/reqeusts?period=${season}`),
+    api.get(`articles/${id}/requests?period=${season}`),
   getArticleRequest: (id: string, requestId: string) =>
-    api.get(`articles/${id}/reqeusts/${requestId}`),
+    api.get(`articles/${id}/requests/${requestId}`),
   acceptArticleRequest: (id: string, requestId: string) =>
-    api.get(`articles/${id}/reqeusts/accept/${requestId}`),
+    api.get(`articles/${id}/requests/accept/${requestId}`),
   declineArticleRequest: (id: string, requestId: string) =>
-    api.get(`articles/${id}/reqeusts/decline/${requestId}`)
+    api.get(`articles/${id}/requests/decline/${requestId}`),
+  postFavorite: (id: string) => api.post(`articles/${id}/favorite`),
+  deleteFavorite: (id: string) => api.delete(`articles/${id}/favorite`)
+};
+
+export const report = {
+  reportArticle: (articleId: number, reason: string) =>
+    api.post(`articles/${articleId}/report`, { reason }),
+  reportUser: (reportedUserId: number, reason: string) =>
+    api.post("/user-report-log", {
+      reason,
+      reportedUserId
+    })
+};
+
+export const admin = {
+  isAdmin: () => api.get("admin"),
+  getUsers: (page: number, limit: number) =>
+    api.get(`admin/users?page=${page}&limit=${limit}`),
+  getArticleReports: (page: number, limit: number) =>
+    api.get(`admin/article-report-logs?page=${page}&limit=${limit}`),
+  getUserReports: (page: number, limit: number) =>
+    api.get(`admin/user-report-logs?page=${page}&limit=${limit}`),
+  banUser: (userId: number, reason: string) =>
+    api.post(`admin/ban/user/${userId}`, { reason })
 };

@@ -4,20 +4,32 @@ type SearchProps = {
   service: google.maps.places.PlacesService;
   search: string;
   map: google.maps.Map | undefined;
-  center: LocationType;
 };
 export const searchPlace = async ({
   search,
-  map,
-  center
+  map
 }: SearchProps): Promise<google.maps.places.PlaceResult[] | null> => {
+  const zoomLevel = map?.getZoom() as number;
+
+  // 장소 탐색 범위 설정
+  const radius =
+    zoomLevel > 20
+      ? 500
+      : zoomLevel > 15
+      ? 1000
+      : zoomLevel > 10
+      ? 10000
+      : zoomLevel > 5
+      ? 10000
+      : 100000;
+
   return new Promise((resolve, reject) => {
     const request = {
       location: {
-        lat: center.latitude,
-        lng: center.longitude
+        lat: map?.getCenter()?.lat() as number,
+        lng: map?.getCenter()?.lng() as number
       },
-      radius: 150000,
+      radius,
       query: search
     };
 

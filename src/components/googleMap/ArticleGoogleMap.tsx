@@ -6,7 +6,6 @@ import { createBookmark } from "@/service/axios/bookmark";
 import { calculateCenter } from "@/service/googlemap/map";
 import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
-import Script from "next/script";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
 
 declare global {
@@ -20,7 +19,7 @@ type Props = {
   location?: string;
   setBookmarkIds?: React.Dispatch<React.SetStateAction<number[]>>;
   bookmarks?: (BookmarkType & { period: SeasonType })[];
-  season?: SeasonType;
+  className?: string;
 };
 
 export default function ArticleGoogleMap({
@@ -28,7 +27,7 @@ export default function ArticleGoogleMap({
   location = "",
   setBookmarkIds,
   bookmarks,
-  season
+  className = ""
 }: Props) {
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
@@ -62,22 +61,19 @@ export default function ArticleGoogleMap({
   };
 
   useEffect(() => {
-    if (location === "") {
+    if (bookmarks && bookmarks.length > 0) {
+      setCenter(calculateCenter(bookmarks));
+      setZoom(9);
+      setPins(bookmarks);
+    } else if (location === "") {
+      setPins([]);
+      setZoom(14);
       navigator.geolocation.getCurrentPosition(
         position => {
-          if (bookmarks) {
-            const seasonBookmarks = bookmarks.filter(
-              bookmark => bookmark.period === season
-            );
-            setCenter(calculateCenter(seasonBookmarks));
-            setZoom(9);
-            setPins(seasonBookmarks);
-          } else {
-            setCenter({
-              latitude: position.coords.latitude,
-              longitude: position.coords.longitude
-            });
-          }
+          setCenter({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          });
         },
         error => {
           alert("현재 위치를 가져오는 데 실패하였습니다.");
@@ -85,6 +81,7 @@ export default function ArticleGoogleMap({
         }
       );
     } else {
+      setPins([]);
       const geocoder = new google.maps.Geocoder();
       geocoder.geocode({ address: location }, (results, status) => {
         if (status === google.maps.GeocoderStatus.OK && results) {
@@ -98,7 +95,7 @@ export default function ArticleGoogleMap({
         }
       });
     }
-  }, [location, bookmarks, season]);
+  }, [location, bookmarks]);
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.google && window.google.maps) {
@@ -149,7 +146,7 @@ export default function ArticleGoogleMap({
     setPlaces([]);
 
     // 검색어로 검색.
-    const response = await searchPlace({ service, search, map, center });
+    const response = await searchPlace({ service, search, map });
 
     if (response === null) {
       alert("검색 실패");
@@ -261,7 +258,7 @@ export default function ArticleGoogleMap({
   };
 
   return (
-    <div className="w-full h-full relative">
+    <div className={`${className} w-full h-full relative`}>
       {modifyState && (
         <form className="absolute z-10 left-2 top-2 flex items-center">
           <input
@@ -279,10 +276,6 @@ export default function ArticleGoogleMap({
         </form>
       )}
       <div id="map" className=" w-full h-full"></div>
-      <Script
-        defer
-        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&libraries=places&callback=initMap`}
-      />
     </div>
   );
 }

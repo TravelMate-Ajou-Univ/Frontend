@@ -3,7 +3,8 @@ export type FriendType = {
   nickname: string;
 
   // Todo : profileImageId에 대한 처리
-  profileImageId: string | null;
+  // profileImageId: string | null;
+  profileImageId: number | null;
 };
 
 export type FriendWithPkType = FriendType & {

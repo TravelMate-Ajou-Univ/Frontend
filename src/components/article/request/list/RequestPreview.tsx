@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import DefaultProfile from "/public/image/defaultProfileImg.png";
 import { initialUser } from "@/redux/features/userSlice";
 import Link from "next/link";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 interface Props {
   request: ArticleRequestType;
@@ -13,6 +14,7 @@ interface Props {
 
 export default function RequestPreview({ request }: Props) {
   const [user, setUser] = useState<User>(initialUser);
+  const [date, setDate] = useState<string>("");
   const [time, setTime] = useState<string>("");
 
   useEffect(() => {
@@ -23,10 +25,15 @@ export default function RequestPreview({ request }: Props) {
     };
 
     getAuthor();
-    const curTime = new Date(request.updatedAt)
-      .toLocaleString()
-      .substring(0, 21);
-    setTime(curTime);
+    const curTime = new Date(request.updatedAt).toLocaleString().split(" ");
+    setDate(curTime[0] + " " + curTime[1] + " " + curTime[2]);
+    setTime(
+      curTime[3] +
+        " " +
+        curTime[4].split(":")[0] +
+        ":" +
+        curTime[4].split(":")[1]
+    );
   }, [request]);
 
   return (
@@ -35,22 +42,29 @@ export default function RequestPreview({ request }: Props) {
       href={`/article/request/${request.articleId}/${request.id}`}
     >
       <section className="flex items-center gap-2">
-        <div className="bg-gray-200 overflow-hidden rounded-full w-10 h-10 p-1">
+        <div
+          className={`bg-gray-200 overflow-hidden rounded-full w-10 h-10 ${
+            user.profileImageId === "" ? "p-1" : ""
+          }`}
+        >
           <Image
             src={
               user.profileImageId === ""
                 ? DefaultProfile
-                : process.env.NEXT_PUBLIC_SERVER_BASE_URL +
-                  "attachments/" +
-                  user?.profileImageId
+                : changeImageIdToImageUrl(
+                    Number(user.profileImageId),
+                    "profile"
+                  )
             }
             alt="프로필 이미지"
+            width={40}
+            height={40}
           />
         </div>
         <p className="flex-grow">{user.userName}</p>
         <section className="text-gray-600 text-sm text-end leading-4">
-          <p>{time.slice(0, 12)}</p>
-          <p>{time.slice(14)}</p>
+          <p>{date}</p>
+          <p>{time}</p>
         </section>
       </section>
       {request.comment && (

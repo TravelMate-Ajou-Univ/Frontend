@@ -72,7 +72,7 @@ export default function ArticleList() {
 
   useEffect(() => {
     const observer = new IntersectionObserver(handleIntersect, {
-      threshold: 0.9,
+      threshold: 0.8,
       root: null
     });
 

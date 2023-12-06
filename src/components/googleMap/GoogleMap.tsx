@@ -11,8 +11,13 @@ import {
 import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
 import Script from "next/script";
-import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
-import { BeatLoader } from "react-spinners";
+import {
+  ChangeEvent,
+  SyntheticEvent,
+  useEffect,
+  useRef,
+  useState
+} from "react";
 import { useDispatch } from "react-redux";
 declare global {
   interface Window {
@@ -27,6 +32,7 @@ export default function GoogleMap({ modifyState }: Props) {
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
   const [places, setPlaces] = useState<google.maps.Marker[]>([]);
+  const infoRef = useRef<google.maps.InfoWindow>(null);
   const { center, bookmarks, pins } = useAppSelector(state => state.mapSlice);
   window.initMap = function () {
     const initmap = new google.maps.Map(
@@ -36,7 +42,7 @@ export default function GoogleMap({ modifyState }: Props) {
           lat: center.latitude,
           lng: center.longitude
         },
-        zoom: 12,
+        zoom: 10,
         zoomControl: true,
         zoomControlOptions: {
           position: google.maps.ControlPosition.RIGHT_BOTTOM
@@ -52,11 +58,12 @@ export default function GoogleMap({ modifyState }: Props) {
   useEffect(() => {
     if (typeof window !== "undefined" && window.google && window.google.maps) {
       window.initMap();
-    } else if (center.latitude == 0 && center.longitude == 0) {
-      console.log("wait");
-      <BeatLoader size={8} color="red" />;
     }
-  }, [center, modifyState, pins]);
+  }, [center, modifyState]);
+
+  // useEffect(() => {
+  //   setMarker(map as google.maps.Map);
+  // }, [pins]);
 
   // page를 나갈 때 pins, bookmarks 초기화.
   useEffect(() => {
@@ -68,6 +75,9 @@ export default function GoogleMap({ modifyState }: Props) {
 
   // 북마크 컬렉션에 있는 북마크들 marker로 표시
   const setMarker = (initmap: google.maps.Map) => {
+    if (initmap === undefined) {
+      return;
+    }
     const service = new google.maps.places.PlacesService(
       initmap as google.maps.Map
     );
@@ -119,7 +129,7 @@ export default function GoogleMap({ modifyState }: Props) {
     setPlaces([]);
 
     // 검색어로 검색.
-    const response = await searchPlace({ service, search, map, center });
+    const response = await searchPlace({ service, search, map });
 
     if (response === null) {
       alert("검색 실패");

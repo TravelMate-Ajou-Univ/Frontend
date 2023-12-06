@@ -1,10 +1,10 @@
-"use client";
 import { useAppSelector } from "@/hooks/redux";
 import { BookmarkType, PinType } from "@/model/bookmark";
 import {
-  addPins,
+  addBookmarks,
   initBookmarks,
   initPins,
+  setBookmarks,
   subBookmarks,
   subPins
 } from "@/redux/features/mapSlice";
@@ -12,22 +12,24 @@ import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
 import Script from "next/script";
 import { ChangeEvent, SyntheticEvent, useEffect, useState } from "react";
-import { BeatLoader } from "react-spinners";
 import { useDispatch } from "react-redux";
+import { Socket } from "socket.io-client";
 declare global {
   interface Window {
     initMap: () => void;
   }
 }
 type Props = {
+  socket: Socket;
   modifyState: boolean;
+  collectionId: number;
 };
-export default function ChatMap({ modifyState }: Props) {
+export default function ChatMap({ modifyState, socket, collectionId }: Props) {
   const dispatch = useDispatch();
   const [map, setMap] = useState<google.maps.Map>();
   const [search, setSearch] = useState("");
   const [places, setPlaces] = useState<google.maps.Marker[]>([]);
-  const { center, bookmarks, pins } = useAppSelector(state => state.mapSlice);
+  const { center, bookmarks } = useAppSelector(state => state.mapSlice);
   window.initMap = function () {
     const initmap = new google.maps.Map(
       document.getElementById("map") as HTMLElement,
@@ -45,23 +47,41 @@ export default function ChatMap({ modifyState }: Props) {
         streetViewControl: false
       }
     );
-    // setMap(initmap);
-    // setMarker(initmap);
+    setMap(initmap);
+    setMarker(initmap);
   };
 
   useEffect(() => {
     if (typeof window !== "undefined" && window.google && window.google.maps) {
       window.initMap();
-    } else if (center.latitude == 0 && center.longitude == 0) {
-      console.log("wait");
-      <BeatLoader size={8} color="red" />;
     }
-  }, [center, modifyState, pins]);
+  }, [center, bookmarks]);
+
+  useEffect(() => {
+    socket.on("postBookmark", data => {
+      const newBookmarks: BookmarkType[] = data.bookmark.map(
+        (chatBookmark: any) => ({
+          latitude: Number(chatBookmark.location.latitude),
+          longitude: Number(chatBookmark.location.longitude),
+          content: chatBookmark.content,
+          placeId: chatBookmark.location.placeId,
+          id: chatBookmark.id
+        })
+      );
+      dispatch(addBookmarks(newBookmarks));
+    });
+    socket.on("deleteBookmark", data => {
+      const deletedBookmarkId = data.bookmarkIds[0];
+      const recentBookmarks = bookmarks.filter(
+        bookmark => bookmark.id !== deletedBookmarkId
+      );
+      dispatch(setBookmarks(recentBookmarks));
+    });
+  }, [socket, dispatch]);
 
   // page를 나갈 때 pins, bookmarks 초기화.
   useEffect(() => {
     return () => {
-      dispatch(initPins());
       dispatch(initBookmarks());
     };
   }, [dispatch]);
@@ -78,30 +98,16 @@ export default function ChatMap({ modifyState }: Props) {
         service,
         modifyState,
         map: map as google.maps.Map,
-        subPinHandler,
         subBookmarkHandler
       });
     });
-
-    pins.map(pin => {
-      makeMarker({
-        pin: pin,
-        initmap,
-        service,
-        modifyState,
-        map: map as google.maps.Map,
-        subPinHandler,
-        subBookmarkHandler
-      });
-    });
-  };
-
-  const subPinHandler = (pin: PinType) => {
-    dispatch(subPins(pin));
   };
 
   const subBookmarkHandler = (bookmark: BookmarkType) => {
-    dispatch(subBookmarks(bookmark));
+    socket.emit("deleteBookmark", {
+      bookmarkIds: [bookmark.id],
+      bookmarkCollectionId: collectionId
+    });
   };
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { value } = e.target;
@@ -119,7 +125,7 @@ export default function ChatMap({ modifyState }: Props) {
     setPlaces([]);
 
     // 검색어로 검색.
-    const response = await searchPlace({ service, search, map, center });
+    const response = await searchPlace({ service, search, map });
 
     if (response === null) {
       alert("검색 실패");
@@ -142,10 +148,12 @@ export default function ChatMap({ modifyState }: Props) {
           service,
           place_id: place.place_id as string
         });
-        if (result === null) {
+        if (result === null || map === undefined) {
           return;
         }
 
+        // click한 marker를 맵 중앙에 오고, 정보창 띄우기
+        map.setCenter(marker.getPosition() as google.maps.LatLng);
         const contentString = makeContentString({
           photoUrl: result?.photos?.[0].getUrl(),
           name: result.name,
@@ -202,14 +210,20 @@ export default function ChatMap({ modifyState }: Props) {
                   const text = document.getElementById(
                     "text"
                   ) as HTMLInputElement;
-                  const newPin: PinType = {
-                    latitude: result.geometry?.location?.lat() as number,
-                    longitude: result.geometry?.location?.lng() as number,
-                    placeId: place.place_id as string,
-                    content: text.value
-                  };
 
-                  dispatch(addPins(newPin));
+                  // 검색한 bookmark chatting map에 emit
+                  socket.emit("postBookmark", {
+                    locationsWithContent: [
+                      {
+                        latitude: result.geometry?.location?.lat() as number,
+                        longitude: result.geometry?.location?.lng() as number,
+                        content: text.value,
+                        placeId: place.place_id as string
+                      }
+                    ],
+                    bookmarkCollectionId: collectionId
+                  });
+
                   addWindow.close();
                   marker.setMap(null);
                 });

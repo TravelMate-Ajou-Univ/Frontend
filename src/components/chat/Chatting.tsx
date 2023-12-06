@@ -1,19 +1,20 @@
 import ChatForm from "@/components/chat/ChatForm";
 import ChatList from "@/components/chat/ChatList";
 import ChatRoomHeader from "@/components/chat/ChatRoomHeader";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
 import { Socket } from "socket.io-client";
 import { calculateCenter } from "@/service/googlemap/map";
-import { getAllBookmarks } from "@/service/axios/bookmark";
 import { useAppSelector } from "@/hooks/redux";
-import { ChatType, ChatWithVisibilityType } from "@/model/chat";
+import { ReceiveChatFormType, ViewChatFormType } from "@/model/chat";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import BookmarkOptionBox from "./BookmarkOptionBox";
-import { CalculateAmPmTime } from "@/service/time";
+import { calculateAmPmTime } from "@/service/time";
 import { checkVisibility, makeNewChat } from "@/service/chat";
 import ChatMap from "../googleMap/ChatMap";
+import { getChatList, getChatRoomData } from "@/service/axios/chatroom";
+import { FriendType } from "@/model/friend";
 
 type Props = {
   socket: Socket;
@@ -21,128 +22,46 @@ type Props = {
   roomName: string;
 };
 
-const test_chat = [
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 1",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 2",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 3",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 4",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 5",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 2",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 3",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 4",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 5",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 2",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 3",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 4",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 5",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 2",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 3",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 2,
-    nickname: "test2",
-    content: "test chat 4",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  },
-  {
-    userId: 1,
-    nickname: "test1",
-    content: "test chat 5",
-    createdAt: CalculateAmPmTime("2023-11-23T19:29:42.923Z")
-  }
-];
 export default function Chatting({ socket, roomId, roomName }: Props) {
   const { id } = useAppSelector(state => state.userSlice);
   const dispatch = useDispatch();
   const { userName } = useAppSelector(state => state.userSlice);
   const [mapState, setMapState] = useState(false);
-  const [chatList, setChatList] = useState<ChatWithVisibilityType[]>([]);
+  const [chatList, setChatList] = useState<ViewChatFormType[]>([]);
+  const chatListRef = useRef<ViewChatFormType[]>([]);
+  const [firstChatIndex, setFirstChatIndex] = useState<number>(-1);
   const [optionsState, setOptionsState] = useState<boolean>(false);
+  const [roomMembers, setRoomMembers] = useState<FriendType[]>([]);
+  const [collectionId, setCollectionId] = useState<number>(0);
+  const [memberChangedState, setMemberChangedState] = useState<boolean>(false);
 
   // 지도, chat기록 데이터 가져오기
   useEffect(() => {
     const getData = async () => {
-      // Todo : 지도에 대한 처리, Message 기록 가져오기
-      const data: any[] = [];
+      const data = await getChatRoomData(roomId);
+      const chatdata = await getChatList(roomId);
 
-      dispatch(setBookmarks(data));
+      setRoomMembers(data.members);
+      setCollectionId(data.collectionId);
+      dispatch(setBookmarks(data.bookmarks));
+
+      const result = checkVisibility(
+        chatdata.chats,
+        chatdata.firstChat,
+        data.members
+      );
+      const newChatList: ViewChatFormType[] = result.newChatList;
+
+      setFirstChatIndex(() => {
+        return result.firstChatIndex;
+      });
+
+      chatListRef.current = newChatList;
+      setChatList(chatListRef.current);
+
       // bookmark들이 있다면 지도 center을 bookmark들의 가운데로
       // 없다면 내 위치를 center로 설정
-      if (data.length === 0) {
+      if (data.bookmarks.length === 0) {
         navigator.geolocation.getCurrentPosition(
           position => {
             dispatch(
@@ -153,75 +72,33 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
             );
           },
           error => {
-            prompt("현재 위치를 가져오는 데 실패하였습니다.");
-            console.log(error);
+            alert("현재 위치를 가져오는 데 실패하였습니다.");
           }
         );
       } else {
-        dispatch(setCenter(calculateCenter(data)));
+        dispatch(setCenter(calculateCenter(data.bookmarks)));
       }
+    };
 
-      // chat Data
-      const response: ChatType[] = test_chat;
+    getData();
+  }, [dispatch, roomId]);
 
-      const chatWithVisibilityList: ChatWithVisibilityType[] =
-        checkVisibility(response);
-
-      setChatList(chatWithVisibilityList);
+  useEffect(() => {
+    // 맴버 최신화
+    const getData = async () => {
+      const data = await getChatRoomData(roomId);
+      setRoomMembers(data.members);
     };
     getData();
-  }, [dispatch]);
+  }, [memberChangedState, roomId]);
 
   useEffect(() => {
     socket.on("message", data => {
-      // const newChatList = makeNewChat(data, chatList);
-      let newChat: ChatWithVisibilityType;
-      const time = CalculateAmPmTime(data.createdAt);
-
-      if (chatList.length === 0) {
-        newChat = {
-          userId: data.userId,
-          nickname: data.nickname,
-          content: data.content,
-          createdAt: time,
-          timeVisibility: true,
-          userVisibility: true
-        };
-      } else if (chatList[chatList.length - 1].nickname !== data.nickname) {
-        // 이전 챗이 다른 사용자인 경우
-        newChat = {
-          userId: data.userId,
-          nickname: data.nickname,
-          content: data.content,
-          createdAt: time,
-          timeVisibility: true,
-          userVisibility: true
-        };
-      } else if (chatList[chatList.length - 1].createdAt !== time) {
-        // 이전 챗이 나이며, 시간 차이가 안나는 경우
-        chatList[chatList.length - 1].timeVisibility = false; // 이전 챗 시간 안 보여주기
-        newChat = {
-          userId: data.userId,
-          nickname: data.nickname,
-          content: data.content,
-          createdAt: time,
-          timeVisibility: true,
-          userVisibility: false
-        };
-      } else {
-        // 이전 챗이 나이지만 시간 차이가 나는 경우
-        chatList[chatList.length - 1].timeVisibility = true; // 이전 챗 시간 보여주기
-        newChat = {
-          userId: data.userId,
-          nickname: data.nickname,
-          content: data.content,
-          createdAt: time,
-          timeVisibility: false,
-          userVisibility: false
-        };
-      }
-
-      setChatList(chatList => [...chatList, newChat]);
+      chatListRef.current = makeNewChat(data, chatListRef.current);
+      setChatList(chatListRef.current);
+    });
+    socket.on("exitChatRoom", data => {
+      setMemberChangedState(!memberChangedState);
     });
     socket.on("disconnected", message => {});
   }, [socket]);
@@ -231,10 +108,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       return;
     }
     socket.emit("sendMessage", {
-      roomId: roomId,
-      userId: id,
-      nickname: userName,
-      content: content
+      message: content
     });
   };
 
@@ -246,7 +120,11 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
     <section className="w-[90%] mx-auto flex justify-center mt-4">
       {mapState ? (
         <div className="w-[50%] h-[40rem] m-2 border-2 rounded-md my-auto relative">
-          <ChatMap modifyState={true} />
+          <ChatMap
+            modifyState={true}
+            socket={socket}
+            collectionId={collectionId}
+          />
           <OutlinedButton
             onClick={() => {
               setOptionsState(!optionsState);
@@ -258,7 +136,11 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           </OutlinedButton>
           {optionsState ? (
             <div className="absolute left-[21rem] top-[0.5rem] z-20">
-              <BookmarkOptionBox setOptionsState={setOptionsState} />
+              <BookmarkOptionBox
+                setOptionsState={setOptionsState}
+                socket={socket}
+                bookmarkCollectionId={collectionId}
+              />
             </div>
           ) : null}
         </div>
@@ -270,10 +152,13 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           roomId={roomId}
           nickname={userName}
           roomName={roomName}
+          roomMembers={roomMembers}
           toggleMapState={toggleMapState}
+          memberChangedState={memberChangedState}
+          setMemberChangedState={setMemberChangedState}
         />
-        <ChatList chatList={chatList} />
-        <ChatForm sendMessage={sendMessage} />
+        <ChatList chatList={chatList} firstChatIndex={firstChatIndex} />
+        <ChatForm sendMessage={sendMessage} socket={socket} />
       </div>
     </section>
   );

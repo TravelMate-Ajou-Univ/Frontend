@@ -5,10 +5,16 @@ export type KeywordType = {
 
 export type KoreanSeasonType = "봄" | "여름" | "가을" | "겨울";
 export type SeasonType = "SPRING" | "SUMMER" | "FALL" | "WINTER";
-export type SeasonLowerCaseType = "spring" | "summer" | "fall" | "winter";
 
-export type SeasonContentType = {
+type SeasonContentType = {
   content: string;
+};
+
+export type MyPageArticleType = {
+  id: number;
+  title: string;
+  season: string;
+  thumbnail: string;
 };
 
 export type ArticleType = {
@@ -54,6 +60,7 @@ export type ArticleDetailType = ArticlePreviewType & {
   fall: SeasonContentType;
   winter: SeasonContentType;
   articleBookmarkMap: any[];
+  isFavorite: boolean;
 };
 
 export type ArticleRequestType = {
@@ -64,4 +71,17 @@ export type ArticleRequestType = {
   content: string;
   updatedAt: string;
   comment?: string;
+};
+
+export type ArticleCountType = {
+  location:
+    | "서울"
+    | "경기/인천"
+    | "강원"
+    | "충청/대전"
+    | "전라/광주"
+    | "경북/대구"
+    | "경남/울산/부산"
+    | "제주";
+  count: number;
 };
