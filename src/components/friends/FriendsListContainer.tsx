@@ -20,6 +20,7 @@ export default function FriendsListContainer({
   setTotal
 }: Props) {
   const onClick = async (id: number) => {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
     const response = await deleteFriend(id);
     if (response.status === 200) {
       alert(response.data);
@@ -33,7 +34,7 @@ export default function FriendsListContainer({
       {friends.map((friend, index) => (
         <li
           key={index}
-          className="relative flex items-center p-4 m-4 border-b-2"
+          className="relative flex items-center md:px-4 px-2 md:py-6 py-4 md:mx-4 mx-2 border-b-2"
         >
           <Image
             src={
@@ -41,30 +42,33 @@ export default function FriendsListContainer({
                 ? defaultProfileImg
                 : changeImageIdToImageUrl(friend.profileImageId, "profile")
             }
-            className="bg-gray-200 rounded-full w-[5rem] h-[5rem] ml-10"
+            className="bg-gray-200 rounded-full md:w-[5rem] w-12 md:h-[5rem] h-12 md:ml-6 ml-2"
             width={70}
             height={70}
             alt={`${friend.nickname}의 사진`}
             priority
           />
-          <p className="text-xl mx-10">{friend.nickname}</p>
-          <Link
-            href={{
-              pathname: `/bookmark/list/${friend.id}`,
-              query: {
-                nickname: friend.nickname
-              }
-            }}
-            className="absolute top-10 right-2"
-          >
-            <p className="font-semibold">북마크 보기</p>
-          </Link>
-          <button
-            onClick={() => onClick(friend.pk)}
-            className="font-semibold absolute top-2 right-2 text-red-500"
-          >
-            삭제
-          </button>
+          <p className="md:text-xl md:mx-10 mx-2 flex-grow break-words">
+            {friend.nickname}
+          </p>
+          <div className="self-start flex flex-col items-end h-full">
+            <button
+              onClick={() => onClick(friend.pk)}
+              className="font-semibold md:text-sm text-xs text-red-500"
+            >
+              삭제
+            </button>
+            <Link
+              href={{
+                pathname: `/bookmark/list/${friend.id}`,
+                query: {
+                  nickname: friend.nickname
+                }
+              }}
+            >
+              <p className="font-semibold md:text-sm text-xs">북마크 보기</p>
+            </Link>
+          </div>
         </li>
       ))}
       <Pagination

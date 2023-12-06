@@ -22,7 +22,7 @@ export default function FriendsListPage() {
     getFriends();
   }, [page, total]);
   return (
-    <section className="flex flex-col w-[70%] m-auto">
+    <section className="flex flex-col lg:w-mainSection md:w-mainSectionMd sm:w-mainSectionSm w-full m-auto">
       <FriendsListHeader total={total} setTotal={setTotal} />
       <FriendsListContainer
         friends={friends}
