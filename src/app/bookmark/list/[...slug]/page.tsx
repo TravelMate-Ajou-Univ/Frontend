@@ -44,11 +44,14 @@ export default function UserBookmarkPage({ params }: Props) {
           {nickname}의 북마크 컬렉션
         </h1>
         <div className=" border-4 rounded-md w-full h-[37rem]">
-          <ul className="h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-4">
+          <ul className="h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-4 overflow-y-scroll">
             {bookmarkCollections.map((bookmarkCollection, index) =>
               index === 12 ? null : (
                 <li key={index} className="h-full w-full">
-                  <Collection bookmarkCollection={bookmarkCollection} />
+                  <Collection
+                    bookmarkCollection={bookmarkCollection}
+                    authorId={params.slug}
+                  />
                 </li>
               )
             )}

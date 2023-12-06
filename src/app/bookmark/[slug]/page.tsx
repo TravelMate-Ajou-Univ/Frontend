@@ -13,10 +13,9 @@ import { useDispatch } from "react-redux";
 import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
 import { calculateCenter } from "@/service/googlemap/map";
 import GoogleMap from "@/components/googleMap/GoogleMap";
+import { useAppSelector } from "@/hooks/redux";
 
 export default function BookmarkPage() {
-  const dispatch = useDispatch();
-
   const visible_scopes = [
     {
       icon: <PrivateIcon />,
@@ -34,8 +33,11 @@ export default function BookmarkPage() {
       description: "모두 공개"
     }
   ];
+  const dispatch = useDispatch();
+  const { id } = useAppSelector(state => state.userSlice);
   const params = useSearchParams();
-  const id = Number(params.get("id"));
+  const userId = Number(params.get("userId"));
+  const collectionId = Number(params.get("id"));
   const title = String(params.get("title"));
   const visibility = visible_scopes.find(
     scope => scope.name === String(params.get("visibility"))
@@ -51,7 +53,7 @@ export default function BookmarkPage() {
 
   useEffect(() => {
     const getData = async () => {
-      const data = await getAllBookmarks(id);
+      const data = await getAllBookmarks(collectionId);
       dispatch(setBookmarks(data));
 
       // bookmark들이 있다면 지도 center을 bookmark들의 가운데로
@@ -76,7 +78,7 @@ export default function BookmarkPage() {
       }
     };
     getData();
-  }, [id, dispatch]);
+  }, [collectionId, dispatch]);
 
   const onChangeText = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -120,13 +122,15 @@ export default function BookmarkPage() {
       <div className="w-[60vw] h-[70vh] border-2 m-4">
         <GoogleMap modifyState={modifyState} />
       </div>
-      <BookmarkButton
-        id={id}
-        title={newTitle}
-        visibility={visible_scope?.name as string}
-        modifyState={modifyState}
-        setModifyState={setModifyState}
-      />
+      {userId === id ? (
+        <BookmarkButton
+          id={collectionId}
+          title={newTitle}
+          visibility={visible_scope?.name as string}
+          modifyState={modifyState}
+          setModifyState={setModifyState}
+        />
+      ) : null}
     </section>
   );
 }
