@@ -38,7 +38,7 @@ export default function VisibilityButton({ scope, user }: Props) {
     return "";
   };
   return (
-    <ul className="flex gap-4">
+    <ul className="flex lg:gap-4 md:gap-2 gap-1">
       {view_scopes.map(view => (
         <li key={view.value} className={highlightHandler(view.value)}>
           <Link
@@ -46,7 +46,9 @@ export default function VisibilityButton({ scope, user }: Props) {
             className="flex flex-col items-center"
           >
             <div className="h-[1.5rem]">{view.icon}</div>
-            {view.description}
+            <p className="lg:text-base md:text-sm text-xs">
+              {view.description}
+            </p>
           </Link>
         </li>
       ))}

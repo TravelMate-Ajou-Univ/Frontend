@@ -46,7 +46,7 @@ export default function MyBookmarkPage({ params }: Props) {
 
   return (
     <section className="flex flex-col items-center w-full p-4 relative pb-[4rem]">
-      <div className="flex flex-col gap-4 w-[60%] mx-auto">
+      <div className="flex flex-col gap-4 lg:w-mainSection md:w-mainSectionMd sm:w-mainSectionSm w-full mx-auto">
         <h1 className="font-bold text-2xl text-center my-4">
           나의 북마크 컬렉션
         </h1>
@@ -54,7 +54,7 @@ export default function MyBookmarkPage({ params }: Props) {
           <VisibilityButton user="me" scope={params.slug} />
           <CollectionAddButton />
         </div>
-        <div className=" border-4 rounded-md h-[37rem]">
+        <div className=" border-4 rounded-md lg:h-[37rem] h-[20rem]">
           <ul className="h-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 py-4 overflow-y-scroll">
             {bookmarkCollections.map((bookmarkCollection, index) =>
               index === 12 ? null : (
