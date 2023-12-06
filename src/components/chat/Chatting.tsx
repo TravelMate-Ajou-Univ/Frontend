@@ -104,7 +104,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
   }, [socket]);
 
   const sendMessage = (content: string) => {
-    if (content.length === 0) {
+    if (content.trim() === "") {
       return;
     }
     socket.emit("sendMessage", {
