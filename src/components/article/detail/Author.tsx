@@ -79,7 +79,7 @@ export default function Author({ authorId }: Props) {
           ) : (
             <>
               <p className="w-full bg-secondary/70 text-white font-medium">
-                북마크 컬렉션
+                북마크 컬렉션 목록
               </p>
               {bookmarkCollections.map(bookmarkCollection => (
                 <li
