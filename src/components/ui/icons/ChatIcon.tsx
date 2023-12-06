@@ -1,5 +1,5 @@
 import { IoChatbubblesOutline } from "react-icons/io5";
 
 export default function ChatIcon() {
-  return <IoChatbubblesOutline className="w-6 h-6" />;
+  return <IoChatbubblesOutline className="md:w-6 w-4 md:h-6 h-4" />;
 }
