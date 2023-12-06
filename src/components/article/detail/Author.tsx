@@ -71,21 +71,27 @@ export default function Author({ authorId }: Props) {
       {isBookmarkCollectionsOpen && (
         <ul className="absolute md:top-9 top-7 flex flex-col items-center w-full border divide-y md:text-sm text-xs text-gray-500 text-center bg-white">
           {bookmarkCollections.length === 0 ? (
-            <div>
-              <p>보유하고 있는</p>
-              <p>북마크 컬렉션이 없습니다.</p>
-            </div>
+            <p>
+              보유하고 있는
+              <br />
+              북마크 컬렉션이 없습니다.
+            </p>
           ) : (
-            bookmarkCollections.map(bookmarkCollection => (
-              <li
-                className="py-1 w-full hover:bg-gray-100"
-                key={bookmarkCollection.id}
-              >
-                <Link href={`/bookmark/${bookmarkCollection.id}`}>
-                  <p>{bookmarkCollection.title}</p>
-                </Link>
-              </li>
-            ))
+            <>
+              <p className="w-full bg-secondary/70 text-white font-medium">
+                북마크 컬렉션
+              </p>
+              {bookmarkCollections.map(bookmarkCollection => (
+                <li
+                  className="py-1 w-full hover:bg-gray-100"
+                  key={bookmarkCollection.id}
+                >
+                  <Link href={`/bookmark/${bookmarkCollection.id}`}>
+                    <p>{bookmarkCollection.title}</p>
+                  </Link>
+                </li>
+              ))}
+            </>
           )}
         </ul>
       )}
