@@ -117,9 +117,9 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
   };
 
   return (
-    <section className="w-[90%] mx-auto flex justify-center mt-4">
+    <section className="w-full mx-auto flex mt-4">
       {mapState ? (
-        <div className="w-[50%] h-[40rem] m-2 border-2 rounded-md my-auto relative">
+        <div className="w-[41rem] h-[40rem] m-2 border-2 rounded-md my-auto relative">
           <ChatMap
             modifyState={true}
             socket={socket}
@@ -145,20 +145,22 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
           ) : null}
         </div>
       ) : null}
-      <div className="w-[50%] mx-auto mt-2 p-2 border-2 rounded-md">
-        <ChatRoomHeader
-          socket={socket}
-          userId={id}
-          roomId={roomId}
-          nickname={userName}
-          roomName={roomName}
-          roomMembers={roomMembers}
-          toggleMapState={toggleMapState}
-          memberChangedState={memberChangedState}
-          setMemberChangedState={setMemberChangedState}
-        />
-        <ChatList chatList={chatList} firstChatIndex={firstChatIndex} />
-        <ChatForm sendMessage={sendMessage} socket={socket} />
+      <div className="w-[52rem] mx-auto">
+        <div className="w-[40rem] mt-2 p-2 border-2 rounded-md">
+          <ChatRoomHeader
+            socket={socket}
+            userId={id}
+            roomId={roomId}
+            nickname={userName}
+            roomName={roomName}
+            roomMembers={roomMembers}
+            toggleMapState={toggleMapState}
+            memberChangedState={memberChangedState}
+            setMemberChangedState={setMemberChangedState}
+          />
+          <ChatList chatList={chatList} firstChatIndex={firstChatIndex} />
+          <ChatForm sendMessage={sendMessage} socket={socket} />
+        </div>
       </div>
     </section>
   );

@@ -62,8 +62,6 @@ export const checkChatTime = (
 export const checkChatDay = (prevTime: string, targetTime: string): boolean => {
   const prevDate = new Date(prevTime);
   const targetDate = new Date(targetTime);
-  console.log("preData : ", prevDate);
-  console.log("targetDate : ", targetDate);
 
   const prevMonth = prevDate.getMonth();
   const prevDay = prevDate.getDate();
@@ -73,9 +71,6 @@ export const checkChatDay = (prevTime: string, targetTime: string): boolean => {
 
   const monthEqual = prevMonth === targetMonth;
   const dayEqual = prevDay === targetDay;
-
-  console.log("day : ", dayEqual);
-  console.log("month : ", monthEqual);
 
   if (monthEqual && dayEqual) {
     return false;
