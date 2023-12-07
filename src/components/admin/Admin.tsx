@@ -57,7 +57,7 @@ export default function Admin() {
         <BanModal
           name={banTarget.userName}
           setReason={(value: string) => setBanReason(value)}
-          submit={() => {}}
+          submit={ban}
           cancel={() => setBanModal(false)}
         />
       )}
