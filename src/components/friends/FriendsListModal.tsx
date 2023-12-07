@@ -13,6 +13,7 @@ import { FriendType, FriendsWithPkListType } from "@/model/friend";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 type Props = {
   total: number;
@@ -73,8 +74,15 @@ export default function FriendsListModal({
             className="self-start w-full flex justify-around items-center"
           >
             <Image
-              src={defaultProfileImg}
-              className="bg-gray-200 rounded-full"
+              src={
+                friend.profileImageId === null
+                  ? defaultProfileImg
+                  : changeImageIdToImageUrl(
+                      Number(friend.profileImageId),
+                      "profile"
+                    )
+              }
+              className="bg-gray-200 rounded-full lg:w-10 lg:h-10 w-5 h-5"
               width={30}
               height={30}
               alt={`${friend.nickname}의 사진`}
