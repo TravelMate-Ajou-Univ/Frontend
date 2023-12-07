@@ -119,7 +119,7 @@ export default function ChatRoomImage({ chatRoom }: Props) {
                     "profile"
                   )
             }
-            className="bg-gray-100 rounded-full w-[3rem] h-[3rem] absolute right-[1.25rem] top-[3.5rem]"
+            className="bg-gray-100 rounded-full w-[3rem] h-[3rem] absolute right-[1.25rem] md:top-[3.5rem] top-[1.5rem]"
             width={150}
             height={150}
             alt="프로필 사진"
@@ -134,7 +134,7 @@ export default function ChatRoomImage({ chatRoom }: Props) {
                     "profile"
                   )
             }
-            className="bg-gray-100 rounded-full w-[3rem] h-[3rem] absolute left-[1.25rem] top-[3.5rem]"
+            className="bg-gray-100 rounded-full w-[3rem] h-[3rem] absolute left-[1.25rem] md:top-[3.5rem] top-[1.5rem]"
             width={150}
             height={150}
             alt="프로필 사진"
