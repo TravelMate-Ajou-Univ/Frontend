@@ -49,13 +49,13 @@ export default function NicknameForm({ nickname, setNickname }: Props) {
 
   return (
     <form onSubmit={formhandler} className="relative">
-      <div className="flex items-center relative">
+      <div className="flex items-end relative border-2 border-gray-400 rounded-lg">
         <input
           ref={inputRef}
           type="text"
           value={nickname}
           onChange={onChange}
-          className="font-bold text-center bg-inherit pr-6 lg:w-[10rem] w-[7rem] lg:text-3xl sm:text-2xl text-xl"
+          className="font-semibold bg-inherit lg:w-[14rem] w-[10rem] lg:text-3xl sm:text-2xl text-xl px-2 py-1 focus:outline-none"
         />
         <PenIcon />
       </div>
