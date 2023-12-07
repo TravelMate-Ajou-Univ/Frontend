@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import ProfileImg from "./ProfileImg";
 import Link from "next/link";
 import { Pagination } from "@mui/material";
+import { ArticlePreviewType } from "@/model/article";
 
 export default function PostingReportList() {
   const [reports, setReports] = useState<ArticleReportType[]>([]);
@@ -24,10 +25,7 @@ export default function PostingReportList() {
             userName: node.articleReporter.nickname,
             profileImageId: node.articleReporter.profileImageId
           },
-          article: {
-            id: node.article.id,
-            title: node.article.title
-          }
+          article: node.article
         };
       });
       setReports(reports);
@@ -36,12 +34,24 @@ export default function PostingReportList() {
     getUserList();
   }, [page]);
 
+  const returnSeason = (article: any) => {
+    if (article.springVersionID) return "spring";
+    if (article.summerVersionID) return "summer";
+    if (article.fallVersionID) return "fall";
+    if (article.winterVersionID) return "winter";
+    return "all";
+  };
+
   return (
     <section className="p-3">
       <ul className="divide-y">
         {reports.map(({ id, reason, reporter, article }: ArticleReportType) => (
           <li key={id} className="px-4 py-4 hover:bg-gray-50">
-            <Link href={`/article/detail/${article.id}`}>
+            <Link
+              href={`/article/detail/${article.id}?season=${returnSeason(
+                article
+              )}`}
+            >
               <section className="flex items-center gap-4 mb-4">
                 <p className="text-lg font-semibold">{article.title}</p>
               </section>
