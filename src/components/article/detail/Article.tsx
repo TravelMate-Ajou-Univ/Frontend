@@ -126,32 +126,34 @@ export default function Article({ articleId }: Props) {
           </nav>
           {article && (
             <div className="w-full flex flex-col md:gap-4 gap-2">
-              <div className="flex gap-2">
-                <button
-                  className={`self-center divide-x border border-secondary rounded-md flex items-center px-1 mb-1 ${
-                    isFavorite ? "bg-summer" : "bg-white"
-                  }`}
-                  onClick={toggleFavorite}
-                >
-                  {isFavorite ? (
-                    <FilledFavoriteIcon className="px-1 py-0.5" />
-                  ) : (
-                    <OutlinedFavoriteIcon className="px-1 py-0.5" />
-                  )}
-                  <span className="md:px-1 px-0.5 py-0.5 md:text-sm text-xs text-secondary font-medium">
-                    즐겨찾기
-                  </span>
-                </button>
-                <button
-                  className={`self-center divide-x border rounded-md flex items-center px-1 mb-1`}
-                  onClick={() => setReportModal(true)}
-                >
-                  <AlertIcon className="px-1 py-0.5" />
-                  <span className="md:px-1 px-0.5 py-0.5 md:text-sm text-xs text-red-400">
-                    게시글 신고
-                  </span>
-                </button>
-              </div>
+              {userId !== 0 && (
+                <div className="flex gap-2">
+                  <button
+                    className={`self-center divide-x border border-secondary rounded-md flex items-center px-1 mb-1 ${
+                      isFavorite ? "bg-summer" : "bg-white"
+                    }`}
+                    onClick={toggleFavorite}
+                  >
+                    {isFavorite ? (
+                      <FilledFavoriteIcon className="px-1 py-0.5" />
+                    ) : (
+                      <OutlinedFavoriteIcon className="px-1 py-0.5" />
+                    )}
+                    <span className="md:px-1 px-0.5 py-0.5 md:text-sm text-xs text-secondary font-medium">
+                      즐겨찾기
+                    </span>
+                  </button>
+                  <button
+                    className={`self-center divide-x border rounded-md flex items-center px-1 mb-1`}
+                    onClick={() => setReportModal(true)}
+                  >
+                    <AlertIcon className="px-1 py-0.5" />
+                    <span className="md:px-1 px-0.5 py-0.5 md:text-sm text-xs text-red-400">
+                      게시글 신고
+                    </span>
+                  </button>
+                </div>
+              )}
               <section
                 className={`flex gap-2 ${
                   article && userId === article.authorId
@@ -197,16 +199,20 @@ export default function Article({ articleId }: Props) {
             </div>
           )}
         </section>
-        <section className="flex flex-row gap-2 mt-8">
-          {(userId === article?.authorId || level === "ADMIN") && (
-            <FilledButton onClick={deleteThisArticle}>게시글 삭제</FilledButton>
-          )}
-          <OutlinedButton className="self-center" onClick={moveToEdit}>
-            {article?.authorId === userId
-              ? "작성/수정하기"
-              : "수정/추가 제안하기"}
-          </OutlinedButton>
-        </section>
+        {userId !== 0 && (
+          <section className="flex flex-row gap-2 mt-8">
+            {(userId === article?.authorId || level === "ADMIN") && (
+              <FilledButton onClick={deleteThisArticle}>
+                게시글 삭제
+              </FilledButton>
+            )}
+            <OutlinedButton className="self-center" onClick={moveToEdit}>
+              {article?.authorId === userId
+                ? "작성/수정하기"
+                : "수정/추가 제안하기"}
+            </OutlinedButton>
+          </section>
+        )}
       </article>
       {reportModal && (
         <ReportModal
