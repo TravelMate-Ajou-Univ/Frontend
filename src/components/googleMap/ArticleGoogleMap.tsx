@@ -68,8 +68,14 @@ export default function ArticleGoogleMap({
   };
 
   useEffect(() => {
+    console.log("set center");
+
     if (bookmarks && bookmarks.length > 0) {
       setCenter(calculateCenter(bookmarks));
+      // map?.panTo({
+      //   lat: calculateCenter(bookmarks).latitude,
+      //   lng: calculateCenter(bookmarks).longitude
+      // });
       setZoom(9);
       setPins(bookmarks);
     } else if (location === "") {
@@ -81,6 +87,10 @@ export default function ArticleGoogleMap({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
           });
+          // map?.panTo({
+          //   lat: position.coords.latitude,
+          //   lng: position.coords.longitude
+          // });
         },
         error => {
           alert("현재 위치를 가져오는 데 실패하였습니다.");
@@ -108,7 +118,13 @@ export default function ArticleGoogleMap({
     if (typeof window !== "undefined" && window.google && window.google.maps) {
       window.initMap();
     }
-  }, [center, modifyState, pins]);
+  }, [center, modifyState]);
+
+  useEffect(() => {
+    if (map !== undefined) {
+      setMarker(map);
+    }
+  }, [pins]);
 
   const setMarker = (initmap: google.maps.Map) => {
     const service = new google.maps.places.PlacesService(
