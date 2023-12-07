@@ -5,6 +5,7 @@ import { SetStateAction } from "react";
 
 type Props = {
   id: number;
+  authorId: number;
   title: string;
   visibility: string;
   modifyState: Boolean;
@@ -12,6 +13,7 @@ type Props = {
 };
 export default function BookmarkButton({
   id,
+  authorId,
   title,
   visibility,
   modifyState,
@@ -39,7 +41,9 @@ export default function BookmarkButton({
       return;
     }
     await modifyCollection(id, title, visibility, pins, deleteBookmarks);
-
+    router.push(
+      `/bookmark/detail?uesrId=${authorId}&title=${title}&visibility=${visibility}&id=${id}`
+    );
     toggleHandler();
   };
   return (

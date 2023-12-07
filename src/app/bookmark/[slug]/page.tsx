@@ -112,7 +112,7 @@ export default function BookmarkPage() {
         </div>
       ) : (
         <div className="flex w-full justify-between items-center">
-          <p className="text-3xl font-bold">{newTitle}</p>
+          <p className="text-3xl font-bold">{title}</p>
           <div className="flex justify-center w-[8rem] gap-4 p-1">
             {visible_scope?.icon}
             {visible_scope?.description}
@@ -125,6 +125,7 @@ export default function BookmarkPage() {
       {userId === id ? (
         <BookmarkButton
           id={collectionId}
+          authorId={id}
           title={newTitle}
           visibility={visible_scope?.name as string}
           modifyState={modifyState}
