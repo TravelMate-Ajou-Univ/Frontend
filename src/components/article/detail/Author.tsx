@@ -28,6 +28,7 @@ export default function Author({ authorId }: Props) {
   const [isBookmarkCollectionsOpen, setIsBookmarkCollectionsOpen] =
     useState<boolean>(false);
   const ref = useOutSideRef(() => setIsBookmarkCollectionsOpen(false));
+  const { id: userId } = useAppSelector(state => state.userSlice);
 
   useEffect(() => {
     const getUser = async () => {
@@ -70,7 +71,7 @@ export default function Author({ authorId }: Props) {
         </div>
         <span className="md:text-base text-sm">{author.userName}</span>
       </div>
-      {isBookmarkCollectionsOpen && (
+      {userId !== 0 && isBookmarkCollectionsOpen && (
         <ul className="absolute md:top-9 top-7 flex flex-col items-center w-full border divide-y md:text-sm text-xs text-gray-500 text-center bg-white">
           {bookmarkCollections.length === 0 ? (
             <p>

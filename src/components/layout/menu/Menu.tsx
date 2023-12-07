@@ -5,7 +5,7 @@ import MarkedMapIcon from "@/components/ui/icons/MarkedMapIcon";
 import WritingIcon from "@/components/ui/icons/WritingIcon";
 import PaperPlane from "@/components/ui/icons/PaperPlane";
 import { deleteCookie } from "cookies-next";
-import { useAppDispatch } from "@/hooks/redux";
+import { useAppDispatch, useAppSelector } from "@/hooks/redux";
 import { userLogout } from "@/redux/features/userSlice";
 import MenuItem from "./MenuItem";
 import DocsIcon from "@/components/ui/icons/DocsIcon";
@@ -26,6 +26,7 @@ const MENU_CLASSIFICATION_CLASS =
 export default function Menu({ closeMenu }: Props) {
   const ref = useClickOutside(closeMenu);
   const dispatch = useAppDispatch();
+  const { id } = useAppSelector(state => state.userSlice);
 
   const logout = () => {
     deleteCookie("refreshToken");
