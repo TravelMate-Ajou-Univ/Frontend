@@ -31,10 +31,10 @@ export const calculateAmPmTime = (time: string): string => {
   const currentHour: number = date.getHours();
   const currentMinute: number = date.getMinutes();
 
-  if (currentHour >= 12) {
-    return `오후 ${currentHour - 12}시 ${currentMinute}분`;
-  } else {
+  if (currentHour < 12) {
     return `오전 ${currentHour}시 ${currentMinute}분`;
+  } else {
+    return `오후 ${currentHour - 12}시 ${currentMinute}분`;
   }
 };
 
