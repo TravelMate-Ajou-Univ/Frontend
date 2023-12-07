@@ -36,7 +36,7 @@ export default function Profile() {
   return (
     <div className="w-full flex justify-around items-center py-4 border-b-2">
       <ProfileImage />
-      <div className="flex flex-col gap-4 text-center lg:w-[20rem] md:w-[16rem] sm:w-[12rem]">
+      <div className="flex flex-col items-center gap-4 text-center lg:w-[20rem] md:w-[16rem] sm:w-[12rem]">
         {modifyState ? (
           <NicknameForm nickname={nickname} setNickname={setNickname} />
         ) : (
@@ -46,9 +46,14 @@ export default function Profile() {
         )}
         <div className="flex justify-center items-center mt-8 gap-2">
           {modifyState ? (
-            <FilledButton onClick={() => modifyNickname()}>
-              변경하기
-            </FilledButton>
+            <div className="flex gap-2">
+              <FilledButton onClick={() => setModifyState(false)}>
+                취소하기
+              </FilledButton>
+              <FilledButton onClick={() => modifyNickname()}>
+                변경하기
+              </FilledButton>
+            </div>
           ) : (
             <FilledButton
               onClick={() => {
