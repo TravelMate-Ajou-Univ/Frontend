@@ -161,12 +161,13 @@ export const modifyCollection = async (
   subPins: Number[]
 ): Promise<Boolean> => {
   try {
+    console.log(visibility);
     await api({
       method: "patch",
       url: `/users/me/bookmark-collection/${id}`,
       data: {
         title: title,
-        visibility: visibility.toUpperCase(),
+        visibility: visibility ? visibility.toUpperCase() : "PUBLIC",
         locationsWithContent: addPins,
         bookmarkIdsToDelete: subPins
       }
