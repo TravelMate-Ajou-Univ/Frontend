@@ -74,7 +74,7 @@ export default function UserReportList({ setBanTarget, setBanModal }: Props) {
                 <h1 className="font-semibold">신고자/사유</h1>
                 <div className="flex items-center gap-4">
                   <ProfileImg profileImageId={reporter.profileImageId} />
-                  <p>{reporter.userName}</p>
+                  <p className="whitespace-pre-line">{reporter.userName}</p>
                 </div>
                 <p className="w-full px-2 py-1 bg-gray-100">{reason}</p>
               </section>

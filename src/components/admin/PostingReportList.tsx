@@ -6,7 +6,6 @@ import { useEffect, useState } from "react";
 import ProfileImg from "./ProfileImg";
 import Link from "next/link";
 import { Pagination } from "@mui/material";
-import { ArticlePreviewType } from "@/model/article";
 
 export default function PostingReportList() {
   const [reports, setReports] = useState<ArticleReportType[]>([]);
@@ -61,7 +60,9 @@ export default function PostingReportList() {
                   <ProfileImg profileImageId={reporter.profileImageId} />
                   <p>{reporter.userName}</p>
                 </div>
-                <p className="w-full px-2 py-1 bg-gray-100">{reason}</p>
+                <p className="w-full px-2 py-1 bg-gray-100 whitespace-pre-line">
+                  {reason}
+                </p>
               </section>
             </Link>
           </li>
