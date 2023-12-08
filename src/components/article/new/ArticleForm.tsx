@@ -210,6 +210,31 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
 
   const edit = async () => {
     const editingSeason = seasonMapper[season] as SeasonType;
+
+    const regex = /<img.*?src="data:(.*?)"/g;
+    let match;
+    let newContent = content;
+
+    while ((match = regex.exec(content)) !== null) {
+      const base64Image = match[1];
+      if (!base64Image) return;
+
+      const beforeSrc = `data:${base64Image}`;
+      const response = await fetch(beforeSrc);
+      const blob = await response.blob();
+      const file = new File([blob], "image.jpg", { type: "image" });
+
+      try {
+        const imgId = await uploadImage(file, "article");
+        if (!imgId) return;
+        const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
+        const replacedContent = newContent.replace(beforeSrc, imgURL);
+        newContent = replacedContent;
+      } catch (error) {
+        alert("업로드에 실패했습니다.");
+      }
+    }
+
     if (authorId === userId) {
       let thumbnail = receivedThumbnail;
       if (thumbnailFile) {
@@ -220,7 +245,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         title,
         period: editingSeason,
         location,
-        content,
+        content: newContent,
         tagIds: keywords.map(keyword => keyword.id),
         thumbnail: thumbnail,
         bookmarkIds
@@ -242,7 +267,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
 
       const result = await editArticleRequest(
         id as string,
-        content,
+        newContent,
         editingSeason,
         comment,
         bookmarksToRemove,
