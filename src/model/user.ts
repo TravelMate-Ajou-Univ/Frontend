@@ -3,4 +3,5 @@ export interface User {
   userName: string;
   profileImageId: string;
   level?: "USER" | "ADMIN";
+  bannedAt?: string;
 }

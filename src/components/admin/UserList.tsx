@@ -5,7 +5,7 @@ import Image from "next/image";
 import DefaultProfile from "/public/image/defaultProfileImg.png";
 import { Pagination } from "@mui/material";
 import { User } from "@/model/user";
-import { getUsers } from "@/service/axios/admin";
+import { getUsers, unblockUser } from "@/service/axios/admin";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import ProfileImg from "./ProfileImg";
 
@@ -26,7 +26,8 @@ export default function UserList({ setBanTarget, setBanModal }: Props) {
         return {
           id: user.id,
           userName: user.nickname,
-          profileImageId: user.profileImageId
+          profileImageId: user.profileImageId,
+          bannedAt: user.bannedAt
         };
       });
       setList(users);
@@ -35,7 +36,18 @@ export default function UserList({ setBanTarget, setBanModal }: Props) {
     getUserList();
   }, [page]);
 
-  const banHandler = (user: User) => {
+  const banHandler = async (user: User) => {
+    if (user.bannedAt) {
+      if (!confirm(`${user.userName}님의 정지를 해제하시겠습니까?`)) return;
+      const res = await unblockUser(user.id);
+      if (res) {
+        alert(`${user.userName}님의 정지를 해제했습니다.`);
+        return;
+      } else {
+        alert("다시 시도해주세요.");
+        return;
+      }
+    }
     setBanTarget(user);
     setBanModal(true);
   };
@@ -43,15 +55,17 @@ export default function UserList({ setBanTarget, setBanModal }: Props) {
   return (
     <section className="p-3">
       <ul className="divide-y">
-        {list.map(({ id, userName, profileImageId }: User) => (
+        {list.map(({ id, userName, profileImageId, bannedAt }: User) => (
           <li key={id} className="flex items-center gap-4 px-4 py-2">
             <ProfileImg profileImageId={profileImageId} />
             <p className="grow">{userName}</p>
             <OutlinedButton
               size="small"
-              onClick={() => banHandler({ id, userName, profileImageId })}
+              onClick={() =>
+                banHandler({ id, userName, profileImageId, bannedAt })
+              }
             >
-              정지
+              {bannedAt ? "정지 해제" : "정지"}
             </OutlinedButton>
           </li>
         ))}
