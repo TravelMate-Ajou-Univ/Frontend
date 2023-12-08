@@ -7,7 +7,7 @@ import { setBookmarks, setCenter } from "@/redux/features/mapSlice";
 import { Socket } from "socket.io-client";
 import { calculateCenter } from "@/service/googlemap/map";
 import { useAppSelector } from "@/hooks/redux";
-import { ViewChatFormType } from "@/model/chat";
+import { ReceiveChatFormType, ViewChatFormType } from "@/model/chat";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import BookmarkOptionBox from "./BookmarkOptionBox";
 import { checkVisibility, makeNewChat } from "@/service/chat";
@@ -92,6 +92,36 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
   }, [memberChangedState, roomId]);
 
   useEffect(() => {
+    socket.on("postBookmark", data => {
+      const newBookmarkMessage: ReceiveChatFormType = {
+        userId: 0,
+        nickname: "",
+        content: "북마크가 추가되었습니다.",
+        type: "text",
+        createdAt: String(new Date()),
+        profileImageId: 0
+      };
+      chatListRef.current = makeNewChat(
+        newBookmarkMessage,
+        chatListRef.current
+      );
+      setChatList(chatListRef.current);
+    });
+    socket.on("deleteBookmark", data => {
+      const newBookmarkMessage: ReceiveChatFormType = {
+        userId: 0,
+        nickname: "",
+        content: "북마크가 삭제되었습니다.",
+        type: "text",
+        createdAt: String(new Date()),
+        profileImageId: 0
+      };
+      chatListRef.current = makeNewChat(
+        newBookmarkMessage,
+        chatListRef.current
+      );
+      setChatList(chatListRef.current);
+    });
     socket.on("message", data => {
       chatListRef.current = makeNewChat(data, chatListRef.current);
       setChatList(chatListRef.current);
