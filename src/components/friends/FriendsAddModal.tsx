@@ -5,6 +5,7 @@ import { FriendType } from "@/model/friend";
 import OutlinedButton from "../ui/button/OutlinedButton";
 import Image from "next/image";
 import defaultProfileImg from "/public/image/defaultProfileImg.png";
+import { changeImageIdToImageUrl } from "@/service/axios/profile";
 
 type Props = {
   toggleModalState: (type: "received" | "sent" | "add" | "") => void;
@@ -71,9 +72,15 @@ export default function FriendsAddModal({
             className="self-start w-full flex justify-around items-center"
           >
             <Image
-              src={defaultProfileImg}
-              // src={`${profileImageId}`}
-              className="bg-gray-200 rounded-full"
+              src={
+                friend.profileImageId === null
+                  ? defaultProfileImg
+                  : changeImageIdToImageUrl(
+                      Number(friend.profileImageId),
+                      "profile"
+                    )
+              }
+              className="bg-gray-200 rounded-full lg:w-10 lg:h-10 w-5 h-5"
               width={30}
               height={30}
               alt={`${friend.nickname}의 사진`}
@@ -91,12 +98,6 @@ export default function FriendsAddModal({
             </OutlinedButton>
           </li>
         ))}
-        {/* <Pagination
-          count={Math.floor((total + 5) / 5)}
-          defaultPage={1}
-          onChange={(e, page) => setPage(page)}
-          className="bottom-[1rem] "
-        /> */}
       </ul>
     </div>
   );
