@@ -68,8 +68,6 @@ export default function ArticleGoogleMap({
   };
 
   useEffect(() => {
-    console.log("set center");
-
     if (bookmarks && bookmarks.length > 0) {
       setCenter(calculateCenter(bookmarks));
       // map?.panTo({

@@ -96,7 +96,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       const newBookmarkMessage: ReceiveChatFormType = {
         userId: 0,
         nickname: "",
-        content: "북마크가 추가되었습니다.",
+        content: `${data.nickname}님이 북마크를 추가하였습니다.`,
         type: "text",
         createdAt: String(new Date()),
         profileImageId: 0
@@ -111,7 +111,7 @@ export default function Chatting({ socket, roomId, roomName }: Props) {
       const newBookmarkMessage: ReceiveChatFormType = {
         userId: 0,
         nickname: "",
-        content: "북마크가 삭제되었습니다.",
+        content: `${data.nickname}님이 북마크를 삭제하였습니다.`,
         type: "text",
         createdAt: String(new Date()),
         profileImageId: 0

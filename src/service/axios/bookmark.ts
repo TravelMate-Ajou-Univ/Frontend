@@ -161,7 +161,6 @@ export const modifyCollection = async (
   subPins: Number[]
 ): Promise<Boolean> => {
   try {
-    console.log(visibility);
     await api({
       method: "patch",
       url: `/users/me/bookmark-collection/${id}`,
