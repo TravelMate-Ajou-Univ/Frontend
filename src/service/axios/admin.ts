@@ -41,9 +41,20 @@ export const getUserReports = async (page: number, limit: number) => {
   }
 };
 
-export const banUser = async (userId: number, reason: string) => {
+export const blockUser = async (userId: number, reason: string) => {
   try {
-    const { status } = await admin.banUser(userId, reason);
+    const { status } = await admin.blockUser(userId, reason);
+    if (!status) throw new Error("다시 시도해주세요.");
+    return true;
+  } catch (error) {
+    console.error(error);
+    return false;
+  }
+};
+
+export const unblockUser = async (userId: number) => {
+  try {
+    const { status } = await admin.unblockUser(userId);
     if (!status) throw new Error("다시 시도해주세요.");
     return true;
   } catch (error) {

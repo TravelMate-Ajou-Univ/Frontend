@@ -5,7 +5,7 @@ import { useState } from "react";
 import ListTypeNav from "./ListTypeNav";
 import UserList from "./UserList";
 import BanModal from "../ui/admin/BanModal";
-import { banUser } from "@/service/axios/admin";
+import { blockUser } from "@/service/axios/admin";
 import { User } from "@/model/user";
 import UserReportList from "./UserReportList";
 import PostingReportList from "./PostingReportList";
@@ -23,7 +23,7 @@ export default function Admin() {
   const ban = async () => {
     if (listType === "USER" || listType === "USER_REPORT") {
       if (!banTarget) return alert("다시 시도해주세요.");
-      const res = await banUser(banTarget.id, banReason);
+      const res = await blockUser(banTarget.id, banReason);
       if (res) {
         alert(`${banTarget.userName}님을 정지시켰습니다.`);
         setBanModal(false);

@@ -149,6 +149,7 @@ export const admin = {
     api.get(`admin/article-report-logs?page=${page}&limit=${limit}`),
   getUserReports: (page: number, limit: number) =>
     api.get(`admin/user-report-logs?page=${page}&limit=${limit}`),
-  banUser: (userId: number, reason: string) =>
-    api.post(`admin/ban/user/${userId}`, { reason })
+  blockUser: (userId: number, reason: string) =>
+    api.post(`admin/user/${userId}/block`, { reason }),
+  unblockUser: (userId: number) => api.post(`admin/user/${userId}/unblock`)
 };
