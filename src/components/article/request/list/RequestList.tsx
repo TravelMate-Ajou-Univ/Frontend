@@ -7,7 +7,7 @@ import {
   SeasonType
 } from "@/model/article";
 import { getArticle, getArticleRequestList } from "@/service/axios/article";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import RequestPreview from "./RequestPreview";
 import DropDown from "@/components/ui/dropDown/DropDown";
@@ -26,6 +26,7 @@ export default function RequestList({ articleId }: Props) {
   const [title, setTitle] = useState<string>("");
   const [season, setSeason] = useState<KoreanSeasonType>("봄");
 
+  const router = useRouter();
   const searchParams = useSearchParams();
   const seasonParam = searchParams.get("season")?.toUpperCase() as SeasonType;
 
@@ -52,6 +53,14 @@ export default function RequestList({ articleId }: Props) {
     );
   }, [seasonParam]);
 
+  const handleSeasonChange = (season: KoreanSeasonType) => {
+    router.push(
+      `/article/request/${articleId}?season=${seasonMapper[
+        season
+      ].toLowerCase()}`
+    );
+  };
+
   return (
     <section>
       <hr />
@@ -72,7 +81,9 @@ export default function RequestList({ articleId }: Props) {
         <DropDown
           className="my-4"
           selected={season}
-          setSelected={season => setSeason(season as KoreanSeasonType)}
+          setSelected={koreanSeason =>
+            handleSeasonChange(koreanSeason as KoreanSeasonType)
+          }
           list={seasonList}
         />
       </div>

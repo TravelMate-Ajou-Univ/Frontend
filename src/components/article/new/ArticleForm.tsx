@@ -29,6 +29,7 @@ import { useAppSelector } from "@/hooks/redux";
 import CommentForm from "./CommentForm";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
 import { BookmarkType } from "@/model/bookmark";
+import { api } from "@/service/axios/api";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -175,12 +176,15 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
 
       try {
         const imgId = await uploadImage(file, "article");
-        if (!imgId) return;
+        if (!imgId) throw new Error();
         const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
+        const imgURLResponse = await api.get(imgURL);
+        if (!imgURLResponse) throw new Error();
         const replacedContent = newContent.replace(base64Image, imgURL);
         newContent = replacedContent;
       } catch (error) {
         alert("업로드에 실패했습니다.");
+        return;
       }
     }
 
@@ -228,10 +232,13 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         const imgId = await uploadImage(file, "article");
         if (!imgId) return;
         const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
+        const imgURLResponse = await api.get(imgURL);
+        if (!imgURLResponse) throw new Error();
         const replacedContent = newContent.replace(beforeSrc, imgURL);
         newContent = replacedContent;
       } catch (error) {
         alert("업로드에 실패했습니다.");
+        return;
       }
     }
 
