@@ -44,7 +44,6 @@ interface Props {
 
 export default function ArticleForm({ id, edittngSeason }: Props) {
   const [title, setTitle] = useState<string>("");
-  const [contentView, setContentView] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [location, setLocation] = useState<string>("");
   const [season, setSeason] = useState<KoreanSeasonType>("봄");
@@ -178,8 +177,6 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         const imgId = await uploadImage(file, "article");
         if (!imgId) throw new Error();
         const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
-        const imgURLResponse = await api.get(imgURL);
-        if (!imgURLResponse) throw new Error();
         const replacedContent = newContent.replace(base64Image, imgURL);
         newContent = replacedContent;
       } catch (error) {
@@ -232,8 +229,6 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         const imgId = await uploadImage(file, "article");
         if (!imgId) return;
         const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
-        const imgURLResponse = await api.get(imgURL);
-        if (!imgURLResponse) throw new Error();
         const replacedContent = newContent.replace(beforeSrc, imgURL);
         newContent = replacedContent;
       } catch (error) {
