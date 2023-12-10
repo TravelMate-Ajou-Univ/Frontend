@@ -3,6 +3,7 @@
 import { getCookie } from "cookies-next";
 import { useEffect, useState } from "react";
 import { Refresh } from "../service/axios/userSign";
+import AuthCheck from "./AuthCheck";
 
 interface AuthContextProps {
   children: React.ReactNode;
@@ -27,5 +28,5 @@ export default function AuthContext({ children }: AuthContextProps) {
     }
   }, []);
 
-  return <>{available ? children : null}</>;
+  return available ? <AuthCheck>{children}</AuthCheck> : null;
 }
