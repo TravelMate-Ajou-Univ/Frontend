@@ -30,53 +30,55 @@ export default function FriendsListContainer({
     }
   };
   return (
-    <ul className="relative border-2 h-[37rem]">
-      {friends.map((friend, index) => (
-        <li
-          key={index}
-          className="relative flex items-center md:px-4 px-2 md:py-6 py-4 md:mx-4 mx-2 border-b-2"
-        >
-          <Image
-            src={
-              friend.profileImageId === null
-                ? defaultProfileImg
-                : changeImageIdToImageUrl(friend.profileImageId, "profile")
-            }
-            className="bg-gray-200 rounded-full md:w-[5rem] w-12 md:h-[5rem] h-12 md:ml-6 ml-2"
-            width={70}
-            height={70}
-            alt={`${friend.nickname}의 사진`}
-            priority
-          />
-          <p className="md:text-xl md:mx-10 mx-2 flex-grow break-words">
-            {friend.nickname}
-          </p>
-          <div className="self-start flex flex-col items-end h-full">
-            <button
-              onClick={() => onClick(friend.pk)}
-              className="font-semibold md:text-sm text-xs text-red-500"
-            >
-              삭제
-            </button>
-            <Link
-              href={{
-                pathname: `/bookmark/list/${friend.id}`,
-                query: {
-                  nickname: friend.nickname
-                }
-              }}
-            >
-              <p className="font-semibold md:text-sm text-xs">북마크 보기</p>
-            </Link>
-          </div>
-        </li>
-      ))}
+    <div className="relative">
+      <ul className="border-2 h-[37rem] overflow-y-scroll">
+        {friends.map((friend, index) => (
+          <li
+            key={index}
+            className="flex items-center md:px-4 px-2 md:py-6 py-4 md:mx-4 mx-2 border-b-2"
+          >
+            <Image
+              src={
+                friend.profileImageId === null
+                  ? defaultProfileImg
+                  : changeImageIdToImageUrl(friend.profileImageId, "profile")
+              }
+              className="bg-gray-200 rounded-full md:w-[5rem] w-12 md:h-[5rem] h-12 md:ml-6 ml-2"
+              width={70}
+              height={70}
+              alt={`${friend.nickname}의 사진`}
+              priority
+            />
+            <p className="md:text-xl md:mx-10 mx-2 flex-grow break-words">
+              {friend.nickname}
+            </p>
+            <div className="self-start flex flex-col items-end h-full">
+              <button
+                onClick={() => onClick(friend.pk)}
+                className="font-semibold md:text-sm text-xs text-red-500"
+              >
+                삭제
+              </button>
+              <Link
+                href={{
+                  pathname: `/bookmark/list/${friend.id}`,
+                  query: {
+                    nickname: friend.nickname
+                  }
+                }}
+              >
+                <p className="font-semibold md:text-sm text-xs">북마크 보기</p>
+              </Link>
+            </div>
+          </li>
+        ))}
+      </ul>
       <Pagination
         count={Math.floor((total + 5) / 5)}
         defaultPage={1}
         onChange={(e, page) => setPage(page)}
-        className="absolute bottom-[1rem] right-[45%]"
+        className="absolute -bottom-[3rem] right-[45%]"
       />
-    </ul>
+    </div>
   );
 }
