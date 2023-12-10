@@ -88,7 +88,8 @@ export default function FriendsListModal({
               alt={`${friend.nickname}의 사진`}
               priority
             />
-            <p className="text-sm text-center truncate hover:overflow-visible w-[5rem]">
+            <p className="text-sm text-center whitespace-nowrap overflow-hidden hover:overflow-x-scroll w-[5rem]">
+              {" "}
               {friend.nickname}
             </p>
             <OutlinedButton
