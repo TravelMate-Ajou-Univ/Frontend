@@ -13,17 +13,21 @@ import MenuIcon from "../ui/icons/MenuIcon";
 export default function Header() {
   const { userName, level } = useAppSelector(state => state.userSlice);
   const [menu, setMenu] = useState(false);
+
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     const refreshToken = getCookie("refreshToken");
+
     if (refreshToken) {
       const setUserInfoAsync = async () => {
         const userInfoData = await GetUserInfo();
+
         if (userInfoData !== false) {
           dispatch(setUser(userInfoData));
         }
       };
+
       setUserInfoAsync();
     }
   }, [dispatch]);
