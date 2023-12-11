@@ -103,7 +103,7 @@ export default function FriendsListModal({
         ))}
         {frinedList.count !== 0 ? (
           <Pagination
-            count={Math.floor((frinedList.count + limit) / limit)}
+            count={Math.floor((frinedList.count + limit - 1) / limit)}
             defaultPage={1}
             onChange={(e, page) => setPage(page)}
             className="bottom-[1rem] "
