@@ -25,6 +25,7 @@ export default function Profile() {
           setNicknamePreView(nickname);
           alert(res);
           setModifyState(false);
+          window.location.reload();
         } catch (error) {
           alert("변경 실패");
         }
