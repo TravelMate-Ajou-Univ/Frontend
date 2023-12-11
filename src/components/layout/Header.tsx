@@ -21,13 +21,16 @@ export default function Header() {
 
   useEffect(() => {
     const refreshToken = getCookie("refreshToken");
+
     if (refreshToken) {
       const setUserInfoAsync = async () => {
         const userInfoData = await GetUserInfo();
+
         if (userInfoData !== false) {
           dispatch(setUser(userInfoData));
         }
       };
+
       setUserInfoAsync();
     }
   }, [dispatch]);

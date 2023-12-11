@@ -10,7 +10,7 @@ export default function FriendsListPage() {
   const [page, setPage] = useState(1);
   const [friends, setFriends] = useState<FriendWithPkType[]>([]);
   const [total, setTotal] = useState(0);
-  const limit = 12;
+  const limit = 5;
 
   useEffect(() => {
     const getFriends = async () => {
