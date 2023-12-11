@@ -86,7 +86,7 @@ export default function ChatMap({ modifyState, socket, collectionId }: Props) {
       );
       dispatch(setBookmarks(recentBookmarks));
     });
-  }, [socket, dispatch]);
+  }, [socket, dispatch, bookmarks]);
 
   // page를 나갈 때 pins, bookmarks 초기화.
   useEffect(() => {
