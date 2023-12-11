@@ -34,7 +34,7 @@ export default function RequestList({ articleId }: Props) {
     const getArticleApi = async () => {
       const data = await getArticleRequestList(
         articleId,
-        (seasonMapper[season] as SeasonType) ?? "ALL"
+        (seasonParam.toUpperCase() as SeasonType) ?? "ALL"
       );
       if (!data) return;
       setRequestList(data);
@@ -44,7 +44,7 @@ export default function RequestList({ articleId }: Props) {
     };
 
     getArticleApi();
-  }, [articleId, season]);
+  }, [articleId, seasonParam]);
 
   useEffect(() => {
     setSeason(
