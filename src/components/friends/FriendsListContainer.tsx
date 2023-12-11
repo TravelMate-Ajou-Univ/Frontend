@@ -31,7 +31,7 @@ export default function FriendsListContainer({
   };
   return (
     <div className="relative">
-      <ul className="border-2 h-[37rem] overflow-y-scroll">
+      <ul className="border-2">
         {friends.map((friend, index) => (
           <li
             key={index}
