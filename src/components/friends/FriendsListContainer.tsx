@@ -74,7 +74,7 @@ export default function FriendsListContainer({
         ))}
       </ul>
       <Pagination
-        count={Math.floor((total + 5) / 5)}
+        count={Math.floor((total + 5 - 1) / 5)}
         defaultPage={1}
         onChange={(e, page) => setPage(page)}
         className="absolute -bottom-[3rem] right-[45%]"
