@@ -21,6 +21,7 @@ export default function ProfileImage() {
     if (imgId) {
       alert("변경되었습니다.");
       setModifyState(!modifyState);
+      window.location.reload();
     } else {
       alert("변경 실패");
     }
