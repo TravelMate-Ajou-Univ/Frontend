@@ -9,12 +9,15 @@ import { getCookie } from "cookies-next";
 import { GetUserInfo } from "@/service/axios/userSign";
 import { setUser } from "@/redux/features/userSlice";
 import MenuIcon from "../ui/icons/MenuIcon";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const { userName, level } = useAppSelector(state => state.userSlice);
   const [menu, setMenu] = useState(false);
 
   const dispatch = useAppDispatch();
+
+  const pathname = usePathname();
 
   useEffect(() => {
     const refreshToken = getCookie("refreshToken");
@@ -31,6 +34,13 @@ export default function Header() {
       setUserInfoAsync();
     }
   }, [dispatch]);
+
+  useEffect(() => {
+    closeMenu();
+    scrollTo(0, 0);
+
+    return () => sessionStorage.setItem("prevPath", pathname);
+  }, [pathname]);
 
   const openMenu = () => {
     setMenu(true);

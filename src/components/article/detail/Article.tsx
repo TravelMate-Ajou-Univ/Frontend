@@ -100,8 +100,10 @@ export default function Article({ articleId }: Props) {
     if (!res) alert("삭제에 실패했습니다.");
     else {
       alert("삭제되었습니다.");
-      if (level === "ADMIN") router.push("/admin");
-      else router.push("/article/list/me");
+
+      sessionStorage.getItem("prevPath") === "/admin"
+        ? router.push("/admin")
+        : router.push("/article/list/me");
     }
   };
 
