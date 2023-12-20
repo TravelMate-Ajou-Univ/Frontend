@@ -139,7 +139,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   };
 
   const removeKeyword = (index: number) => {
-    if (id) return;
+    if (userId !== authorId) return;
     setKeywords(keywords.filter((_, i) => i !== index));
   };
 
