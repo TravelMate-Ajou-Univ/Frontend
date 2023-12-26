@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --watch --coverage"
   },
   "dependencies": {
     "@emotion/react": "^11.11.1",
@@ -55,10 +56,14 @@
     "ws": "^8.14.2"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.1.5",
+    "@testing-library/react": "^14.1.2",
     "@types/dompurify": "^3.0.5",
     "@types/lodash": "^4.14.202",
     "@types/masonry-layout": "^4.2.7",
     "encoding": "^0.1.13",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
     "prettier": "3.0.3"
   }
 }
