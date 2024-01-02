@@ -11,6 +11,13 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
+  "jest": {
+    "collectCoverageFrom": [
+      "<rootDir>/src/components/**/*.{ts,tsx}",
+      "!**/node_modules/**",
+      "!**/*.stories.{ts,tsx}"
+    ]
+  },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
