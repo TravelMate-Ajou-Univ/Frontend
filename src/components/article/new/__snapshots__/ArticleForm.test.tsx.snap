@@ -1,0 +1,418 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ArticleForm /> should render correctly 1`] = `
+{
+  "asFragment": [Function],
+  "baseElement": <body>
+    <div>
+      <section
+        class="flex flex-col gap-6 bg-white w-full mx-auto lg:px-16 md:px-12 sm:px-8 px-4 lg:py-12 md:py-9 sm:py-6 py-3 mb-12 border"
+      >
+        <input
+          class="focus:outline-none border-b px-2 py-1 md:text-lg disabled:bg-white"
+          placeholder="제목"
+          type="text"
+          value="title"
+        />
+        <div
+          class="flex flex-row lg:gap-28 md:gap-20 sm:gap-12 gap-4"
+        >
+          <div
+            class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
+          >
+            <label>
+              지역 
+            </label>
+            <div
+              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
+            >
+              <span
+                class="grow text-center"
+              >
+                서울
+              </span>
+              <span>
+                <svg
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  height="1em"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 16 16"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+          </div>
+          <div
+            class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
+          >
+            <label>
+              계절 
+            </label>
+            <div
+              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
+            >
+              <span
+                class="grow text-center"
+              />
+              <span>
+                <svg
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  height="1em"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 16 16"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </div>
+          </div>
+        </div>
+        <section>
+          <button
+            class=" rounded-lg bg-white border border-secondary text-secondary hover:bg-gray-100 ease-in-out transition-colors font-semibold md:px-4 px-3 py-1 md:text-base text-sm"
+          >
+            <label
+              class="w-full h-full hover:cursor-pointer"
+              for="thumbnail"
+            >
+              썸네일 등록
+            </label>
+          </button>
+          <input
+            accept="image/*"
+            class="hidden"
+            id="thumbnail"
+            type="file"
+          />
+        </section>
+        <div
+          class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
+        >
+          <label>
+            키워드 
+          </label>
+          <div
+            class="flex flex-col"
+          >
+            <form
+              class="flex"
+            >
+              <input
+                class="focus:outline-none border-b px-2 py-1 text-sm md:w-80 sm:w-72 w-64 rounded-none"
+                placeholder="#맛집, #카페, #숙소 등의 키워드를 입력해주세요 :)"
+                type="text"
+                value=""
+              />
+              <button
+                class="border-b text-sm text-primary w-8 h-8"
+                type="submit"
+              >
+                <svg
+                  class="w-full h-full p-2 false"
+                  fill="currentColor"
+                  height="1em"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 1024 1024"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8Z"
+                  />
+                  <path
+                    d="M192 474h672q8 0 8 8v60q0 8-8 8H160q-8 0-8-8v-60q0-8 8-8Z"
+                  />
+                </svg>
+              </button>
+            </form>
+          </div>
+        </div>
+        <ul
+          class="text-sm"
+        >
+          <li
+            class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+          >
+            <span
+              class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+            >
+              keyword1
+            </span>
+          </li>
+          <li
+            class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+          >
+            <span
+              class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+            >
+              keyword2
+            </span>
+          </li>
+        </ul>
+        <section
+          class="self-end flex gap-2"
+        >
+          <button
+            class=" rounded-lg bg-white border border-secondary text-secondary hover:bg-gray-100 ease-in-out transition-colors font-semibold md:px-4 px-3 py-1 md:text-base text-sm"
+          >
+            취소
+          </button>
+          <button
+            class=" rounded-lg bg-secondary text-white md:px-4 px-3 py-1 md:text-base text-sm hover:bg-primary ease-in-out transition-colors font-semibold"
+          >
+            작성
+          </button>
+        </section>
+      </section>
+    </div>
+  </body>,
+  "container": <div>
+    <section
+      class="flex flex-col gap-6 bg-white w-full mx-auto lg:px-16 md:px-12 sm:px-8 px-4 lg:py-12 md:py-9 sm:py-6 py-3 mb-12 border"
+    >
+      <input
+        class="focus:outline-none border-b px-2 py-1 md:text-lg disabled:bg-white"
+        placeholder="제목"
+        type="text"
+        value="title"
+      />
+      <div
+        class="flex flex-row lg:gap-28 md:gap-20 sm:gap-12 gap-4"
+      >
+        <div
+          class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
+        >
+          <label>
+            지역 
+          </label>
+          <div
+            class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
+          >
+            <span
+              class="grow text-center"
+            >
+              서울
+            </span>
+            <span>
+              <svg
+                class="w-4 h-4"
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                stroke-width="0"
+                viewBox="0 0 16 16"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+        <div
+          class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
+        >
+          <label>
+            계절 
+          </label>
+          <div
+            class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
+          >
+            <span
+              class="grow text-center"
+            />
+            <span>
+              <svg
+                class="w-4 h-4"
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                stroke-width="0"
+                viewBox="0 0 16 16"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                  fill-rule="evenodd"
+                />
+              </svg>
+            </span>
+          </div>
+        </div>
+      </div>
+      <section>
+        <button
+          class=" rounded-lg bg-white border border-secondary text-secondary hover:bg-gray-100 ease-in-out transition-colors font-semibold md:px-4 px-3 py-1 md:text-base text-sm"
+        >
+          <label
+            class="w-full h-full hover:cursor-pointer"
+            for="thumbnail"
+          >
+            썸네일 등록
+          </label>
+        </button>
+        <input
+          accept="image/*"
+          class="hidden"
+          id="thumbnail"
+          type="file"
+        />
+      </section>
+      <div
+        class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
+      >
+        <label>
+          키워드 
+        </label>
+        <div
+          class="flex flex-col"
+        >
+          <form
+            class="flex"
+          >
+            <input
+              class="focus:outline-none border-b px-2 py-1 text-sm md:w-80 sm:w-72 w-64 rounded-none"
+              placeholder="#맛집, #카페, #숙소 등의 키워드를 입력해주세요 :)"
+              type="text"
+              value=""
+            />
+            <button
+              class="border-b text-sm text-primary w-8 h-8"
+              type="submit"
+            >
+              <svg
+                class="w-full h-full p-2 false"
+                fill="currentColor"
+                height="1em"
+                stroke="currentColor"
+                stroke-width="0"
+                viewBox="0 0 1024 1024"
+                width="1em"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M482 152h60q8 0 8 8v704q0 8-8 8h-60q-8 0-8-8V160q0-8 8-8Z"
+                />
+                <path
+                  d="M192 474h672q8 0 8 8v60q0 8-8 8H160q-8 0-8-8v-60q0-8 8-8Z"
+                />
+              </svg>
+            </button>
+          </form>
+        </div>
+      </div>
+      <ul
+        class="text-sm"
+      >
+        <li
+          class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+        >
+          <span
+            class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+          >
+            keyword1
+          </span>
+        </li>
+        <li
+          class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+        >
+          <span
+            class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+          >
+            keyword2
+          </span>
+        </li>
+      </ul>
+      <section
+        class="self-end flex gap-2"
+      >
+        <button
+          class=" rounded-lg bg-white border border-secondary text-secondary hover:bg-gray-100 ease-in-out transition-colors font-semibold md:px-4 px-3 py-1 md:text-base text-sm"
+        >
+          취소
+        </button>
+        <button
+          class=" rounded-lg bg-secondary text-white md:px-4 px-3 py-1 md:text-base text-sm hover:bg-primary ease-in-out transition-colors font-semibold"
+        >
+          작성
+        </button>
+      </section>
+    </section>
+  </div>,
+  "debug": [Function],
+  "findAllByAltText": [Function],
+  "findAllByDisplayValue": [Function],
+  "findAllByLabelText": [Function],
+  "findAllByPlaceholderText": [Function],
+  "findAllByRole": [Function],
+  "findAllByTestId": [Function],
+  "findAllByText": [Function],
+  "findAllByTitle": [Function],
+  "findByAltText": [Function],
+  "findByDisplayValue": [Function],
+  "findByLabelText": [Function],
+  "findByPlaceholderText": [Function],
+  "findByRole": [Function],
+  "findByTestId": [Function],
+  "findByText": [Function],
+  "findByTitle": [Function],
+  "getAllByAltText": [Function],
+  "getAllByDisplayValue": [Function],
+  "getAllByLabelText": [Function],
+  "getAllByPlaceholderText": [Function],
+  "getAllByRole": [Function],
+  "getAllByTestId": [Function],
+  "getAllByText": [Function],
+  "getAllByTitle": [Function],
+  "getByAltText": [Function],
+  "getByDisplayValue": [Function],
+  "getByLabelText": [Function],
+  "getByPlaceholderText": [Function],
+  "getByRole": [Function],
+  "getByTestId": [Function],
+  "getByText": [Function],
+  "getByTitle": [Function],
+  "queryAllByAltText": [Function],
+  "queryAllByDisplayValue": [Function],
+  "queryAllByLabelText": [Function],
+  "queryAllByPlaceholderText": [Function],
+  "queryAllByRole": [Function],
+  "queryAllByTestId": [Function],
+  "queryAllByText": [Function],
+  "queryAllByTitle": [Function],
+  "queryByAltText": [Function],
+  "queryByDisplayValue": [Function],
+  "queryByLabelText": [Function],
+  "queryByPlaceholderText": [Function],
+  "queryByRole": [Function],
+  "queryByTestId": [Function],
+  "queryByText": [Function],
+  "queryByTitle": [Function],
+  "rerender": [Function],
+  "unmount": [Function],
+}
+`;
