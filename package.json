@@ -11,13 +11,6 @@
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
-  "jest": {
-    "collectCoverageFrom": [
-      "<rootDir>/src/components/**/*.{ts,tsx}",
-      "!**/node_modules/**",
-      "!**/*.stories.{ts,tsx}"
-    ]
-  },
   "dependencies": {
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
@@ -26,6 +19,7 @@
     "@mui/material": "^5.14.15",
     "@react-google-maps/api": "^2.19.2",
     "@reduxjs/toolkit": "^1.9.7",
+    "@storybook/global": "^5.0.0",
     "@types/node": "20.5.1",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
@@ -57,6 +51,7 @@
     "react-spinners": "^0.13.8",
     "sharp": "^0.32.6",
     "socket.io-client": "^4.7.2",
+    "storybook-addon-next-router": "^4.0.2",
     "tailwindcss": "3.3.3",
     "typescript": "5.1.6",
     "unidiff": "^1.0.4",
@@ -69,6 +64,7 @@
     "@storybook/addon-interactions": "^7.6.7",
     "@storybook/addon-links": "^7.6.7",
     "@storybook/addon-onboarding": "^1.0.10",
+    "@storybook/addon-styling-webpack": "^0.0.5",
     "@storybook/blocks": "^7.6.7",
     "@storybook/nextjs": "^7.6.7",
     "@storybook/react": "^7.6.7",
