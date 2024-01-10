@@ -1,10 +1,13 @@
-import { render } from "@testing-library/react";
-import ArticleForm from "./ArticleForm";
+import { render, waitFor } from "@testing-library/react";
+import * as stories from "./ArticleForm.stories";
+import { composeStories } from "@storybook/react";
 
+const { NewArticle, EditArticle } = composeStories(stories);
+
+document.execCommand = jest.fn();
 const mockDispatch = jest.fn();
 const mockSelector = jest.fn();
 const mockRouter = jest.fn();
-const mockUseState = jest.fn();
 
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
@@ -17,37 +20,23 @@ jest.mock("next/navigation", () => ({
   useRouter: () => mockRouter
 }));
 
-jest.mock("react", () => ({
-  ...jest.requireActual("react"),
-  useState: () => mockUseState()
-}));
-
 const user = {
   id: 1
 };
 
 describe("<ArticleForm />", () => {
-  it("should render correctly", () => {
-    mockSelector.mockReturnValue({
-      id: user.id
-    });
-    mockRouter.mockReturnValue({});
-    mockUseState
-      .mockImplementationOnce(() => ["title", mockUseState])
-      .mockImplementationOnce(() => ["content", mockUseState])
-      .mockImplementationOnce(() => ["서울", mockUseState])
-      .mockImplementationOnce(initial => [initial, mockUseState])
-      .mockImplementationOnce(() => [
-        [
-          { id: 1, name: "keyword1" },
-          { id: 2, name: "keyword2" }
-        ],
-        mockUseState
-      ])
-      .mockImplementation(initial => [initial, mockUseState]);
+  mockSelector.mockReturnValue({
+    id: user.id
+  });
+  mockRouter.mockReturnValue({});
 
-    const component = render(<ArticleForm />);
+  it("새로운 게시글을 작성하는 컴포넌트", async () => {
+    const component = render(<NewArticle />);
+    await waitFor(() => expect(component).toMatchSnapshot());
+  });
 
-    expect(component).toMatchSnapshot();
+  it("기존 게시글을 수정하는 컴포넌트", async () => {
+    const component = render(<EditArticle />);
+    await waitFor(() => expect(component).toMatchSnapshot());
   });
 });
