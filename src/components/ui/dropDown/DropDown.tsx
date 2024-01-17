@@ -31,25 +31,26 @@ export default function DropDown({
   };
 
   return (
-    <div
-      className={
-        className +
-        " flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white" +
-        (border ? " border" : "") +
-        (size == "small" ? " text-sm " : " md:text-base text-sm")
-      }
-      onClick={handleOpen}
-      ref={dropDownRef}
-    >
-      <span className="grow text-center">
-        {selected === "" ? "선택" : selected}
-      </span>
-      <span>
-        <DownIcon />
-      </span>
-      {isOpen && (
-        <DropDownList list={list} setSelected={setSelected} size={size} />
-      )}
+    <div ref={dropDownRef}>
+      <button
+        className={
+          className +
+          " flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white" +
+          (border ? " border" : "") +
+          (size == "small" ? " text-sm " : " md:text-base text-sm")
+        }
+        onClick={handleOpen}
+      >
+        <span className="grow text-center">
+          {selected === "" ? "선택" : selected}
+        </span>
+        <span>
+          <DownIcon />
+        </span>
+        {isOpen && (
+          <DropDownList list={list} setSelected={setSelected} size={size} />
+        )}
+      </button>
     </div>
   );
 }
