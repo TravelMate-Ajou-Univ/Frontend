@@ -6,21 +6,9 @@ import { locationList } from "@/lib/locationList";
 import { seasonList, seasonMapper } from "@/lib/seasonList";
 import KeywordInput from "./KeywordInput";
 import dynamic from "next/dynamic";
-import {
-  editArticle,
-  editArticleRequest,
-  getArticle,
-  postKeyword,
-  submitArticle,
-  uploadImage
-} from "@/service/axios/article";
+import { getArticle, postKeyword } from "@/service/axios/article";
 import Keyword from "@/components/ui/Keyword";
-import {
-  ArticleType,
-  KeywordType,
-  KoreanSeasonType,
-  SeasonType
-} from "@/model/article";
+import { KeywordType, KoreanSeasonType, SeasonType } from "@/model/article";
 import { useRouter } from "next/navigation";
 import ImageSection from "@/components/ui/ImageSection";
 import FilledButton from "@/components/ui/button/FilledButton";
@@ -29,6 +17,13 @@ import { useAppSelector } from "@/hooks/redux";
 import CommentForm from "./CommentForm";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
 import { BookmarkType } from "@/model/bookmark";
+import {
+  editRequestAndRedirect,
+  handleImgInContent,
+  submitAndRedirect,
+  validateArticleForm
+} from "@/service/article/articleForm";
+import { getImgUrl } from "@/service/handleImg";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -158,132 +153,58 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   };
 
   const submit = async () => {
-    if (!title) return alert("제목을 입력해주세요");
-    if (!location) return alert("지역을 선택해주세요");
-    if (!season) return alert("계절을 선택해주세요");
-    if (!content) return alert("내용을 입력해주세요");
-    if (!thumbnailFile) return alert("썸네일을 등록해주세요");
+    if (!validateArticleForm(title, location, season, content, thumbnailFile))
+      return;
 
-    const regex = /<img.*?src="(.*?)"/g;
-    let match;
-    let newContent = content;
+    const newContent = await handleImgInContent(content);
+    if (!newContent) return;
+    const thumbnail = await getImgUrl(thumbnailFile as File, "thumbnail");
+    if (!thumbnail) return;
 
-    while ((match = regex.exec(content)) !== null) {
-      const base64Image = match[1];
-      if (!base64Image) return;
-
-      const response = await fetch(base64Image);
-      const blob = await response.blob();
-      const file = new File([blob], "image.jpg", { type: "image" });
-
-      try {
-        const imgId = await uploadImage(file, "article");
-        if (!imgId) throw new Error();
-        const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
-        const replacedContent = newContent.replace(base64Image, imgURL);
-        newContent = replacedContent;
-      } catch (error) {
-        alert("업로드에 실패했습니다.");
-        return;
-      }
-    }
-
-    const imgId = await uploadImage(thumbnailFile, "thumbnail");
-    const thumbnail = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=thumbnail`;
-    const article: ArticleType = {
+    submitAndRedirect(
       title,
-      period: seasonMapper[season] as SeasonType,
+      seasonMapper[season] as SeasonType,
       location,
-      content: newContent,
-      tagIds: keywords.map(keyword => keyword.id),
+      newContent,
+      keywords,
       thumbnail,
-      bookmarkIds
-    };
-
-    const articleId = await submitArticle(article);
-
-    if (articleId) {
-      alert("게시글이 등록되었습니다.");
-      router.push(
-        `/article/detail/${articleId}?season=${seasonMapper[
-          season
-        ].toLowerCase()}`
-      );
-    }
+      bookmarkIds,
+      router
+    );
   };
 
   const edit = async () => {
-    const editingSeason = seasonMapper[season] as SeasonType;
-
-    const regex = /<img.*?src="data:(.*?)"/g;
-    let match;
-    let newContent = content;
-
-    while ((match = regex.exec(content)) !== null) {
-      const base64Image = match[1];
-      if (!base64Image) return;
-
-      const beforeSrc = `data:${base64Image}`;
-      const response = await fetch(beforeSrc);
-      const blob = await response.blob();
-      const file = new File([blob], "image.jpg", { type: "image" });
-
-      try {
-        const imgId = await uploadImage(file, "article");
-        if (!imgId) return;
-        const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
-        const replacedContent = newContent.replace(beforeSrc, imgURL);
-        newContent = replacedContent;
-      } catch (error) {
-        alert("업로드에 실패했습니다.");
-        return;
-      }
-    }
+    const edittingSeason = seasonMapper[season] as SeasonType;
+    const newContent = await handleImgInContent(content);
+    if (!newContent) return;
 
     if (authorId === userId) {
-      let thumbnail = receivedThumbnail;
+      let thumbnail: string | null = receivedThumbnail;
       if (thumbnailFile) {
-        const imgId = await uploadImage(thumbnailFile, "thumbnail");
-        thumbnail = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=thumbnail`;
+        thumbnail = await getImgUrl(thumbnailFile as File, "thumbnail");
+        if (!thumbnail) return;
       }
-      const article: ArticleType = {
+      submitAndRedirect(
         title,
-        period: editingSeason,
+        edittingSeason,
         location,
-        content: newContent,
-        tagIds: keywords.map(keyword => keyword.id),
-        thumbnail: thumbnail,
-        bookmarkIds
-      };
-      const result = await editArticle(edittingId as string, article);
-      if (result) {
-        alert("게시글이 수정되었습니다.");
-        router.push(
-          `/article/detail/${edittingId}?season=${editingSeason.toLowerCase()}`
-        );
-      }
+        newContent,
+        keywords,
+        thumbnail,
+        bookmarkIds,
+        router,
+        edittingId as string
+      );
     } else {
-      const bookmarksToRemove = receivedBookmarkIds.filter(
-        bookmarkId => !bookmarkIds.includes(bookmarkId)
-      );
-      const bookmarksToAdd = bookmarkIds.filter(
-        bookmarkId => !receivedBookmarkIds.includes(bookmarkId)
-      );
-
-      const result = await editArticleRequest(
+      editRequestAndRedirect(
         edittingId as string,
         newContent,
-        editingSeason,
+        edittingSeason,
         comment,
-        bookmarksToRemove,
-        bookmarksToAdd
+        bookmarkIds,
+        receivedBookmarkIds,
+        router
       );
-      if (result) {
-        alert("수정 요청이 완료되었습니다.");
-        router.push(
-          `/article/detail/${edittingId}?season=${editingSeason.toLowerCase()}`
-        );
-      }
     }
   };
 
