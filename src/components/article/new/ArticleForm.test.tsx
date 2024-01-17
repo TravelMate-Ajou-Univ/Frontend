@@ -54,6 +54,8 @@ describe("<ArticleForm />", () => {
 
       expect(component.getByRole("button", { name: "봄" })).toBeInTheDocument();
 
+      expect(component.getByLabelText("키워드")).toBeInTheDocument();
+
       expect(component).toMatchSnapshot();
     });
   });
@@ -69,6 +71,8 @@ describe("<ArticleForm />", () => {
       expect(
         component.getByRole("button", { name: "가을" })
       ).toBeInTheDocument();
+
+      expect(component.getByLabelText("키워드")).toBeInTheDocument();
 
       expect(component).toMatchSnapshot();
     });

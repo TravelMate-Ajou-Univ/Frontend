@@ -24,6 +24,8 @@ import {
   validateArticleForm
 } from "@/service/article/articleForm";
 import { getImgUrl } from "@/service/handleImg";
+import KeywordList from "./KeywordList";
+import KeywordInputContainer from "./keyword/KeywordInputContainer";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -54,8 +56,6 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   const [receivedBookmarkIds, setReceivedBookmarkIds] = useState<number[]>([]);
   const [comment, setComment] = useState<string>("");
   const [authorId, setAuthorId] = useState<number>(-1);
-
-  const keywordInputId = useId();
 
   const { id: userId } = useAppSelector(state => state.userSlice);
   const router = useRouter();
@@ -256,25 +256,12 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
           thumbnailPreview={thumbnailPreview}
         />
       )}
-      <div className={INPUT_CLASSNAME}>
-        <label htmlFor={keywordInputId}>키워드 </label>
-        <KeywordInput
-          inputId={keywordInputId}
-          addKeyword={addKeyword}
-          disabled={edittingId && authorId !== userId ? true : false}
-        />
-      </div>
-      <ul className="text-sm">
-        {keywords?.map((keyword, index) => (
-          <li
-            className="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
-            key={keyword.id}
-            onClick={() => removeKeyword(index)}
-          >
-            <Keyword keyword={keyword.name} />
-          </li>
-        ))}
-      </ul>
+      <KeywordInputContainer
+        keywords={keywords}
+        addKeyword={addKeyword}
+        removeKeyword={removeKeyword}
+        disabled={edittingId && authorId !== userId ? true : false}
+      />
       {edittingId && authorId !== userId && (
         <CommentForm
           comment={comment}

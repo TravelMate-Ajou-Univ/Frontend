@@ -1492,9 +1492,7 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
             />
           </div>
         </section>
-        <div
-          class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
-        >
+        <div>
           <label
             for=":r1:"
           >
@@ -3054,9 +3052,7 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
           />
         </div>
       </section>
-      <div
-        class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
-      >
+      <div>
         <label
           for=":r1:"
         >
@@ -3318,9 +3314,7 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
             type="file"
           />
         </section>
-        <div
-          class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
-        >
+        <div>
           <label
             for=":r0:"
           >
@@ -3517,9 +3511,7 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
           type="file"
         />
       </section>
-      <div
-        class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
-      >
+      <div>
         <label
           for=":r0:"
         >
