@@ -29,31 +29,33 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
             <label>
               지역 
             </label>
-            <div
-              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
-            >
-              <span
-                class="grow text-center"
+            <div>
+              <button
+                class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
               >
-                선택
-              </span>
-              <span>
-                <svg
-                  class="w-4 h-4"
-                  fill="currentColor"
-                  height="1em"
-                  stroke="currentColor"
-                  stroke-width="0"
-                  viewBox="0 0 16 16"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <span
+                  class="grow text-center"
                 >
-                  <path
-                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-              </span>
+                  경기/인천
+                </span>
+                <span>
+                  <svg
+                    class="w-4 h-4"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 16 16"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </button>
             </div>
           </div>
           <div
@@ -62,31 +64,33 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
             <label>
               계절 
             </label>
-            <div
-              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
-            >
-              <span
-                class="grow text-center"
+            <div>
+              <button
+                class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
               >
-                봄
-              </span>
-              <span>
-                <svg
-                  class="w-4 h-4"
-                  fill="currentColor"
-                  height="1em"
-                  stroke="currentColor"
-                  stroke-width="0"
-                  viewBox="0 0 16 16"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <span
+                  class="grow text-center"
                 >
-                  <path
-                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-              </span>
+                  가을
+                </span>
+                <span>
+                  <svg
+                    class="w-4 h-4"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 16 16"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </button>
             </div>
           </div>
         </div>
@@ -1491,7 +1495,9 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
         <div
           class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
         >
-          <label>
+          <label
+            for=":r1:"
+          >
             키워드 
           </label>
           <div
@@ -1503,6 +1509,7 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
               <input
                 class="focus:outline-none border-b px-2 py-1 text-sm md:w-80 sm:w-72 w-64 rounded-none"
                 disabled=""
+                id=":r1:"
                 placeholder="#맛집, #카페, #숙소 등의 키워드를 입력해주세요 :)"
                 type="text"
                 value=""
@@ -1536,10 +1543,13 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
           class="text-sm"
         />
         <section>
-          <label>
+          <label
+            id=":r2:"
+          >
             코멘트
           </label>
           <textarea
+            aria-labelledby=":r2:"
             class="w-full border resize-none overflow-y-scroll h-40 focus:outline-none px-4 py-2 text-sm mt-1"
             placeholder="작성자에게 수정 요청에 대한 코멘트를 남겨주세요!"
           />
@@ -1581,31 +1591,33 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
           <label>
             지역 
           </label>
-          <div
-            class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
-          >
-            <span
-              class="grow text-center"
+          <div>
+            <button
+              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
             >
-              선택
-            </span>
-            <span>
-              <svg
-                class="w-4 h-4"
-                fill="currentColor"
-                height="1em"
-                stroke="currentColor"
-                stroke-width="0"
-                viewBox="0 0 16 16"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="grow text-center"
               >
-                <path
-                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
+                경기/인천
+              </span>
+              <span>
+                <svg
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  height="1em"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 16 16"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </button>
           </div>
         </div>
         <div
@@ -1614,31 +1626,33 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
           <label>
             계절 
           </label>
-          <div
-            class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
-          >
-            <span
-              class="grow text-center"
+          <div>
+            <button
+              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
             >
-              봄
-            </span>
-            <span>
-              <svg
-                class="w-4 h-4"
-                fill="currentColor"
-                height="1em"
-                stroke="currentColor"
-                stroke-width="0"
-                viewBox="0 0 16 16"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="grow text-center"
               >
-                <path
-                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
+                가을
+              </span>
+              <span>
+                <svg
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  height="1em"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 16 16"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -3043,7 +3057,9 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
       <div
         class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
       >
-        <label>
+        <label
+          for=":r1:"
+        >
           키워드 
         </label>
         <div
@@ -3055,6 +3071,7 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
             <input
               class="focus:outline-none border-b px-2 py-1 text-sm md:w-80 sm:w-72 w-64 rounded-none"
               disabled=""
+              id=":r1:"
               placeholder="#맛집, #카페, #숙소 등의 키워드를 입력해주세요 :)"
               type="text"
               value=""
@@ -3088,10 +3105,13 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
         class="text-sm"
       />
       <section>
-        <label>
+        <label
+          id=":r2:"
+        >
           코멘트
         </label>
         <textarea
+          aria-labelledby=":r2:"
           class="w-full border resize-none overflow-y-scroll h-40 focus:outline-none px-4 py-2 text-sm mt-1"
           placeholder="작성자에게 수정 요청에 대한 코멘트를 남겨주세요!"
         />
@@ -3189,31 +3209,33 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
             <label>
               지역 
             </label>
-            <div
-              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
-            >
-              <span
-                class="grow text-center"
+            <div>
+              <button
+                class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
               >
-                선택
-              </span>
-              <span>
-                <svg
-                  class="w-4 h-4"
-                  fill="currentColor"
-                  height="1em"
-                  stroke="currentColor"
-                  stroke-width="0"
-                  viewBox="0 0 16 16"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <span
+                  class="grow text-center"
                 >
-                  <path
-                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-              </span>
+                  선택
+                </span>
+                <span>
+                  <svg
+                    class="w-4 h-4"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 16 16"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </button>
             </div>
           </div>
           <div
@@ -3222,31 +3244,33 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
             <label>
               계절 
             </label>
-            <div
-              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
-            >
-              <span
-                class="grow text-center"
+            <div>
+              <button
+                class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
               >
-                봄
-              </span>
-              <span>
-                <svg
-                  class="w-4 h-4"
-                  fill="currentColor"
-                  height="1em"
-                  stroke="currentColor"
-                  stroke-width="0"
-                  viewBox="0 0 16 16"
-                  width="1em"
-                  xmlns="http://www.w3.org/2000/svg"
+                <span
+                  class="grow text-center"
                 >
-                  <path
-                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                    fill-rule="evenodd"
-                  />
-                </svg>
-              </span>
+                  봄
+                </span>
+                <span>
+                  <svg
+                    class="w-4 h-4"
+                    fill="currentColor"
+                    height="1em"
+                    stroke="currentColor"
+                    stroke-width="0"
+                    viewBox="0 0 16 16"
+                    width="1em"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <path
+                      d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                      fill-rule="evenodd"
+                    />
+                  </svg>
+                </span>
+              </button>
             </div>
           </div>
         </div>
@@ -3297,7 +3321,9 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
         <div
           class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
         >
-          <label>
+          <label
+            for=":r0:"
+          >
             키워드 
           </label>
           <div
@@ -3308,6 +3334,7 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
             >
               <input
                 class="focus:outline-none border-b px-2 py-1 text-sm md:w-80 sm:w-72 w-64 rounded-none"
+                id=":r0:"
                 placeholder="#맛집, #카페, #숙소 등의 키워드를 입력해주세요 :)"
                 type="text"
                 value=""
@@ -3381,31 +3408,33 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
           <label>
             지역 
           </label>
-          <div
-            class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
-          >
-            <span
-              class="grow text-center"
+          <div>
+            <button
+              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
             >
-              선택
-            </span>
-            <span>
-              <svg
-                class="w-4 h-4"
-                fill="currentColor"
-                height="1em"
-                stroke="currentColor"
-                stroke-width="0"
-                viewBox="0 0 16 16"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="grow text-center"
               >
-                <path
-                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
+                선택
+              </span>
+              <span>
+                <svg
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  height="1em"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 16 16"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </button>
           </div>
         </div>
         <div
@@ -3414,31 +3443,33 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
           <label>
             계절 
           </label>
-          <div
-            class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
-          >
-            <span
-              class="grow text-center"
+          <div>
+            <button
+              class=" flex justify-between items-center md:w-40 w-28 md:h-9 h-8 px-2 rounded-full cursor-pointer relative bg-white border md:text-base text-sm"
             >
-              봄
-            </span>
-            <span>
-              <svg
-                class="w-4 h-4"
-                fill="currentColor"
-                height="1em"
-                stroke="currentColor"
-                stroke-width="0"
-                viewBox="0 0 16 16"
-                width="1em"
-                xmlns="http://www.w3.org/2000/svg"
+              <span
+                class="grow text-center"
               >
-                <path
-                  d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
-                  fill-rule="evenodd"
-                />
-              </svg>
-            </span>
+                봄
+              </span>
+              <span>
+                <svg
+                  class="w-4 h-4"
+                  fill="currentColor"
+                  height="1em"
+                  stroke="currentColor"
+                  stroke-width="0"
+                  viewBox="0 0 16 16"
+                  width="1em"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"
+                    fill-rule="evenodd"
+                  />
+                </svg>
+              </span>
+            </button>
           </div>
         </div>
       </div>
@@ -3489,7 +3520,9 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
       <div
         class="flex items-center md:gap-4 gap-2 md:text-base text-sm"
       >
-        <label>
+        <label
+          for=":r0:"
+        >
           키워드 
         </label>
         <div
@@ -3500,6 +3533,7 @@ exports[`<ArticleForm /> 새로운 게시글을 작성하는 컴포넌트 1`] = 
           >
             <input
               class="focus:outline-none border-b px-2 py-1 text-sm md:w-80 sm:w-72 w-64 rounded-none"
+              id=":r0:"
               placeholder="#맛집, #카페, #숙소 등의 키워드를 입력해주세요 :)"
               type="text"
               value=""
