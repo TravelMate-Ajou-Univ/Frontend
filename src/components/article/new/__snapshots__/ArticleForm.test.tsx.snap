@@ -1539,7 +1539,38 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
         </div>
         <ul
           class="text-sm"
-        />
+        >
+          <li
+            class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+          >
+            <span
+              class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+            >
+              카페
+            </span>
+          </li>
+          <li
+            class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+          >
+            <span
+              class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+            >
+              행궁
+            </span>
+          </li>
+          <li
+            class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+          >
+            <span
+              class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+            >
+              행궁 카페
+            </span>
+          </li>
+        </ul>
         <section>
           <label
             id=":r2:"
@@ -3099,7 +3130,38 @@ exports[`<ArticleForm /> 기존 게시글을 수정하는 컴포넌트 1`] = `
       </div>
       <ul
         class="text-sm"
-      />
+      >
+        <li
+          class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+        >
+          <span
+            class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+          >
+            카페
+          </span>
+        </li>
+        <li
+          class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+        >
+          <span
+            class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+          >
+            행궁
+          </span>
+        </li>
+        <li
+          class="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
+        >
+          <span
+            class="border rounded-full text-secondary 
+      text-xs px-2 py-0.5 bg-white"
+          >
+            행궁 카페
+          </span>
+        </li>
+      </ul>
       <section>
         <label
           id=":r2:"

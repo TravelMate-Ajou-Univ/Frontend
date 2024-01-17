@@ -73,6 +73,9 @@ describe("<ArticleForm />", () => {
       ).toBeInTheDocument();
 
       expect(component.getByLabelText("키워드")).toBeInTheDocument();
+      expect(component.getByText("카페")).toBeInTheDocument();
+      expect(component.getByText("행궁")).toBeInTheDocument();
+      expect(component.getByText("행궁 카페")).toBeInTheDocument();
 
       expect(component).toMatchSnapshot();
     });
