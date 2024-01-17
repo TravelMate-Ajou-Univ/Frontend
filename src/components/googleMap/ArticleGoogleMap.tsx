@@ -6,9 +6,11 @@ import { createBookmark } from "@/service/axios/bookmark";
 import { calculateCenter } from "@/service/googlemap/map";
 import { makeContentString, makeMarker } from "@/service/googlemap/marker";
 import { placeDetail, searchPlace } from "@/service/googlemap/place";
+import Script from "next/script";
 import {
   ChangeEvent,
   SyntheticEvent,
+  useCallback,
   useEffect,
   useRef,
   useState
@@ -70,16 +72,12 @@ export default function ArticleGoogleMap({
   useEffect(() => {
     if (bookmarks && bookmarks.length > 0) {
       setCenter(calculateCenter(bookmarks));
-      // map?.panTo({
-      //   lat: calculateCenter(bookmarks).latitude,
-      //   lng: calculateCenter(bookmarks).longitude
-      // });
       setZoom(9);
       setPins(bookmarks);
     } else if (location === "") {
       setPins([]);
       setZoom(14);
-      navigator.geolocation.getCurrentPosition(
+      navigator.geolocation?.getCurrentPosition(
         position => {
           setCenter({
             latitude: position.coords.latitude,
@@ -118,42 +116,47 @@ export default function ArticleGoogleMap({
     }
   }, [center, modifyState]);
 
+  const subPinHandler = useCallback(
+    (pin: PinType) => {
+      setPins(prevPins => prevPins.filter(prevPin => prevPin !== pin));
+      if (setBookmarkIds) {
+        setBookmarkIds(prevBookmarkIds =>
+          prevBookmarkIds.filter((_, index) => index !== pins.indexOf(pin))
+        );
+      }
+    },
+    [pins, setBookmarkIds]
+  );
+
+  const setMarker = useCallback(
+    (initmap: google.maps.Map) => {
+      const service = new google.maps.places.PlacesService(
+        initmap as google.maps.Map
+      );
+
+      pins.map(pin => {
+        makeMarker({
+          pin: pin,
+          initmap,
+          service,
+          modifyState,
+          activeMarkerHandler,
+          subPinHandler
+        });
+      });
+    },
+    [pins, modifyState, subPinHandler]
+  );
   useEffect(() => {
     if (map !== undefined) {
       setMarker(map);
     }
-  }, [pins]);
-
-  const setMarker = (initmap: google.maps.Map) => {
-    const service = new google.maps.places.PlacesService(
-      initmap as google.maps.Map
-    );
-
-    pins.map(pin => {
-      makeMarker({
-        pin: pin,
-        initmap,
-        service,
-        modifyState,
-        activeMarkerHandler,
-        subPinHandler
-      });
-    });
-  };
+  }, [map, setMarker, pins]);
 
   const activeMarkerHandler = (currentMarker: google.maps.InfoWindow): void => {
     // active marker 변경
     activeMarkerInfoRef.current?.close();
     activeMarkerInfoRef.current = currentMarker;
-  };
-
-  const subPinHandler = (pin: PinType) => {
-    setPins(prevPins => prevPins.filter(prevPin => prevPin !== pin));
-    if (setBookmarkIds) {
-      setBookmarkIds(prevBookmarkIds =>
-        prevBookmarkIds.filter((_, index) => index !== pins.indexOf(pin))
-      );
-    }
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
@@ -306,6 +309,10 @@ export default function ArticleGoogleMap({
         </form>
       )}
       <div id="map" className=" w-full h-full"></div>
+      <Script
+        defer
+        src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&libraries=places&callback=initMap`}
+      />
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { composeStories } from "@storybook/react";
 import MockAdapter from "axios-mock-adapter";
 import { api } from "@/service/axios/api";
 import { initialize } from "@googlemaps/jest-mocks";
+import { articleMock } from "@/lib/mockData";
 
 const { NewArticle, EditArticle } = composeStories(stories);
 
@@ -27,48 +28,32 @@ const user = {
   id: 1
 };
 
+const axiosMock = new MockAdapter(api, { delayResponse: 200 });
+
+beforeEach(() => {
+  initialize();
+  axiosMock.onGet(`articles/1?userId=0`).reply(200, articleMock);
+});
+
+afterEach(() => {
+  axiosMock.reset();
+});
+
 describe("<ArticleForm />", () => {
   mockSelector.mockReturnValue({
     id: user.id
   });
   mockRouter.mockReturnValue({});
-  const axiosMock = new MockAdapter(api, { delayResponse: 200 });
-  beforeEach(() => {
-    initialize();
-    axiosMock.onGet(`articles/1?userId=0`).reply(200, {
-      id: 1,
-      title: "",
-      thumbnail: null,
-      location: "경기/인천",
-      authorId: 1,
-      springVersionID: 1,
-      summerVersionID: null,
-      fallVersionID: null,
-      winterVersionID: null,
-      articleTagMap: [],
-      spring: null,
-      summer: {
-        id: 1,
-        articleId: 1,
-        userId: 1,
-        period: "SUMMER",
-        content: "<p>hi</p>",
-        createdAt: "2023-12-02T09:31:38.000Z",
-        updatedAt: "2023-12-02T09:31:38.000Z"
-      },
-      fall: null,
-      winter: null,
-      articleBookmarkMap: [],
-      isFavorite: false
-    });
-  });
-  afterEach(() => {
-    axiosMock.reset();
-  });
 
   it("새로운 게시글을 작성하는 컴포넌트", async () => {
     const component = render(<NewArticle />);
     await waitFor(() => {
+      expect(
+        component.getByRole("button", { name: "선택" })
+      ).toBeInTheDocument();
+
+      expect(component.getByRole("button", { name: "봄" })).toBeInTheDocument();
+
       expect(component).toMatchSnapshot();
     });
   });
@@ -77,8 +62,14 @@ describe("<ArticleForm />", () => {
     const component = render(<EditArticle />);
 
     await waitFor(() => {
-      expect(component.getByText("경기/인천")).toBeInTheDocument();
-      expect(component.getByText("가을")).toBeInTheDocument();
+      expect(
+        component.getByRole("button", { name: "경기/인천" })
+      ).toBeInTheDocument();
+
+      expect(
+        component.getByRole("button", { name: "가을" })
+      ).toBeInTheDocument();
+
       expect(component).toMatchSnapshot();
     });
 

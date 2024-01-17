@@ -13,8 +13,8 @@ export default function Editable({ id }: Props) {
 
   return (
     <ArticleForm
-      id={id}
-      edittngSeason={searchParams.get("season")?.toUpperCase() as SeasonType}
+      edittingId={id}
+      edittingSeason={searchParams.get("season")?.toUpperCase() as SeasonType}
     />
   );
 }
