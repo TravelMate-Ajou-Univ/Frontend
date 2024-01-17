@@ -1,26 +1,12 @@
 "use client";
 
 import DropDown from "@/components/ui/dropDown/DropDown";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import { locationList } from "@/lib/locationList";
 import { seasonList, seasonMapper } from "@/lib/seasonList";
-import KeywordInput from "./KeywordInput";
 import dynamic from "next/dynamic";
-import {
-  editArticle,
-  editArticleRequest,
-  getArticle,
-  postKeyword,
-  submitArticle,
-  uploadImage
-} from "@/service/axios/article";
-import Keyword from "@/components/ui/Keyword";
-import {
-  ArticleType,
-  KeywordType,
-  KoreanSeasonType,
-  SeasonType
-} from "@/model/article";
+import { getArticle, postKeyword } from "@/service/axios/article";
+import { KeywordType, KoreanSeasonType, SeasonType } from "@/model/article";
 import { useRouter } from "next/navigation";
 import ImageSection from "@/components/ui/ImageSection";
 import FilledButton from "@/components/ui/button/FilledButton";
@@ -29,6 +15,16 @@ import { useAppSelector } from "@/hooks/redux";
 import CommentForm from "./CommentForm";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
 import { BookmarkType } from "@/model/bookmark";
+import {
+  editRequestAndRedirect,
+  handleImgInContent,
+  setBookmarks,
+  setContents,
+  submitAndRedirect,
+  validateArticleForm
+} from "@/service/article/articleForm";
+import { getImgUrl } from "@/service/handleImg";
+import KeywordInputContainer from "./keyword/KeywordInputContainer";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -60,7 +56,7 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   const [comment, setComment] = useState<string>("");
   const [authorId, setAuthorId] = useState<number>(-1);
 
-  const keywordInputId = useId();
+  const [inputDisabled, setInputDisabled] = useState<boolean>(false);
 
   const { id: userId } = useAppSelector(state => state.userSlice);
   const router = useRouter();
@@ -70,6 +66,7 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
       if (!edittingId || !edittingSeason) return;
       const article = await getArticle(edittingId);
       if (!article) return;
+      setInputDisabled(article.authorId !== userId);
       setAuthorId(article.authorId);
       setTitle(article.title);
       setLocation(article.location);
@@ -80,48 +77,18 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
       );
       setThumbnailPreview(article.thumbnail);
       setReceivedThumbnail(article.thumbnail);
-      if (article.articleBookmarkMap.length > 0) {
-        const bookmarkList: (BookmarkType & { period: SeasonType })[] =
-          article.articleBookmarkMap
-            .filter(
-              bookmark =>
-                bookmark.period === (seasonMapper[season] as SeasonType)
-            )
-            .map(bookmark => ({
-              id: bookmark.bookmark.id,
-              period: bookmark.period as SeasonType,
-              placeId: bookmark.bookmark.location.placeId,
-              content: bookmark.bookmark.content,
-              latitude: Number(bookmark.bookmark.location.latitude),
-              longitude: Number(bookmark.bookmark.location.longitude)
-            }));
-        setReceivedBookmarks(bookmarkList);
-        const bookmarkIdList = bookmarkList.map(bookmark => bookmark.id);
-        setBookmarkIds(bookmarkIdList);
-        setReceivedBookmarkIds(bookmarkIdList);
-      }
-      switch (edittingSeason) {
-        case "SPRING":
-          setSeason("봄");
-          setReceivedContent(article.spring?.content);
-          break;
-        case "SUMMER":
-          setSeason("여름");
-          setReceivedContent(article.summer?.content);
-          break;
-        case "FALL":
-          setSeason("가을");
-          setReceivedContent(article.fall?.content);
-          break;
-        case "WINTER":
-          setSeason("겨울");
-          setReceivedContent(article.winter?.content);
-          break;
-      }
+      setBookmarks(
+        article,
+        seasonMapper[season] as SeasonType,
+        setReceivedBookmarks,
+        setBookmarkIds,
+        setReceivedBookmarkIds
+      );
+      setContents(edittingSeason, article, setSeason, setReceivedContent);
     };
 
     getOrigin();
-  }, [edittingId, edittingSeason, season]);
+  }, [edittingId, edittingSeason, season, userId]);
 
   const handleLocation = (location: string) => {
     if (edittingId) return;
@@ -158,132 +125,58 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   };
 
   const submit = async () => {
-    if (!title) return alert("제목을 입력해주세요");
-    if (!location) return alert("지역을 선택해주세요");
-    if (!season) return alert("계절을 선택해주세요");
-    if (!content) return alert("내용을 입력해주세요");
-    if (!thumbnailFile) return alert("썸네일을 등록해주세요");
+    if (!validateArticleForm(title, location, season, content, thumbnailFile))
+      return;
 
-    const regex = /<img.*?src="(.*?)"/g;
-    let match;
-    let newContent = content;
+    const newContent = await handleImgInContent(content);
+    if (!newContent) return;
+    const thumbnail = await getImgUrl(thumbnailFile as File, "thumbnail");
+    if (!thumbnail) return;
 
-    while ((match = regex.exec(content)) !== null) {
-      const base64Image = match[1];
-      if (!base64Image) return;
-
-      const response = await fetch(base64Image);
-      const blob = await response.blob();
-      const file = new File([blob], "image.jpg", { type: "image" });
-
-      try {
-        const imgId = await uploadImage(file, "article");
-        if (!imgId) throw new Error();
-        const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
-        const replacedContent = newContent.replace(base64Image, imgURL);
-        newContent = replacedContent;
-      } catch (error) {
-        alert("업로드에 실패했습니다.");
-        return;
-      }
-    }
-
-    const imgId = await uploadImage(thumbnailFile, "thumbnail");
-    const thumbnail = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=thumbnail`;
-    const article: ArticleType = {
+    submitAndRedirect(
       title,
-      period: seasonMapper[season] as SeasonType,
+      seasonMapper[season] as SeasonType,
       location,
-      content: newContent,
-      tagIds: keywords.map(keyword => keyword.id),
+      newContent,
+      keywords,
       thumbnail,
-      bookmarkIds
-    };
-
-    const articleId = await submitArticle(article);
-
-    if (articleId) {
-      alert("게시글이 등록되었습니다.");
-      router.push(
-        `/article/detail/${articleId}?season=${seasonMapper[
-          season
-        ].toLowerCase()}`
-      );
-    }
+      bookmarkIds,
+      router
+    );
   };
 
   const edit = async () => {
-    const editingSeason = seasonMapper[season] as SeasonType;
-
-    const regex = /<img.*?src="data:(.*?)"/g;
-    let match;
-    let newContent = content;
-
-    while ((match = regex.exec(content)) !== null) {
-      const base64Image = match[1];
-      if (!base64Image) return;
-
-      const beforeSrc = `data:${base64Image}`;
-      const response = await fetch(beforeSrc);
-      const blob = await response.blob();
-      const file = new File([blob], "image.jpg", { type: "image" });
-
-      try {
-        const imgId = await uploadImage(file, "article");
-        if (!imgId) return;
-        const imgURL = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=article`;
-        const replacedContent = newContent.replace(beforeSrc, imgURL);
-        newContent = replacedContent;
-      } catch (error) {
-        alert("업로드에 실패했습니다.");
-        return;
-      }
-    }
+    const edittingSeason = seasonMapper[season] as SeasonType;
+    const newContent = await handleImgInContent(content);
+    if (!newContent) return;
 
     if (authorId === userId) {
-      let thumbnail = receivedThumbnail;
+      let thumbnail: string | null = receivedThumbnail;
       if (thumbnailFile) {
-        const imgId = await uploadImage(thumbnailFile, "thumbnail");
-        thumbnail = `${process.env.NEXT_PUBLIC_SERVER_BASE_URL}attachments/${imgId}/?type=thumbnail`;
+        thumbnail = await getImgUrl(thumbnailFile as File, "thumbnail");
+        if (!thumbnail) return;
       }
-      const article: ArticleType = {
+      submitAndRedirect(
         title,
-        period: editingSeason,
+        edittingSeason,
         location,
-        content: newContent,
-        tagIds: keywords.map(keyword => keyword.id),
-        thumbnail: thumbnail,
-        bookmarkIds
-      };
-      const result = await editArticle(edittingId as string, article);
-      if (result) {
-        alert("게시글이 수정되었습니다.");
-        router.push(
-          `/article/detail/${edittingId}?season=${editingSeason.toLowerCase()}`
-        );
-      }
+        newContent,
+        keywords,
+        thumbnail,
+        bookmarkIds,
+        router,
+        edittingId as string
+      );
     } else {
-      const bookmarksToRemove = receivedBookmarkIds.filter(
-        bookmarkId => !bookmarkIds.includes(bookmarkId)
-      );
-      const bookmarksToAdd = bookmarkIds.filter(
-        bookmarkId => !receivedBookmarkIds.includes(bookmarkId)
-      );
-
-      const result = await editArticleRequest(
+      editRequestAndRedirect(
         edittingId as string,
         newContent,
-        editingSeason,
+        edittingSeason,
         comment,
-        bookmarksToRemove,
-        bookmarksToAdd
+        bookmarkIds,
+        receivedBookmarkIds,
+        router
       );
-      if (result) {
-        alert("수정 요청이 완료되었습니다.");
-        router.push(
-          `/article/detail/${edittingId}?season=${editingSeason.toLowerCase()}`
-        );
-      }
     }
   };
 
@@ -295,7 +188,7 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
         placeholder="제목"
         value={title}
         onChange={e => setTitle(e.target.value)}
-        disabled={edittingId && authorId !== userId ? true : false}
+        disabled={inputDisabled}
       />
       <div className="flex flex-row lg:gap-28 md:gap-20 sm:gap-12 gap-4">
         <div className={INPUT_CLASSNAME}>
@@ -335,25 +228,12 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
           thumbnailPreview={thumbnailPreview}
         />
       )}
-      <div className={INPUT_CLASSNAME}>
-        <label htmlFor={keywordInputId}>키워드 </label>
-        <KeywordInput
-          inputId={keywordInputId}
-          addKeyword={addKeyword}
-          disabled={edittingId && authorId !== userId ? true : false}
-        />
-      </div>
-      <ul className="text-sm">
-        {keywords?.map((keyword, index) => (
-          <li
-            className="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
-            key={keyword.id}
-            onClick={() => removeKeyword(index)}
-          >
-            <Keyword keyword={keyword.name} />
-          </li>
-        ))}
-      </ul>
+      <KeywordInputContainer
+        keywords={keywords}
+        addKeyword={addKeyword}
+        removeKeyword={removeKeyword}
+        disabled={inputDisabled}
+      />
       {edittingId && authorId !== userId && (
         <CommentForm
           comment={comment}

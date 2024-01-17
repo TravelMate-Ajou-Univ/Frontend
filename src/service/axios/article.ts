@@ -111,7 +111,9 @@ export const getArticleList = async (
   }
 };
 
-export const submitArticle = async (newArticle: ArticleType) => {
+export const submitArticle = async (
+  newArticle: ArticleType
+): Promise<string | false> => {
   try {
     const { data } = await article.submitArticle(newArticle);
     if (!data) return false;
