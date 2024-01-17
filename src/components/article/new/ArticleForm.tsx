@@ -1,13 +1,11 @@
 "use client";
 
 import DropDown from "@/components/ui/dropDown/DropDown";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 import { locationList } from "@/lib/locationList";
 import { seasonList, seasonMapper } from "@/lib/seasonList";
-import KeywordInput from "./KeywordInput";
 import dynamic from "next/dynamic";
 import { getArticle, postKeyword } from "@/service/axios/article";
-import Keyword from "@/components/ui/Keyword";
 import { KeywordType, KoreanSeasonType, SeasonType } from "@/model/article";
 import { useRouter } from "next/navigation";
 import ImageSection from "@/components/ui/ImageSection";
@@ -20,11 +18,12 @@ import { BookmarkType } from "@/model/bookmark";
 import {
   editRequestAndRedirect,
   handleImgInContent,
+  setBookmarks,
+  setContents,
   submitAndRedirect,
   validateArticleForm
 } from "@/service/article/articleForm";
 import { getImgUrl } from "@/service/handleImg";
-import KeywordList from "./KeywordList";
 import KeywordInputContainer from "./keyword/KeywordInputContainer";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
@@ -57,6 +56,8 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   const [comment, setComment] = useState<string>("");
   const [authorId, setAuthorId] = useState<number>(-1);
 
+  const [inputDisabled, setInputDisabled] = useState<boolean>(false);
+
   const { id: userId } = useAppSelector(state => state.userSlice);
   const router = useRouter();
 
@@ -65,6 +66,7 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
       if (!edittingId || !edittingSeason) return;
       const article = await getArticle(edittingId);
       if (!article) return;
+      setInputDisabled(article.authorId !== userId);
       setAuthorId(article.authorId);
       setTitle(article.title);
       setLocation(article.location);
@@ -75,48 +77,18 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
       );
       setThumbnailPreview(article.thumbnail);
       setReceivedThumbnail(article.thumbnail);
-      if (article.articleBookmarkMap.length > 0) {
-        const bookmarkList: (BookmarkType & { period: SeasonType })[] =
-          article.articleBookmarkMap
-            .filter(
-              bookmark =>
-                bookmark.period === (seasonMapper[season] as SeasonType)
-            )
-            .map(bookmark => ({
-              id: bookmark.bookmark.id,
-              period: bookmark.period as SeasonType,
-              placeId: bookmark.bookmark.location.placeId,
-              content: bookmark.bookmark.content,
-              latitude: Number(bookmark.bookmark.location.latitude),
-              longitude: Number(bookmark.bookmark.location.longitude)
-            }));
-        setReceivedBookmarks(bookmarkList);
-        const bookmarkIdList = bookmarkList.map(bookmark => bookmark.id);
-        setBookmarkIds(bookmarkIdList);
-        setReceivedBookmarkIds(bookmarkIdList);
-      }
-      switch (edittingSeason) {
-        case "SPRING":
-          setSeason("봄");
-          setReceivedContent(article.spring?.content);
-          break;
-        case "SUMMER":
-          setSeason("여름");
-          setReceivedContent(article.summer?.content);
-          break;
-        case "FALL":
-          setSeason("가을");
-          setReceivedContent(article.fall?.content);
-          break;
-        case "WINTER":
-          setSeason("겨울");
-          setReceivedContent(article.winter?.content);
-          break;
-      }
+      setBookmarks(
+        article,
+        seasonMapper[season] as SeasonType,
+        setReceivedBookmarks,
+        setBookmarkIds,
+        setReceivedBookmarkIds
+      );
+      setContents(edittingSeason, article, setSeason, setReceivedContent);
     };
 
     getOrigin();
-  }, [edittingId, edittingSeason, season]);
+  }, [edittingId, edittingSeason, season, userId]);
 
   const handleLocation = (location: string) => {
     if (edittingId) return;
@@ -216,7 +188,7 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
         placeholder="제목"
         value={title}
         onChange={e => setTitle(e.target.value)}
-        disabled={edittingId && authorId !== userId ? true : false}
+        disabled={inputDisabled}
       />
       <div className="flex flex-row lg:gap-28 md:gap-20 sm:gap-12 gap-4">
         <div className={INPUT_CLASSNAME}>
@@ -260,7 +232,7 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
         keywords={keywords}
         addKeyword={addKeyword}
         removeKeyword={removeKeyword}
-        disabled={edittingId && authorId !== userId ? true : false}
+        disabled={inputDisabled}
       />
       {edittingId && authorId !== userId && (
         <CommentForm

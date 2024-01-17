@@ -1,4 +1,5 @@
 import {
+  ArticleDetailType,
   ArticleType,
   KeywordType,
   KoreanSeasonType,
@@ -11,7 +12,69 @@ import {
   uploadImage
 } from "../axios/article";
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context";
-import { seasonMapper } from "@/lib/seasonList";
+import { BookmarkType, LocationType } from "@/model/bookmark";
+import { SetStateAction } from "react";
+
+export const setBookmarks = (
+  article: ArticleDetailType,
+  season: SeasonType,
+  setReceivedBookmarks: (
+    value: SetStateAction<
+      (LocationType & {
+        content?: string | undefined;
+        placeId: string;
+        id: number;
+        period: SeasonType;
+      })[]
+    >
+  ) => void,
+  setBookmarkIds: (value: SetStateAction<number[]>) => void,
+  setReceivedBookmarkIds: (value: SetStateAction<number[]>) => void
+) => {
+  if (article.articleBookmarkMap.length > 0) {
+    const bookmarkList: (BookmarkType & { period: SeasonType })[] =
+      article.articleBookmarkMap
+        .filter(bookmark => bookmark.period === season)
+        .map(bookmark => ({
+          id: bookmark.bookmark.id,
+          period: bookmark.period as SeasonType,
+          placeId: bookmark.bookmark.location.placeId,
+          content: bookmark.bookmark.content,
+          latitude: Number(bookmark.bookmark.location.latitude),
+          longitude: Number(bookmark.bookmark.location.longitude)
+        }));
+    setReceivedBookmarks(bookmarkList);
+    const bookmarkIdList = bookmarkList.map(bookmark => bookmark.id);
+    setBookmarkIds(bookmarkIdList);
+    setReceivedBookmarkIds(bookmarkIdList);
+  }
+};
+
+export const setContents = (
+  edittingSeason: SeasonType,
+  article: ArticleDetailType,
+  setSeason: (value: SetStateAction<KoreanSeasonType>) => void,
+  setReceivedContent: (value: SetStateAction<string>) => void
+): void => {
+  switch (edittingSeason) {
+    case "SPRING":
+      setSeason("봄");
+      setReceivedContent(article.spring?.content);
+      break;
+    case "SUMMER":
+      setSeason("여름");
+      setReceivedContent(article.summer?.content);
+      break;
+    case "FALL":
+      setSeason("가을");
+      setReceivedContent(article.fall?.content);
+      break;
+    case "WINTER":
+      setSeason("겨울");
+      setReceivedContent(article.winter?.content);
+      break;
+  }
+};
 
 export const validateArticleForm = (
   title: string,
