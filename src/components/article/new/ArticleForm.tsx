@@ -1,7 +1,7 @@
 "use client";
 
 import DropDown from "@/components/ui/dropDown/DropDown";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import { locationList } from "@/lib/locationList";
 import { seasonList, seasonMapper } from "@/lib/seasonList";
 import KeywordInput from "./KeywordInput";
@@ -29,7 +29,6 @@ import { useAppSelector } from "@/hooks/redux";
 import CommentForm from "./CommentForm";
 import ArticleGoogleMap from "@/components/googleMap/ArticleGoogleMap";
 import { BookmarkType } from "@/model/bookmark";
-import { api } from "@/service/axios/api";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -37,12 +36,12 @@ const TextEditor = dynamic(() => import("@/components/reactQuill/TextEditor"), {
   ssr: false
 });
 
-interface Props {
-  id?: string;
-  edittngSeason?: SeasonType;
+export interface Props {
+  edittingId?: string;
+  edittingSeason?: SeasonType;
 }
 
-export default function ArticleForm({ id, edittngSeason }: Props) {
+export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   const [title, setTitle] = useState<string>("");
   const [content, setContent] = useState<string>("");
   const [location, setLocation] = useState<string>("");
@@ -51,6 +50,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [thumbnailPreview, setThumbnailPreview] = useState<string | null>(null);
   const [bookmarkIds, setBookmarkIds] = useState<number[]>([]);
+
   const [receivedContent, setReceivedContent] = useState<string>("");
   const [receivedThumbnail, setReceivedThumbnail] = useState<string>("");
   const [receivedBookmarks, setReceivedBookmarks] = useState<
@@ -58,14 +58,17 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
   >([]);
   const [receivedBookmarkIds, setReceivedBookmarkIds] = useState<number[]>([]);
   const [comment, setComment] = useState<string>("");
-  const { id: userId } = useAppSelector(state => state.userSlice);
   const [authorId, setAuthorId] = useState<number>(-1);
+
+  const keywordInputId = useId();
+
+  const { id: userId } = useAppSelector(state => state.userSlice);
   const router = useRouter();
 
   useEffect(() => {
     const getOrigin = async () => {
-      if (!id || !edittngSeason) return;
-      const article = await getArticle(id);
+      if (!edittingId || !edittingSeason) return;
+      const article = await getArticle(edittingId);
       if (!article) return;
       setAuthorId(article.authorId);
       setTitle(article.title);
@@ -97,7 +100,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         setBookmarkIds(bookmarkIdList);
         setReceivedBookmarkIds(bookmarkIdList);
       }
-      switch (edittngSeason) {
+      switch (edittingSeason) {
         case "SPRING":
           setSeason("봄");
           setReceivedContent(article.spring?.content);
@@ -118,10 +121,10 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
     };
 
     getOrigin();
-  }, [id, edittngSeason, season]);
+  }, [edittingId, edittingSeason, season]);
 
   const handleLocation = (location: string) => {
-    if (id) return;
+    if (edittingId) return;
     setLocation(location);
   };
 
@@ -252,11 +255,11 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         thumbnail: thumbnail,
         bookmarkIds
       };
-      const result = await editArticle(id as string, article);
+      const result = await editArticle(edittingId as string, article);
       if (result) {
         alert("게시글이 수정되었습니다.");
         router.push(
-          `/article/detail/${id}?season=${editingSeason.toLowerCase()}`
+          `/article/detail/${edittingId}?season=${editingSeason.toLowerCase()}`
         );
       }
     } else {
@@ -268,7 +271,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       );
 
       const result = await editArticleRequest(
-        id as string,
+        edittingId as string,
         newContent,
         editingSeason,
         comment,
@@ -278,7 +281,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       if (result) {
         alert("수정 요청이 완료되었습니다.");
         router.push(
-          `/article/detail/${id}?season=${editingSeason.toLowerCase()}`
+          `/article/detail/${edittingId}?season=${editingSeason.toLowerCase()}`
         );
       }
     }
@@ -292,7 +295,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
         placeholder="제목"
         value={title}
         onChange={e => setTitle(e.target.value)}
-        disabled={id && authorId !== userId ? true : false}
+        disabled={edittingId && authorId !== userId ? true : false}
       />
       <div className="flex flex-row lg:gap-28 md:gap-20 sm:gap-12 gap-4">
         <div className={INPUT_CLASSNAME}>
@@ -301,7 +304,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
             selected={location}
             list={locationList}
             setSelected={handleLocation}
-            disabled={!!id}
+            disabled={!!edittingId}
           />
         </div>
         <div className={INPUT_CLASSNAME}>
@@ -310,7 +313,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
             selected={season}
             list={seasonList}
             setSelected={handleSeason}
-            disabled={!!id}
+            disabled={!!edittingId}
           />
         </div>
       </div>
@@ -323,24 +326,25 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
           modifyState={true}
           location={location}
           setBookmarkIds={setBookmarkIds}
-          bookmarks={id ? receivedBookmarks : undefined}
+          bookmarks={edittingId ? receivedBookmarks : undefined}
         />
       </section>
-      {(!id || authorId === userId) && (
+      {(!edittingId || authorId === userId) && (
         <ImageSection
           handleImage={handleThumbnail}
           thumbnailPreview={thumbnailPreview}
         />
       )}
       <div className={INPUT_CLASSNAME}>
-        <label>키워드 </label>
+        <label htmlFor={keywordInputId}>키워드 </label>
         <KeywordInput
+          inputId={keywordInputId}
           addKeyword={addKeyword}
-          disabled={id && authorId !== userId ? true : false}
+          disabled={edittingId && authorId !== userId ? true : false}
         />
       </div>
       <ul className="text-sm">
-        {keywords.map((keyword, index) => (
+        {keywords?.map((keyword, index) => (
           <li
             className="inline-block md:mr-4 mr-2 mb-1.5 cursor-pointer"
             key={keyword.id}
@@ -350,7 +354,7 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
           </li>
         ))}
       </ul>
-      {id && authorId !== userId && (
+      {edittingId && authorId !== userId && (
         <CommentForm
           comment={comment}
           setComment={value => setComment(value)}
@@ -358,8 +362,8 @@ export default function ArticleForm({ id, edittngSeason }: Props) {
       )}
       <section className="self-end flex gap-2">
         <OutlinedButton onClick={cancel}>취소</OutlinedButton>
-        <FilledButton onClick={id ? edit : submit}>
-          {id ? (authorId === userId ? "수정" : "수정 요청") : "작성"}
+        <FilledButton onClick={edittingId ? edit : submit}>
+          {edittingId ? (authorId === userId ? "수정" : "수정 요청") : "작성"}
         </FilledButton>
       </section>
     </section>

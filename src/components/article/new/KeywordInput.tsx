@@ -7,11 +7,16 @@ import useOutSideRef from "@/hooks/useClickOutside";
 import { getKeywords } from "@/service/axios/article";
 
 interface Props {
+  inputId: string;
   addKeyword: (keyword: string) => void;
   disabled?: boolean;
 }
 
-export default function KeywordInput({ addKeyword, disabled = false }: Props) {
+export default function KeywordInput({
+  inputId,
+  addKeyword,
+  disabled = false
+}: Props) {
   const [keyword, setKeyword] = useState<string>("");
   const [searchedKeyword, setSearchedKeyword] = useState<string[]>([]);
   const [dropdown, setDropdown] = useState<boolean>(false);
@@ -45,6 +50,7 @@ export default function KeywordInput({ addKeyword, disabled = false }: Props) {
     <div className="flex flex-col">
       <form className="flex" onSubmit={e => addKeywordList(e)}>
         <input
+          id={inputId}
           className="focus:outline-none border-b px-2 py-1 text-sm md:w-80 sm:w-72 w-64 rounded-none"
           type="text"
           placeholder="#맛집, #카페, #숙소 등의 키워드를 입력해주세요 :)"
