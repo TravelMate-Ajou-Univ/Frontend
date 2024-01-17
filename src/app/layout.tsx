@@ -11,12 +11,6 @@ import Script from "next/script";
 
 const openSans = Open_Sans({ subsets: ["latin"] });
 
-declare global {
-  interface Window {
-    initMap: () => void;
-  }
-}
-
 export const metadata: Metadata = {
   title: "Travel Mate",
   description: "실시간 채팅으로 여행 정보를 공유하세요."
@@ -30,10 +24,6 @@ export default function RootLayout({
   return (
     <html lang="en" className={openSans.className}>
       <head>
-        <Script
-          defer
-          src={`https://maps.googleapis.com/maps/api/js?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_KEY}&libraries=places&callback=initMap`}
-        />
         <link
           href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
           rel="stylesheet"
