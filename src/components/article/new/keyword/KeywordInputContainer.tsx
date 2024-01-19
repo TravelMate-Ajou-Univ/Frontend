@@ -1,6 +1,6 @@
 import { useId } from "react";
-import KeywordInput from "../KeywordInput";
-import KeywordList from "../KeywordList";
+import KeywordInput from "./KeywordInput";
+import KeywordList from "./KeywordList";
 import { KeywordType } from "@/model/article";
 
 type Props = {

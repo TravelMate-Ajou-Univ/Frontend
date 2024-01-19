@@ -32,7 +32,7 @@ const TextEditor = dynamic(() => import("@/components/reactQuill/TextEditor"), {
   ssr: false
 });
 
-export interface Props {
+interface Props {
   edittingId?: string;
   edittingSeason?: SeasonType;
 }
