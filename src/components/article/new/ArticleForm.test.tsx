@@ -1,11 +1,11 @@
-import { render, waitFor } from "@testing-library/react";
+import { waitFor } from "@testing-library/react";
 import * as stories from "./ArticleForm.stories";
 import { composeStories } from "@storybook/react";
 import MockAdapter from "axios-mock-adapter";
 import { api } from "@/service/axios/api";
 import { initialize } from "@googlemaps/jest-mocks";
 import { articleMock } from "@/lib/mockData";
-import { QueryClient, QueryClientProvider } from "react-query";
+import customRender from "@/test/customRender";
 
 const { NewArticle, EditArticle } = composeStories(stories);
 
@@ -13,11 +13,6 @@ document.execCommand = jest.fn();
 const mockDispatch = jest.fn();
 const mockSelector = jest.fn();
 const mockRouter = jest.fn();
-
-const queryClient = new QueryClient();
-const ReactQeuryWrapper = ({ children }: { children: React.ReactNode }) => (
-  <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
-);
 
 jest.mock("react-redux", () => ({
   ...jest.requireActual("react-redux"),
@@ -52,11 +47,7 @@ describe("<ArticleForm />", () => {
   mockRouter.mockReturnValue({});
 
   it("새로운 게시글을 작성하는 컴포넌트", async () => {
-    const component = render(
-      <ReactQeuryWrapper>
-        <NewArticle />
-      </ReactQeuryWrapper>
-    );
+    const component = customRender(<NewArticle />);
     await waitFor(() => {
       expect(
         component.getByRole("button", { name: "선택" })
@@ -71,11 +62,7 @@ describe("<ArticleForm />", () => {
   });
 
   it("기존 게시글을 수정하는 컴포넌트", async () => {
-    const component = render(
-      <ReactQeuryWrapper>
-        <EditArticle />
-      </ReactQeuryWrapper>
-    );
+    const component = customRender(<EditArticle />);
 
     await waitFor(() => {
       expect(
