@@ -25,6 +25,9 @@ import {
 } from "@/service/article/articleForm";
 import { getImgUrl } from "@/service/handleImg";
 import KeywordInputContainer from "./keyword/KeywordInputContainer";
+import { useQuery } from "react-query";
+import { queryKey } from "@/lib/queryKey";
+import { useEditArticleQuery } from "@/service/react-query/article";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -61,34 +64,35 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   const { id: userId } = useAppSelector(state => state.userSlice);
   const router = useRouter();
 
-  useEffect(() => {
-    const getOrigin = async () => {
-      if (!edittingId || !edittingSeason) return;
-      const article = await getArticle(edittingId);
-      if (!article) return;
-      setInputDisabled(article.authorId !== userId);
-      setAuthorId(article.authorId);
-      setTitle(article.title);
-      setLocation(article.location);
-      setKeywords(
-        article.articleTagMap.map(tag => {
-          return { id: tag.tag.id, name: tag.tag.name };
-        })
-      );
-      setThumbnailPreview(article.thumbnail);
-      setReceivedThumbnail(article.thumbnail);
-      setBookmarks(
-        article,
-        seasonMapper[season] as SeasonType,
-        setReceivedBookmarks,
-        setBookmarkIds,
-        setReceivedBookmarkIds
-      );
-      setContents(edittingSeason, article, setSeason, setReceivedContent);
-    };
+  const article = useEditArticleQuery(edittingId, edittingSeason);
 
-    getOrigin();
-  }, [edittingId, edittingSeason, season, userId]);
+  useEffect(() => {
+    if (!article) return;
+    setInputDisabled(article.authorId !== userId);
+    setAuthorId(article.authorId);
+    setTitle(article.title);
+    setLocation(article.location);
+    setKeywords(
+      article.articleTagMap.map(tag => {
+        return { id: tag.tag.id, name: tag.tag.name };
+      })
+    );
+    setThumbnailPreview(article.thumbnail);
+    setReceivedThumbnail(article.thumbnail);
+    setBookmarks(
+      article,
+      seasonMapper[season] as SeasonType,
+      setReceivedBookmarks,
+      setBookmarkIds,
+      setReceivedBookmarkIds
+    );
+    setContents(
+      edittingSeason as SeasonType,
+      article,
+      setSeason,
+      setReceivedContent
+    );
+  }, [article, edittingSeason, season, userId]);
 
   const handleLocation = (location: string) => {
     if (edittingId) return;
