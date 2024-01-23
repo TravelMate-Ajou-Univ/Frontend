@@ -81,3 +81,18 @@ export const articleMock = {
   ],
   isFavorite: false
 };
+
+export const searchedKeywordMock = [
+  {
+    id: 2,
+    name: "제주 맛집",
+    createdAt: "2023-11-05T11:00:18.000Z",
+    updatedAt: "2023-11-05T11:00:18.000Z"
+  },
+  {
+    id: 34,
+    name: "맛집",
+    createdAt: "2023-11-08T12:43:01.000Z",
+    updatedAt: "2023-11-08T12:43:01.000Z"
+  }
+];

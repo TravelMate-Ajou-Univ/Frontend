@@ -6,15 +6,18 @@ import { store } from "@/redux/store";
 import { expect } from "@storybook/jest";
 import { userEvent, waitFor, within } from "@storybook/testing-library";
 import { sleep } from "@/service/sleep";
+import ReactQueryProvider from "@/context/ReactQueryProvider";
 
 export default {
   title: "ArticleForm",
   component: ArticleForm,
   decorators: [
     (Story: StoryFn) => (
-      <Provider store={store}>
-        <Story />
-      </Provider>
+      <ReactQueryProvider>
+        <Provider store={store}>
+          <Story />
+        </Provider>
+      </ReactQueryProvider>
     )
   ],
   parameters: {

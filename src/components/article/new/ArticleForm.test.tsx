@@ -1,11 +1,10 @@
 import { waitFor } from "@testing-library/react";
 import * as stories from "./ArticleForm.stories";
 import { composeStories } from "@storybook/react";
-import MockAdapter from "axios-mock-adapter";
-import { api } from "@/service/axios/api";
 import { initialize } from "@googlemaps/jest-mocks";
 import { articleMock } from "@/lib/mockData";
 import customRender from "@/test/customRender";
+import { axiosMock } from "@/test/axios-mock";
 
 const { NewArticle, EditArticle } = composeStories(stories);
 
@@ -28,8 +27,6 @@ jest.mock("next/navigation", () => ({
 const user = {
   id: 1
 };
-
-const axiosMock = new MockAdapter(api, { delayResponse: 200 });
 
 beforeEach(() => {
   initialize();
