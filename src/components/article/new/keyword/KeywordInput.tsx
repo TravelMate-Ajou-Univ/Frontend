@@ -42,13 +42,14 @@ export default function KeywordInput({
   };
 
   const handleDropdownKeyword = (keyword: string) => {
-    setKeyword(keyword);
+    addKeyword(keyword);
+    setKeyword("");
     setDropdown(false);
   };
 
   return (
     <div className="flex flex-col">
-      <form className="flex" onSubmit={e => addKeywordList(e)}>
+      <form className="flex" onSubmit={addKeywordList}>
         <input
           id={inputId}
           className="focus:outline-none border-b px-2 py-1 text-sm md:w-80 sm:w-72 w-64 rounded-none"

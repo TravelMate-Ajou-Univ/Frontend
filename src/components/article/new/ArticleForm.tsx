@@ -26,6 +26,7 @@ import {
 import { getImgUrl } from "@/service/handleImg";
 import KeywordInputContainer from "./keyword/KeywordInputContainer";
 import { useEditArticleQuery } from "@/service/react-query/article";
+import { useKeywordMutation } from "@/service/react-query/keyword";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -92,6 +93,17 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
     );
   }, [article, edittingSeason, season, userId]);
 
+  const { mutate: mutateKeyword, data: addedKeyword } = useKeywordMutation();
+
+  useEffect(() => {
+    if (addedKeyword) {
+      if (addedKeyword.name.charAt(0) === "#") {
+        addedKeyword.name = addedKeyword.name.substring(1);
+      }
+      setKeywords(prev => [...prev, addedKeyword]);
+    }
+  }, [addedKeyword]);
+
   const handleLocation = (location: string) => {
     if (edittingId) return;
     setLocation(location);
@@ -102,12 +114,7 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   };
 
   const addKeyword = async (keyword: string) => {
-    const returnedKeyword = await postKeyword(keyword);
-    if (!returnedKeyword) return;
-    if (returnedKeyword.name.charAt(0) === "#") {
-      returnedKeyword.name = returnedKeyword.name.substring(1);
-    }
-    setKeywords([...keywords, returnedKeyword]);
+    mutateKeyword(keyword);
   };
 
   const removeKeyword = (index: number) => {

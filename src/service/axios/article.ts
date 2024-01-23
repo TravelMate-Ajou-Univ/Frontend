@@ -48,7 +48,9 @@ export const getKeywords = async (
   }
 };
 
-export const postKeyword = async (name: string) => {
+export const postKeyword = async (
+  name: string
+): Promise<false | KeywordType> => {
   try {
     const { data } = await article.postKeyword(name);
     return {

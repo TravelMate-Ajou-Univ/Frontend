@@ -1,6 +1,6 @@
 import { queryKey } from "@/lib/queryKey";
-import { useQuery } from "react-query";
-import { getKeywords } from "../axios/article";
+import { useMutation, useQuery } from "react-query";
+import { getKeywords, postKeyword } from "../axios/article";
 import { SetStateAction } from "react";
 
 export const useGetKeywordsQuery = (
@@ -18,5 +18,15 @@ export const useGetKeywordsQuery = (
       if (data) setDropdown(true);
     }
   });
+
   return { data, refetch };
+};
+
+export const useKeywordMutation = () => {
+  const { mutate, data } = useMutation({
+    mutationKey: [queryKey.keyword],
+    mutationFn: (keyword: string) => postKeyword(keyword)
+  });
+
+  return { mutate, data };
 };
