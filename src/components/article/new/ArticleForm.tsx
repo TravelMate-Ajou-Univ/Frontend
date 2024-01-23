@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { locationList } from "@/lib/locationList";
 import { seasonList, seasonMapper } from "@/lib/seasonList";
 import dynamic from "next/dynamic";
-import { getArticle, postKeyword } from "@/service/axios/article";
+import { postKeyword } from "@/service/axios/article";
 import { KeywordType, KoreanSeasonType, SeasonType } from "@/model/article";
 import { useRouter } from "next/navigation";
 import ImageSection from "@/components/ui/ImageSection";
@@ -25,8 +25,6 @@ import {
 } from "@/service/article/articleForm";
 import { getImgUrl } from "@/service/handleImg";
 import KeywordInputContainer from "./keyword/KeywordInputContainer";
-import { useQuery } from "react-query";
-import { queryKey } from "@/lib/queryKey";
 import { useEditArticleQuery } from "@/service/react-query/article";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
@@ -35,7 +33,7 @@ const TextEditor = dynamic(() => import("@/components/reactQuill/TextEditor"), {
   ssr: false
 });
 
-interface Props {
+export interface Props {
   edittingId?: string;
   edittingSeason?: SeasonType;
 }

@@ -3,6 +3,7 @@ import {
   ArticlePreviewType,
   ArticleRequestType,
   ArticleType,
+  KeywordType,
   MyPageArticleType,
   SeasonType
 } from "@/model/article";
@@ -35,7 +36,9 @@ export const uploadImage = async (file: File, type: ImageType) => {
   }
 };
 
-export const getKeywords = async (word: string) => {
+export const getKeywords = async (
+  word: string
+): Promise<KeywordType[] | false> => {
   try {
     const { data } = await article.getKeywords(word);
     return data;
