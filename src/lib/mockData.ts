@@ -82,6 +82,41 @@ export const articleMock = {
   isFavorite: false
 };
 
+export const articleCountMock = [
+  {
+    location: "서울",
+    count: 3
+  },
+  {
+    location: "경기/인천",
+    count: 3
+  },
+  {
+    location: "강원",
+    count: 0
+  },
+  {
+    location: "충청/대전",
+    count: 0
+  },
+  {
+    location: "전라/광주",
+    count: 0
+  },
+  {
+    location: "경북/대구",
+    count: 0
+  },
+  {
+    location: "경남/울산/부산",
+    count: 1
+  },
+  {
+    location: "제주",
+    count: 0
+  }
+];
+
 export const searchedKeywordMock = [
   {
     id: 2,
