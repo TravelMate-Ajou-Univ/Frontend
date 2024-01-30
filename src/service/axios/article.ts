@@ -1,4 +1,5 @@
 import {
+  ArticleCountType,
   ArticleDetailType,
   ArticlePreviewType,
   ArticleRequestType,
@@ -10,14 +11,16 @@ import {
 import { article, user } from "./api";
 import { ImageType } from "@/model/image";
 
-export const articleCount = async (season: SeasonType) => {
+export const articleCount = async (
+  season: SeasonType
+): Promise<ArticleCountType[] | undefined> => {
   try {
     const { data } = await article.articleCount(season);
-    if (!data) return false;
+    if (!data) return;
     return data;
   } catch (error) {
     console.error(error);
-    return false;
+    return;
   }
 };
 

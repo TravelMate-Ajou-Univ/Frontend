@@ -1,7 +1,11 @@
 import { queryKey } from "@/lib/queryKey";
 import { useQuery } from "react-query";
-import { getArticle } from "../axios/article";
-import { ArticleDetailType } from "@/model/article";
+import { articleCount, getArticle } from "../axios/article";
+import {
+  ArticleCountType,
+  ArticleDetailType,
+  SeasonType
+} from "@/model/article";
 
 export const useEditArticleQuery = (
   edittingId: string | undefined,
@@ -13,6 +17,16 @@ export const useEditArticleQuery = (
       if (!edittingId || !edittingSeason) return;
       return getArticle(edittingId);
     }
+  });
+  return data;
+};
+
+export const useGetArticleCountQuery = (
+  season: SeasonType
+): ArticleCountType[] | undefined => {
+  const { data } = useQuery({
+    queryKey: [queryKey.articleCount, season],
+    queryFn: () => articleCount(season)
   });
   return data;
 };
