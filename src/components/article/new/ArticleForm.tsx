@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { locationList } from "@/lib/locationList";
 import { seasonList, seasonMapper } from "@/lib/seasonList";
 import dynamic from "next/dynamic";
-import { getArticle, postKeyword } from "@/service/axios/article";
+import { postKeyword } from "@/service/axios/article";
 import { KeywordType, KoreanSeasonType, SeasonType } from "@/model/article";
 import { useRouter } from "next/navigation";
 import ImageSection from "@/components/ui/ImageSection";
@@ -25,6 +25,8 @@ import {
 } from "@/service/article/articleForm";
 import { getImgUrl } from "@/service/handleImg";
 import KeywordInputContainer from "./keyword/KeywordInputContainer";
+import { useEditArticleQuery } from "@/service/react-query/article";
+import { useKeywordMutation } from "@/service/react-query/keyword";
 
 const INPUT_CLASSNAME = "flex items-center md:gap-4 gap-2 md:text-base text-sm";
 
@@ -61,34 +63,46 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   const { id: userId } = useAppSelector(state => state.userSlice);
   const router = useRouter();
 
-  useEffect(() => {
-    const getOrigin = async () => {
-      if (!edittingId || !edittingSeason) return;
-      const article = await getArticle(edittingId);
-      if (!article) return;
-      setInputDisabled(article.authorId !== userId);
-      setAuthorId(article.authorId);
-      setTitle(article.title);
-      setLocation(article.location);
-      setKeywords(
-        article.articleTagMap.map(tag => {
-          return { id: tag.tag.id, name: tag.tag.name };
-        })
-      );
-      setThumbnailPreview(article.thumbnail);
-      setReceivedThumbnail(article.thumbnail);
-      setBookmarks(
-        article,
-        seasonMapper[season] as SeasonType,
-        setReceivedBookmarks,
-        setBookmarkIds,
-        setReceivedBookmarkIds
-      );
-      setContents(edittingSeason, article, setSeason, setReceivedContent);
-    };
+  const article = useEditArticleQuery(edittingId, edittingSeason);
 
-    getOrigin();
-  }, [edittingId, edittingSeason, season, userId]);
+  useEffect(() => {
+    if (!article) return;
+    setInputDisabled(article.authorId !== userId);
+    setAuthorId(article.authorId);
+    setTitle(article.title);
+    setLocation(article.location);
+    setKeywords(
+      article.articleTagMap.map(tag => {
+        return { id: tag.tag.id, name: tag.tag.name };
+      })
+    );
+    setThumbnailPreview(article.thumbnail);
+    setReceivedThumbnail(article.thumbnail);
+    setBookmarks(
+      article,
+      seasonMapper[season] as SeasonType,
+      setReceivedBookmarks,
+      setBookmarkIds,
+      setReceivedBookmarkIds
+    );
+    setContents(
+      edittingSeason as SeasonType,
+      article,
+      setSeason,
+      setReceivedContent
+    );
+  }, [article, edittingSeason, season, userId]);
+
+  const { mutate: mutateKeyword, data: addedKeyword } = useKeywordMutation();
+
+  useEffect(() => {
+    if (addedKeyword) {
+      if (addedKeyword.name.charAt(0) === "#") {
+        addedKeyword.name = addedKeyword.name.substring(1);
+      }
+      setKeywords(prev => [...prev, addedKeyword]);
+    }
+  }, [addedKeyword]);
 
   const handleLocation = (location: string) => {
     if (edittingId) return;
@@ -100,12 +114,7 @@ export default function ArticleForm({ edittingId, edittingSeason }: Props) {
   };
 
   const addKeyword = async (keyword: string) => {
-    const returnedKeyword = await postKeyword(keyword);
-    if (!returnedKeyword) return;
-    if (returnedKeyword.name.charAt(0) === "#") {
-      returnedKeyword.name = returnedKeyword.name.substring(1);
-    }
-    setKeywords([...keywords, returnedKeyword]);
+    mutateKeyword(keyword);
   };
 
   const removeKeyword = (index: number) => {

@@ -1,22 +1,26 @@
 import {
+  ArticleCountType,
   ArticleDetailType,
   ArticlePreviewType,
   ArticleRequestType,
   ArticleType,
+  KeywordType,
   MyPageArticleType,
   SeasonType
 } from "@/model/article";
 import { article, user } from "./api";
 import { ImageType } from "@/model/image";
 
-export const articleCount = async (season: SeasonType) => {
+export const articleCount = async (
+  season: SeasonType
+): Promise<ArticleCountType[] | undefined> => {
   try {
     const { data } = await article.articleCount(season);
-    if (!data) return false;
+    if (!data) return;
     return data;
   } catch (error) {
     console.error(error);
-    return false;
+    return;
   }
 };
 
@@ -35,7 +39,9 @@ export const uploadImage = async (file: File, type: ImageType) => {
   }
 };
 
-export const getKeywords = async (word: string) => {
+export const getKeywords = async (
+  word: string
+): Promise<KeywordType[] | false> => {
   try {
     const { data } = await article.getKeywords(word);
     return data;
@@ -45,7 +51,9 @@ export const getKeywords = async (word: string) => {
   }
 };
 
-export const postKeyword = async (name: string) => {
+export const postKeyword = async (
+  name: string
+): Promise<false | KeywordType> => {
   try {
     const { data } = await article.postKeyword(name);
     return {

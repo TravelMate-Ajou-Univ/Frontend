@@ -1,37 +1,28 @@
 "use client";
 
-import { ArticleCountType, SeasonType } from "@/model/article";
-import { useEffect, useState } from "react";
+import { SeasonType } from "@/model/article";
+import { useState } from "react";
 import SeasonNav from "../ui/SeasonNav";
 import Image from "next/image";
 import map from "/public/image/map.png";
-import { articleCount } from "@/service/axios/article";
 import _ from "lodash";
 import Link from "next/link";
+import { useGetArticleCountQuery } from "@/service/react-query/article";
 
 const ARTICLE_NUM_CLASS =
   "rounded-full md:px-5 sm:px-4 px-3 py-1 md:py-0.5 border absolute bg-white hover:bg-gray-100 md:text-base sm:text-sm text-xs cursor-pointer";
 
 export default function HomeMap() {
   const [season, setSeason] = useState<SeasonType>("SPRING");
-  const [articleCounts, setArticleCounts] = useState<ArticleCountType[]>([]);
 
-  useEffect(() => {
-    const getArticleCounts = async () => {
-      const data = await articleCount(season);
-      if (!data)
-        return alert("데이터를 불러오는데 실패했습니다. 다시 시도해주세요.");
-      setArticleCounts(data);
-    };
-
-    getArticleCounts();
-  }, [season]);
+  const articleCounts = useGetArticleCountQuery(season);
 
   const selectSeason = (season: SeasonType) => {
     setSeason(season);
   };
 
   const getArticleCount = (location: string) => {
+    if (!articleCounts) return;
     return _.find(articleCounts, item => item.location === location)?.count;
   };
 
